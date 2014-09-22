@@ -187,6 +187,7 @@ namespace TimecardApp.ViewModel
         // Class constructor, create the data context object.
         public AppViewModel(string dbConnectionString)
         {
+
             connectionString = dbConnectionString;
             ConnectDB();
 
