@@ -1,0 +1,9 @@
+﻿Fehler: Wenn mehrere Timecards vorhanden sind, stimmt das zurücksetzen des Projekts nicht, wenn man zwischen Tagen zwischen zwei Timecards wechselt
+Fehler: Projekt wird gelöscht, obwohl es noch Tage gibt die dieses Projekt nutzen
+
+Spätere Versionen:
+An einem Tag für mehrere Projekte arbeiten
+Feiertage automatisch erkennen
+Einen Tag als Urlaubstag bzw. halben erkennen, markieren
+
+test

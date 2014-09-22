@@ -1,0 +1,68 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="TimecardApp.View.FilterPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="TimecardApp - filter" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="Filter" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <toolkit:ListPicker x:Name="objectPicker" IsEnabled="false" SelectionChanged="objectPicker_SelectionChanged" Margin="10,7,-242,0" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding FilterObjectCollection}" SelectedItem="{Binding FilterObject, Mode=TwoWay}" RenderTransformOrigin="0.725,0.485"/>
+            <TextBlock HorizontalAlignment="Left" Margin="0,18,0,21" Text="object" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontSize="25" Height="33" Width="150"/>
+
+            <toolkit:DatePicker  x:Name="startDayDatePicker" Grid.Column="1" Grid.Row="1"  Value="{Binding StartDate,  Mode=TwoWay}" Margin="0,0,-252,0" RenderTransformOrigin="0.832,0.521" />
+            <TextBlock x:Name="startdateTextBox" HorizontalAlignment="Left" Margin="0,18,0,21" Text="startdate" VerticalAlignment="Center"  Grid.Row="1" Grid.Column="0" FontSize="25" Height="33" Width="150"/>
+
+            <toolkit:DatePicker  x:Name="endDayDatePicker" Grid.Column="1" Grid.Row="2"  Value="{Binding EndDate,  Mode=TwoWay}" Margin="0,0,-252,0" RenderTransformOrigin="0.832,0.521" />
+            <TextBlock x:Name="enddateTextBox" HorizontalAlignment="Left" Margin="0,18,0,21" Text="enddate" VerticalAlignment="Center"  Grid.Row="2" Grid.Column="0" FontSize="25" Height="33" Width="150"/>
+
+            <!--<CheckBox x:Name="inactiveCheckBox" Grid.Column="1" Grid.Row="3" Margin="10,0,-246,0" IsChecked="{Binding InActive, Mode=TwoWay}"/>
+            <TextBlock HorizontalAlignment="Right" Margin="0,18,0,21" Text="inactive" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0" FontSize="25" Height="33" Width="150"/>-->
+
+            <TextBox x:Name="searchStringTextBox" Grid.Column="1" Grid.Row="4" Margin="0,0,-252,0" Text="{Binding SearchString,  Mode=TwoWay}" />
+            <TextBlock HorizontalAlignment="Right" Margin="0,18,0,21" Text="name (like)" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="25" Height="33" Width="150"/>
+
+            <RadioButton x:Name="dateRadioButton"  Content="date filter" GroupName="radioGroup" Checked="RadioButtonDate_Checked" HorizontalAlignment="Left" Margin="10,0,-203,0" Grid.Row="7" VerticalAlignment="Top" Grid.Column="1"/>
+            <RadioButton x:Name="stringRadioButton" Content="name filter" GroupName="radioGroup" Checked="RadioButtonString_Checked" HorizontalAlignment="Left" Margin="10,72,-203,-72" Grid.Row="7" VerticalAlignment="Top" Grid.Column="1"/>
+            <RadioButton x:Name="bothRadioButton" Content="both (AND)" GroupName="radioGroup" Checked="RadioButtonBoth_Checked" HorizontalAlignment="Left" Margin="10,144,-203,-144" Grid.Row="7" VerticalAlignment="Top" Grid.Column="1"/>
+        </Grid>
+    </Grid>
+
+</phone:PhoneApplicationPage>

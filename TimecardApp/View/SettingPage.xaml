@@ -1,0 +1,135 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="TimecardApp.View.SettingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <phone:Pivot x:Name="SettingPagePivot" SelectionChanged="SettingPagePivot_SelectionChanged" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - setting" VerticalAlignment="Top" Width="500">
+            <phone:PivotItem x:Name="projects" CacheMode="{x:Null}" Header="projects">
+                <Grid x:Name="ProjectContentPanel" Margin="12,0,12,0">
+                    <ListBox x:Name="projectListBox" ItemsSource="{Binding ProjectCollection}" 
+                      Margin="12, 0, 12, 0" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid  Width="440">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox
+                                IsChecked="{Binding IsInactive, Mode=TwoWay}"
+                                Grid.Column="0"
+                                VerticalAlignment="Center" 
+                                FontFamily="Portable User Interface"
+                                />
+                                    <Button
+                                Grid.Column="1"
+                                Content="{Binding Ident_Project}"
+                                x:Name="changeProject"
+                                BorderThickness="0"
+                                FontSize="25"
+                                Margin="0"
+                                Click="changeProjectButton_Click">
+                                    </Button>
+                                    <Button
+                                Grid.Column="2"
+                                x:Name="deleteProject"
+                                BorderThickness="0"                                
+                                Margin="0"
+                                Click="deleteProjectButton_Click">
+                                        <Image Source="/Resources/delete.png"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem x:Name="customer" CacheMode="{x:Null}" Header="customers" >
+                <Grid x:Name="CustomerContentPanel" Margin="12,0,12,0">
+                    <ListBox x:Name="customerListBox" ItemsSource="{Binding CustomerCollection}" 
+                      Margin="12, 0, 12, 0" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Stretch" Width="440">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button
+                                Grid.Column="0"
+                                Content="{Binding CustomerName}"
+                                x:Name="changeCustomerButton"
+                                BorderThickness="0"
+                                FontSize="25"
+                                Margin="0"
+                                Click="changeCustomerButton_Click">
+                                    </Button>
+                                    <Button
+                                Grid.Column="1"
+                                x:Name="deleteCustomerButton"
+                                BorderThickness="0"                                
+                                Margin="0"
+                                Click="deleteCustomerButton_Click">
+                                        <Image Source="/Resources/delete.png"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem x:Name="setting" CacheMode="{x:Null}" Header="settings" >
+                <Grid x:Name="SettingGrid" Margin="0,0,12,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="250"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!--<TextBlock HorizontalAlignment="Left" Margin="5,0,0,0" Text="Default Project" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontSize="20" Height="Auto" Width="Auto"/>
+                    <toolkit:ListPicker x:Name="ProjectPicker" Margin="5,7,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ProjectCollection}" SelectedItem="{Binding DefaultProject, Mode=TwoWay}">
+                        <toolkit:ListPicker.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ident_Project}" />
+                            </DataTemplate>
+                        </toolkit:ListPicker.ItemTemplate>
+                        <toolkit:ListPicker.FullModeItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ident_Project}" FontSize="30"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.FullModeItemTemplate>
+                    </toolkit:ListPicker>-->
+
+                    <!--<TextBlock Text="default mailaddress" Style="{StaticResource PhoneTextNormalStyle}" Margin="5" Grid.Column="0" Grid.Row="2"  Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="settingPageMailAddress" Text="{Binding MailAddress, Mode=TwoWay}" Grid.Column="0" Grid.Row="3"  Grid.ColumnSpan="2" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="-9,-10,0,0"/>-->
+                    <TextBlock Text="number of timcards" Margin="5,0,0,0" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" />
+                    <TextBox  x:Name="settingPageNumberTimecards" Text="{Binding NumberTimecards, Mode=TwoWay}" Grid.Column="1" Grid.Row="2" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="5,0,0,0"  />
+                </Grid>
+            </phone:PivotItem>
+
+        </phone:Pivot>
+    </Grid>
+
+</phone:PhoneApplicationPage>

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
+  <Identity Name="17648Kn0rk3.TimecardApp" Publisher="CN=E2D87DBF-21EB-4EEC-BA6A-B7EF0C4FAD5C" Version="2.2.0.2" />
+  <mp:PhoneIdentity PhoneProductId="36daef2f-313a-4a83-8682-89a3943ff01e" PhonePublisherId="0cc62370-ff7d-4b0a-8188-a5ee7851ea6a" />
+  <Properties>
+    <DisplayName>TimecardApp</DisplayName>
+    <PublisherDisplayName>Kn0rk3</PublisherDisplayName>
+    <Logo>free-zone-starts-md.png</Logo>
+  </Properties>
+  <Prerequisites>
+    <OSMinVersion>6.3.1</OSMinVersion>
+    <OSMaxVersionTested>6.3.1</OSMaxVersionTested>
+  </Prerequisites>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="x36daef2fy313ay4a83y8682y89a3943ff01ex" Executable="AGHost.exe" EntryPoint="View\MainPage.xaml">
+      <m3:VisualElements DisplayName="TimecardApp" Square150x150Logo="free-zone-starts-md.png" Square44x44Logo="free-zone-starts-md.png" Description="TimecardApp" ForegroundText="light" BackgroundColor="#464646">
+        <m3:DefaultTile Square71x71Logo="free-zone-starts-md.png">
+        </m3:DefaultTile>
+      </m3:VisualElements>
+    </Application>
+  </Applications>
+  <Extensions>
+    <Extension Category="windows.activatableClass.inProcessServer">
+      <InProcessServer>
+        <Path>AgHostSvcs.dll</Path>
+        <ActivatableClass ActivatableClassId="AgHost.BackgroundTask" ThreadingModel="both" />
+      </InProcessServer>
+    </Extension>
+  </Extensions>
+  <Capabilities>
+    <Capability Name="internetClientServer" />
+  </Capabilities>
+</Package>

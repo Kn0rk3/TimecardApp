@@ -1,0 +1,210 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="TimecardApp.View.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <phone:Pivot x:Name="MainPagePivot" SelectionChanged="MainPagePivot_SelectionChanged"  HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - Home" VerticalAlignment="Top" >
+            <phone:PivotItem x:Name="currentTimecards" CacheMode="{x:Null}" Header="current">
+                <!--ContentPanel - place additional content here.-->
+                <Grid x:Name="CurrentContentPanel" Margin="12,0,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" MinHeight="400"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!--ContentPanel - place additional content here-->
+
+                    <!-- Bind the list box to the observable collection Timecards in the MainPage.xaml.cs. -->
+                    <ListBox x:Name="timecardListBox" ItemsSource="{Binding CurrentTimecardCollection}" 
+                     Grid.Row="0" Margin="12, 0, 12, 0" Width="440"  >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid  Width="440">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox
+                                        x:Name="SelectorTimecard"
+                                Grid.Column="0"
+                                VerticalAlignment="Center" 
+                                FontFamily="Portable User Interface"
+                                   IsChecked="{Binding IsComplete, Mode=TwoWay}"     
+                                />
+                                    <Button
+                                Grid.Column="1"
+                                Content="{Binding TimecardName}"
+                                x:Name="changeTimecardButton"
+                                BorderThickness="0"
+                                FontSize="25"
+                                Margin="0"
+                                Click="changeTimecardButton_Click">
+                                    </Button>
+                                    <Button
+                                Grid.Column="2"
+                                x:Name="deleteTimecardButton"
+                                BorderThickness="0"                                
+                                Margin="0"
+                                Click="deleteTimecardButton_Click">
+                                        <Image Source="/Resources/delete.png"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <Grid Grid.Row="1" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox
+                    x:Name="newTimecardTextBox"                    
+                    Grid.Column="0"
+                    Text="{Binding TimecardName}"
+                    FontFamily="{StaticResource PhoneFontFamilyLight}"                    
+                    />
+                            <TextBox
+                    x:Name="weekNumberTextbox"  
+                    Text= "{Binding WeekText}"
+                    Grid.Column="1"
+                    IsEnabled="False"
+                    FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                    </Grid>
+                    <Grid Grid.Row="2"  >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <toolkit:DatePicker x:Name="datePicker" Grid.Column="0" ValueChanged="datePicker_ValueChanged"/>
+                        <Button 
+                    Content="create"
+                    Grid.Column="1"
+                    x:Name="newTimecardAddButton"
+                    Click="newTimecardAddButton_Click"/>
+                    </Grid>
+                </Grid>
+
+            </phone:PivotItem>
+
+            <phone:PivotItem x:Name="openTimecards" CacheMode="{x:Null}" Header="not closed">
+                <!--ContentPanel - place additional content here.-->
+                <Grid x:Name="OpenContentPanel" Margin="12,0,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" MinHeight="400"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!--ContentPanel - place additional content here-->
+
+                    <!-- Bind the list box to the observable collection Timecards in the MainPage.xaml.cs. -->
+                    <ListBox x:Name="timecardOpenListBox" ItemsSource="{Binding OpenTimecardCollection}" 
+                     Grid.Row="0" Margin="12, 0, 12, 0" Width="440" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid  Width="440">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox
+                                IsChecked="{Binding IsComplete, Mode=TwoWay}"
+                                Grid.Column="0"
+                                VerticalAlignment="Center" 
+                                FontFamily="Portable User Interface"
+                                />
+                                    <Button
+                                Grid.Column="1"
+                                Content="{Binding TimecardName}"
+                                x:Name="changeTimecardButton"
+                                BorderThickness="0"
+                                FontSize="25"
+                                Margin="0"
+                                Click="changeTimecardButton_Click">
+                                    </Button>
+                                    <Button
+                                Grid.Column="2"
+                                x:Name="deleteTimecardButton"
+                                BorderThickness="0"                                
+                                Margin="0"
+                                Click="deleteTimecardButton_Click">
+                                        <Image Source="/Resources/delete.png"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </phone:PivotItem>
+
+            <phone:PivotItem x:Name="filtersTimecards" CacheMode="{x:Null}" Header="filtered">
+                <!--ContentPanel - place additional content here.-->
+                <Grid x:Name="AllContentPanel" Margin="12,0,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" MinHeight="400"/>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <!--ContentPanel - place additional content here-->
+
+                    <!-- Bind the list box to the observable collection Timecards in the MainPage.xaml.cs. -->
+                    <ListBox x:Name="timecardALLListBox" ItemsSource="{Binding FilteredTimecardCollection}" 
+                     Grid.Row="0" Margin="12, 0, 12, 0" Width="440" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid  Width="440">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="70" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="100" />
+                                    </Grid.ColumnDefinitions>
+                                    <CheckBox
+                                IsChecked="{Binding IsComplete, Mode=TwoWay}"
+                                Grid.Column="0"
+                                VerticalAlignment="Center" 
+                                FontFamily="Portable User Interface"
+                                />
+                                    <Button
+                                Grid.Column="1"
+                                Content="{Binding TimecardName}"
+                                x:Name="changeTimecardButton"
+                                BorderThickness="0"
+                                FontSize="25"
+                                Margin="0"
+                                Click="changeTimecardButton_Click">
+                                    </Button>
+                                    <Button
+                                Grid.Column="2"
+                                x:Name="deleteTimecardButton"
+                                BorderThickness="0"                                
+                                Margin="0"
+                                Click="deleteTimecardButton_Click">
+                                        <Image Source="/Resources/delete.png"/>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
+    </Grid>
+</phone:PhoneApplicationPage>

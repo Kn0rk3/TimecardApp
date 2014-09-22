@@ -1,0 +1,81 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="TimecardApp.View.CopyTimecardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="TimecardApp - copy timecard" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="copy Timecard" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <toolkit:DatePicker ValueChanged="datePicker_ValueChanged" x:Name="copyTimecardDatePicker" Grid.Row="1" />
+            <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="start date of new copy timecard" VerticalAlignment="Center" Grid.Row="0"  FontSize="25" Height="33" Width="423"/>
+            <TextBox x:Name="newTimecardTextBox" Grid.Row="2" Text="{Binding TimecardName}" FontFamily="{StaticResource PhoneFontFamilyLight}"    />
+            <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="preview worktasks: " VerticalAlignment="Center" Grid.Row="3"  FontSize="25" Height="33" Width="423"/>
+            <Grid x:Name="listboxGrid" Grid.Row="4" Margin="20,0,12,0">
+                <ListBox x:Name="worktaskListBox" ItemsSource="{Binding WorktaskCopyCollection}" Grid.Row="0" Margin="23, 0, 12, 0" Width="440">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch" Width="440">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="300" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="50"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock 
+                                        Grid.Column="0" Grid.Row="0"
+                                        Margin="12,0,0,0"
+                                        Text="{Binding Ident_WorkTask}"
+                                        FontSize="20"
+                                        Width="300"
+                                        VerticalAlignment="Center" 
+                                        HorizontalAlignment="Left"
+                                        >
+                                </TextBlock>
+                                <TextBlock 
+                                        Grid.Column="1" Grid.Row="0"
+                                        Margin="12,0,0,0"
+                                        Text="{Binding TotalWorkTimeString}"
+                                        FontSize="20"
+                                        VerticalAlignment="Center" 
+                                        HorizontalAlignment="Left"
+                                        >
+                                </TextBlock>
+                             </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Grid>
+    </Grid>
+</phone:PhoneApplicationPage>

@@ -1,0 +1,128 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="TimecardApp.View.WorktaskPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
+    <Grid x:Name="LayoutRoot" Background="Transparent" Margin="0,10,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,0">
+            <TextBlock Text="TimecardApp - worktask" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
+            <TextBlock Text="{Binding WorktaskPageTimecardName}" Margin="12,0" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="{Binding WorktaskPageIdent}" FontSize="30" Margin="12,0"/>
+        </StackPanel>
+
+        <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="10,0,0,0" >
+            <Grid x:Name="WorkingGrid" Margin="0,0,12,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="Auto" MinWidth="100"/>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="Auto" MinWidth="100"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <toolkit:TimePicker x:Name="startTimePicker"  Grid.Column="1" Grid.Row="0" Value="{Binding WorktaskPageStartTime,  Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}" />
+                <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="start" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontSize="25" Height="33" Width="76"/>
+                <toolkit:TimePicker x:Name="endTimePicker" Grid.Column="3" Grid.Row="0" Value="{Binding WorktaskPageEndTime,  Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="end" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2" FontSize="25" Height="33" Width="55"/>
+                <toolkit:TimePicker x:Name="pauseTimePicker" Grid.Column="1" Grid.Row="1" Value="{Binding WorktaskPagePauseTime, Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="break" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontSize="25" Height="33" Width="64"/>
+                <CheckBox x:Name="onsiteCheckBox" Grid.Column="3" Grid.Row="1" Margin="020,0,0,0" IsChecked="{Binding WorktaskPageIsOnsite, Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="onsite" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" FontSize="25" Height="33" Width="75"/>
+                <toolkit:TimePicker x:Name="workTimePicker" Grid.Column="3" Grid.Row="3" Value="{Binding WorktaskPageWorkTime}" IsEnabled="False" />
+                <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="workingtime" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"  Grid.ColumnSpan="2" FontSize="25" Height="33" Width="154"/>
+                <TextBlock HorizontalAlignment="Left" Margin="23,0,0,2" Text="Project:" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="25" Height="33" Width="90"/>
+                <toolkit:ListPicker x:Name="ProjectPicker" Margin="23,7,0,0" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding WorktaskPageProjectCollection}" IsEnabled="{Binding WorktaskPageEnabled}" SelectedItem="{Binding WorktaskPageProject, Mode=TwoWay}">
+                    <toolkit:ListPicker.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Ident_Project}" />
+                        </DataTemplate>
+                    </toolkit:ListPicker.ItemTemplate>
+                    <toolkit:ListPicker.FullModeItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Ident_Project}" FontSize="30"/>
+                        </DataTemplate>
+                    </toolkit:ListPicker.FullModeItemTemplate>
+                </toolkit:ListPicker>
+                <Button
+                                Grid.Column="3"
+                                Grid.Row="5"
+                                x:Name="newProjectButton"
+                                BorderThickness="2"    
+                                IsEnabled="{Binding WorktaskPageEnabled}"
+                                Click="newProjectButton_Click">
+                    <Image Source="/Icons/add.png" Height="40" Width="40" Margin="0,0,0,0" />
+                </Button>
+                <toolkit:DatePicker  x:Name="dayDatePicker" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="3" Value="{Binding WorktaskPageDayDate,  Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}" />
+                <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="date" VerticalAlignment="Center" Grid.Row="6" Grid.Column="0" FontSize="25" Height="33" Width="76"/>
+
+                <ScrollViewer Grid.Column="0" HorizontalAlignment="Left"  Margin="0,5,-36,0" Grid.Row="7" VerticalAlignment="Top" Grid.ColumnSpan="4" Height="Auto" >
+                    <TextBox x:Name="workDescriptionTextBox" VerticalAlignment="Top" Text="{Binding WorktaskPageWorkDescription, Mode=TwoWay}" Width="456" TextWrapping="Wrap" GotFocus="workDescriptionTextBox_GotFocus" IsEnabled="{Binding WorktaskPageEnabled}"/>
+                </ScrollViewer>
+            </Grid>
+
+            <!--<phone:PivotItem CacheMode="{x:Null}" Header="settings" Margin="0,0,14,28">
+                    <Grid x:Name="SettingGrid" Margin="0,0,12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="250"/>
+                            <ColumnDefinition Width="70"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock HorizontalAlignment="Left" Margin="5,18,0,21" Text="Project:" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontSize="25" Height="33" Width="90"/>
+                        <toolkit:ListPicker x:Name="ProjectPicker" Grid.Row="0" Grid.Column="1" ItemsSource="{Binding WorktaskPageProjectCollection}" IsEnabled="{Binding WorktaskPageEnabled}" SelectedItem="{Binding WorktaskPageProject, Mode=TwoWay}">
+                            <toolkit:ListPicker.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Ident_Project}" />
+                                </DataTemplate>
+                            </toolkit:ListPicker.ItemTemplate>
+                        </toolkit:ListPicker>
+                        <Button
+                                Grid.Column="2"
+                                x:Name="newProjectButton"
+                                BorderThickness="0"    
+                                IsEnabled="{Binding WorktaskPageEnabled}"
+                                Click="newProjectButton_Click">
+                            <Image Source="/Icons/add.png" Height="55" Width="55" Margin="-20,0,0,0"/>
+                        </Button>
+                    </Grid>
+                </phone:PivotItem>-->
+
+        </Grid>
+    </Grid>
+</phone:PhoneApplicationPage>
