@@ -30,7 +30,8 @@ namespace TimecardApp
         }
 
         // The current version of the application.
-        public static int DB_VERSION = 1;
+        //version 2: New object Phase (from Timelog), marking projects and customers as Timelog objects and worktask now refers to phase from timelog
+        public static int DB_VERSION = 2;
 
 
         /// <summary>
