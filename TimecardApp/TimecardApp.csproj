@@ -116,6 +116,11 @@
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Model\Timecard.cs" />
     <Compile Include="Model\WorkTask.cs" />
+    <Compile Include="Service References\ProjectManagement1_6Service\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AppViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\FilterViewModel.cs" />
@@ -209,6 +214,9 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\ProjectManagement1_6Service\ProjectManagementService.wsdl" />
+    <None Include="Service References\ProjectManagement1_6Service\ProjectManagementService1.wsdl" />
+    <Content Include="ServiceReferences.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\AlignmentGrid.png" />
@@ -277,6 +285,13 @@
     <Content Include="Resources\save.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Service References\ProjectManagement1_6Service\ProjectManagementService.disco" />
+    <None Include="Service References\ProjectManagement1_6Service\configuration91.svcinfo" />
+    <None Include="Service References\ProjectManagement1_6Service\configuration.svcinfo" />
+    <None Include="Service References\ProjectManagement1_6Service\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="ToDo.txt" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
@@ -302,6 +317,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\ProjectManagement1_6Service\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
