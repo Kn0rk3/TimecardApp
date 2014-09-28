@@ -116,7 +116,12 @@
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Model\Timecard.cs" />
     <Compile Include="Model\WorkTask.cs" />
-    <Compile Include="Service References\ProjectManagement1_6Service\Reference.cs">
+    <Compile Include="Service References\TimelogProjectManagementService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TimelogSecurityService\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -128,6 +133,7 @@
     <Compile Include="ViewModel\BackupViewModel.cs" />
     <Compile Include="ViewModel\SettingViewModel.cs" />
     <Compile Include="ViewModel\TimecardViewModel.cs" />
+    <Compile Include="ViewModel\TimelogViewModel.cs" />
     <Compile Include="ViewModel\WorktaskViewModel.cs" />
     <Compile Include="View\BackupPage.xaml.cs">
       <DependentUpon>BackupPage.xaml</DependentUpon>
@@ -214,9 +220,24 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\ProjectManagement1_6Service\ProjectManagementService.wsdl" />
-    <None Include="Service References\ProjectManagement1_6Service\ProjectManagementService1.wsdl" />
+    <None Include="Service References\TimelogProjectManagementService\ProjectManagementServiceSecure.wsdl" />
+    <None Include="Service References\TimelogProjectManagementService\ProjectManagementServiceSecure1.wsdl" />
+    <None Include="Service References\TimelogSecurityService\SecurityServiceSecure.disco" />
+    <None Include="Service References\TimelogSecurityService\configuration91.svcinfo" />
+    <None Include="Service References\TimelogSecurityService\configuration.svcinfo" />
+    <None Include="Service References\TimelogSecurityService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\TimelogProjectManagementService\ProjectManagementServiceSecure.disco" />
+    <None Include="Service References\TimelogProjectManagementService\configuration91.svcinfo" />
+    <None Include="Service References\TimelogProjectManagementService\configuration.svcinfo" />
+    <None Include="Service References\TimelogProjectManagementService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="ServiceReferences.ClientConfig" />
+    <None Include="Service References\TimelogSecurityService\SecurityServiceSecure.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\AlignmentGrid.png" />
@@ -285,13 +306,6 @@
     <Content Include="Resources\save.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Service References\ProjectManagement1_6Service\ProjectManagementService.disco" />
-    <None Include="Service References\ProjectManagement1_6Service\configuration91.svcinfo" />
-    <None Include="Service References\ProjectManagement1_6Service\configuration.svcinfo" />
-    <None Include="Service References\ProjectManagement1_6Service\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="ToDo.txt" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
@@ -319,7 +333,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\ProjectManagement1_6Service\" />
+    <WCFMetadataStorage Include="Service References\TimelogProjectManagementService\" />
+    <WCFMetadataStorage Include="Service References\TimelogSecurityService\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

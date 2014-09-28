@@ -13,7 +13,6 @@ using TimecardApp.Resources;
 using Microsoft.Phone.Data.Linq;
 using System.IO.IsolatedStorage;
 
-
 namespace TimecardApp.ViewModel
 {
     public class AppViewModel : INotifyPropertyChanged
@@ -187,6 +186,8 @@ namespace TimecardApp.ViewModel
         // Class constructor, create the data context object.
         public AppViewModel(string dbConnectionString)
         {
+            
+
             connectionString = dbConnectionString;
             ConnectDB();
 
