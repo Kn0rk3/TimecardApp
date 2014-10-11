@@ -62,7 +62,8 @@ namespace TimecardApp.View
         private void cancelButton_Click(object sender, EventArgs e)
         {
             App.AppViewModel.DiscardCustomerViewModel();
-            NavigationService.Navigate(new Uri("/View/SettingPage.xaml?item=1", UriKind.Relative));
+            this.NavigationService.GoBack();
+            //NavigationService.Navigate(new Uri("/View/SettingPage.xaml?item=2", UriKind.Relative));
         }
         
         protected override void OnNavigatedTo(System.Windows.Navigation.NavigationEventArgs e)

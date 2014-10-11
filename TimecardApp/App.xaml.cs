@@ -11,6 +11,7 @@ using TimecardApp.ViewModel;
 using Microsoft.Phone.Data.Linq;
 using System.IO.IsolatedStorage;
 using TimecardApp.Resources;
+using System.Linq;
 
 namespace TimecardApp
 {
@@ -30,10 +31,9 @@ namespace TimecardApp
         }
 
         // The current version of the application.
-        //version 2: New object Phase (from Timelog), marking projects and customers as Timelog objects and worktask now refers to phase from timelog
+        //version 2: New object TimelogTask, TimelogProject (from Timelog), marking projects and customers as Timelog objects and worktask now refers to phase from timelog
         public static int DB_VERSION = 2;
-
-
+        
         /// <summary>
         /// Constructor for the Application object.
         /// </summary>
@@ -114,13 +114,21 @@ namespace TimecardApp
                 if (dbUpdater.DatabaseSchemaVersion < DB_VERSION)
                 {
                     //performn here the changes for database in higher versions
-
+                    if (dbUpdater.DatabaseSchemaVersion == 1)
+                    {
+                        //dbUpdater.AddTable<TimelogProject>();
+                        //dbUpdater.AddTable<TimelogTask>();
+                        
+                        dbUpdater.AddColumn<Setting>("IsUsingTimelog");
+                        
+                        dbUpdater.DatabaseSchemaVersion = DB_VERSION;
+                        dbUpdater.Execute();
+                    }
                 }
             }
 
             // Create the ViewModel object.
             appViewModel = new AppViewModel(DBConnectionString);
-
         }
 
         private void fillDummyDataInDatabase(DBClass dellAppDB)
@@ -131,7 +139,7 @@ namespace TimecardApp
             Customer forthCustomer = new Customer() { CustomerID = System.Guid.NewGuid().ToString(), CustomerName = "Paul Hartmann", CustomerShort = "PH" };
             Customer fifthCustomer = new Customer() { CustomerID = System.Guid.NewGuid().ToString(), CustomerName = "Bell", CustomerShort = "BL" };
             Customer sixthCustomer = new Customer() { CustomerID = System.Guid.NewGuid().ToString(), CustomerName = "Wüstenrot", CustomerShort = "WW" };
-
+            
             dellAppDB.Customer.InsertOnSubmit(firstCustomer);
             dellAppDB.Customer.InsertOnSubmit(secondCustomer);
             dellAppDB.Customer.InsertOnSubmit(thirdCustomer);

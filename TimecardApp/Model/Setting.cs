@@ -90,6 +90,32 @@ namespace TimecardApp.Model
             }
         }
 
+        //db version 2
+        private bool isUsingTimelog;
+        [Column(CanBeNull = true)]
+        public bool? IsUsingTimelog
+        {
+            get
+            {
+                return isUsingTimelog;
+            }
+
+            set
+            {
+                if (value.HasValue)
+                {
+                    if (isUsingTimelog != value)
+                    {
+                        NotifyPropertyChanging("IsUsingTimelog");
+                        isUsingTimelog = value.Value;
+                        NotifyPropertyChanged("IsUsingTimelog");
+                    }
+                }
+                else
+                    isUsingTimelog = false;
+                
+            }
+        }
 
         // Version column aids update performance.
         [Column(IsVersion = true)]

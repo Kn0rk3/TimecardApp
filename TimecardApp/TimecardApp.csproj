@@ -105,16 +105,20 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalizedStrings.cs" />
-    <Compile Include="Model\Backupfile.cs" />
+    <Compile Include="Model\NonPersistent\Backupfile.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\DBClass.cs" />
     <Compile Include="Model\Filter.cs" />
-    <Compile Include="Model\HelperClass.cs" />
+    <Compile Include="Model\NonPersistent\DBMigrator.cs" />
+    <Compile Include="Model\NonPersistent\HelperClass.cs" />
     <Compile Include="Model\IDBObjects.cs" />
-    <Compile Include="Model\PDFCreater.cs" />
+    <Compile Include="Model\Timelog\ITimelogWrapper.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Model\Timecard.cs" />
+    <Compile Include="Model\TimelogProject.cs" />
+    <Compile Include="Model\TimelogTask.cs" />
+    <Compile Include="Model\Timelog\TimelogWrapper.cs" />
     <Compile Include="Model\WorkTask.cs" />
     <Compile Include="Service References\TimelogProjectManagementService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -146,6 +150,9 @@
     </Compile>
     <Compile Include="View\FilterPage.xaml.cs">
       <DependentUpon>FilterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TimelogPage.xaml.cs">
+      <DependentUpon>TimelogPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WorktaskPage.xaml.cs">
       <DependentUpon>WorktaskPage.xaml</DependentUpon>
@@ -187,6 +194,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\FilterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TimelogPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

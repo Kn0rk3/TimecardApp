@@ -29,6 +29,7 @@ namespace TimecardApp.View
         private ApplicationBarIconButton appBarSendMailButton;
 
         private ApplicationBarMenuItem appBarMenuBackup;
+        private ApplicationBarMenuItem appBarMenuTimelog;
         
         private int weekNum;
         public int WeekNum
@@ -127,6 +128,13 @@ namespace TimecardApp.View
             appBarMenuBackup.Text = "Backup/Restore (OneDrive)";
             appBarMenuBackup.Click += new System.EventHandler(this.backupButton_Click);
 
+            if (App.AppViewModel.UsingTimelogInterface)
+            {
+                appBarMenuTimelog = new ApplicationBarMenuItem();
+                appBarMenuTimelog.Text = "Timelog settings";
+                appBarMenuTimelog.Click += new System.EventHandler(this.timelogButton_Click);
+            }
+
             appBarSettingsButton = new ApplicationBarIconButton(new Uri("Icons/feature.settings.png", UriKind.Relative));
             appBarSettingsButton.Text = "Settings";
             appBarSettingsButton.Click += new System.EventHandler(this.settingsButton_Click);
@@ -174,6 +182,11 @@ namespace TimecardApp.View
             NavigationService.Navigate(new Uri("/View/BackupPage.xaml", UriKind.Relative));
         }
 
+        private void timelogButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/View/TimelogPage.xaml", UriKind.Relative));
+        }
+
         private void refreshButton_Click(object sender, EventArgs e)
         {
             App.AppViewModel.SaveChangesToDB();
@@ -214,32 +227,29 @@ namespace TimecardApp.View
 
         private void MainPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            App.AppViewModel.SaveChangesToDB();
+            ApplicationBar = new ApplicationBar();
+            ApplicationBar.MenuItems.Add(appBarMenuBackup);
+            if (App.AppViewModel.UsingTimelogInterface)
+                ApplicationBar.MenuItems.Add(appBarMenuTimelog);
             switch ((sender as Pivot).SelectedIndex)
             {
                 case 0:
-                    App.AppViewModel.SaveChangesToDB();
-                    ApplicationBar = new ApplicationBar();
                     ApplicationBar.Buttons.Add(appBarSettingsButton);
                     ApplicationBar.Buttons.Add(appBarAddWorktaskButton);
                     ApplicationBar.Buttons.Add(appBarSendMailButton);
-                    ApplicationBar.MenuItems.Add(appBarMenuBackup);
                     break;
 
                 case 1:
-                    App.AppViewModel.SaveChangesToDB();
-                    ApplicationBar = new ApplicationBar();
+                    
                     ApplicationBar.Buttons.Add(appBarSettingsButton);
                     ApplicationBar.Buttons.Add(appBarRefreshButton);
-                    ApplicationBar.MenuItems.Add(appBarMenuBackup);
                     App.AppViewModel.LoadOpenTimecardCollectionFromDatabase();
                     break;
 
                 case 2:
-                    App.AppViewModel.SaveChangesToDB();
-                    ApplicationBar = new ApplicationBar();
                     ApplicationBar.Buttons.Add(appBarSettingsButton);
                     ApplicationBar.Buttons.Add(appBarFilterButton);
-                    ApplicationBar.MenuItems.Add(appBarMenuBackup);
                     App.AppViewModel.LoadFilterTimecardCollectionFromDatabase(null);
                     break;
             }

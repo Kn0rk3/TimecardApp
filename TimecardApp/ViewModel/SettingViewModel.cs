@@ -44,6 +44,20 @@ namespace TimecardApp.ViewModel
             }
         }
 
+        private bool isUsingTimelog;
+        public bool IsUsingTimelog
+        {
+            get
+            {
+                return isUsingTimelog;
+            }
+            set
+            {
+                isUsingTimelog = value;
+                NotifyPropertyChanged("IsUsingTimelog");
+            }
+        }
+
         
        
         //private String mailAddress;
@@ -93,6 +107,10 @@ namespace TimecardApp.ViewModel
                 defaultProject = setting.Project;
 
             numberTimecards = setting.NumberTimecards.ToString();
+            if (setting.IsUsingTimelog.HasValue)
+                isUsingTimelog = setting.IsUsingTimelog.Value;
+            else
+                isUsingTimelog = false;
 
             projectCollection = App.AppViewModel.ProjectCollection;
             customerCollection = App.AppViewModel.CustomerCollection;
@@ -106,7 +124,9 @@ namespace TimecardApp.ViewModel
             }
 
             thisSetting.NumberTimecards = Int16.Parse(numberTimecards);
-
+            thisSetting.IsUsingTimelog = isUsingTimelog;
+            App.AppViewModel.UsingTimelogInterface = isUsingTimelog;
+            
             //if (!String.IsNullOrEmpty(mailAddress))
             //    thisSetting.MailAddress = mailAddress; ;
             App.AppViewModel.SaveChangesToDB();

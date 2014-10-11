@@ -11,9 +11,6 @@ namespace TimecardApp.Model
 
     class DBClass : DataContext
     {
-        // Specify the connection string as a static, used in main page and app.xaml.
-        //public static string DBConnectionString = "Data Source=isostore:/DellApp.sdf";
-
         // Pass the connection string to the base class.
         public DBClass(string connectionString) : base(connectionString)
         { }
@@ -24,5 +21,9 @@ namespace TimecardApp.Model
         public Table<WorkTask> WorkTasks;
         public Table<Customer> Customer;
         public Table<Filter> Filter;
+
+        //db version 2
+        //public Table<TimelogTask> TimelogTasks;
+        //public Table<TimelogProject> TimelogProjects;
     }
 }

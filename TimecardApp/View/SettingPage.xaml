@@ -17,6 +17,43 @@
     <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <phone:Pivot x:Name="SettingPagePivot" SelectionChanged="SettingPagePivot_SelectionChanged" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - setting" VerticalAlignment="Top" Width="500">
+            <phone:PivotItem x:Name="setting" CacheMode="{x:Null}" Header="settings" >
+                <Grid x:Name="SettingGrid" Margin="0,0,12,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="250"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!--<TextBlock HorizontalAlignment="Left" Margin="5,0,0,0" Text="Default Project" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontSize="20" Height="Auto" Width="Auto"/>
+                    <toolkit:ListPicker x:Name="ProjectPicker" Margin="5,7,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ProjectCollection}" SelectedItem="{Binding DefaultProject, Mode=TwoWay}">
+                        <toolkit:ListPicker.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ident_Project}" />
+                            </DataTemplate>
+                        </toolkit:ListPicker.ItemTemplate>
+                        <toolkit:ListPicker.FullModeItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Ident_Project}" FontSize="30"/>
+                            </DataTemplate>
+                        </toolkit:ListPicker.FullModeItemTemplate>
+                    </toolkit:ListPicker>-->
+
+                    <!--<TextBlock Text="default mailaddress" Style="{StaticResource PhoneTextNormalStyle}" Margin="5" Grid.Column="0" Grid.Row="2"  Grid.ColumnSpan="2"/>
+                    <TextBox x:Name="settingPageMailAddress" Text="{Binding MailAddress, Mode=TwoWay}" Grid.Column="0" Grid.Row="3"  Grid.ColumnSpan="2" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="-9,-10,0,0"/>-->
+                    <TextBlock Text="number of timcards" Margin="5,0,0,0" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" />
+                    <TextBox  Text="{Binding NumberTimecards, Mode=TwoWay}" Grid.Column="1" Grid.Row="0" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="5,0,0,0"  />
+                    <TextBlock Text="using Timelog" Margin="5,0,0,0" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
+                    <CheckBox  IsChecked ="{Binding IsUsingTimelog, Mode=TwoWay}" Grid.Column="1" Grid.Row="1" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="5,0,0,0"/>
+                </Grid>
+            </phone:PivotItem>
             <phone:PivotItem x:Name="projects" CacheMode="{x:Null}" Header="projects">
                 <Grid x:Name="ProjectContentPanel" Margin="12,0,12,0">
                     <ListBox x:Name="projectListBox" ItemsSource="{Binding ProjectCollection}" 
@@ -93,43 +130,7 @@
                     </ListBox>
                 </Grid>
             </phone:PivotItem>
-            <phone:PivotItem x:Name="setting" CacheMode="{x:Null}" Header="settings" >
-                <Grid x:Name="SettingGrid" Margin="0,0,12,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="250"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <!--<TextBlock HorizontalAlignment="Left" Margin="5,0,0,0" Text="Default Project" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontSize="20" Height="Auto" Width="Auto"/>
-                    <toolkit:ListPicker x:Name="ProjectPicker" Margin="5,7,0,0" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding ProjectCollection}" SelectedItem="{Binding DefaultProject, Mode=TwoWay}">
-                        <toolkit:ListPicker.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Ident_Project}" />
-                            </DataTemplate>
-                        </toolkit:ListPicker.ItemTemplate>
-                        <toolkit:ListPicker.FullModeItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Ident_Project}" FontSize="30"/>
-                            </DataTemplate>
-                        </toolkit:ListPicker.FullModeItemTemplate>
-                    </toolkit:ListPicker>-->
-
-                    <!--<TextBlock Text="default mailaddress" Style="{StaticResource PhoneTextNormalStyle}" Margin="5" Grid.Column="0" Grid.Row="2"  Grid.ColumnSpan="2"/>
-                    <TextBox x:Name="settingPageMailAddress" Text="{Binding MailAddress, Mode=TwoWay}" Grid.Column="0" Grid.Row="3"  Grid.ColumnSpan="2" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="-9,-10,0,0"/>-->
-                    <TextBlock Text="number of timcards" Margin="5,0,0,0" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" />
-                    <TextBox  x:Name="settingPageNumberTimecards" Text="{Binding NumberTimecards, Mode=TwoWay}" Grid.Column="1" Grid.Row="2" FontFamily="{StaticResource PhoneFontFamilyLight}" Margin="5,0,0,0"  />
-                </Grid>
-            </phone:PivotItem>
-
-        </phone:Pivot>
+         </phone:Pivot>
     </Grid>
 
 </phone:PhoneApplicationPage>

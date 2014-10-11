@@ -22,12 +22,21 @@ namespace TimecardApp.ViewModel
         // Data context for the local database
         private DBClass dellAppDB;
         private string connectionString;
+
         private WorktaskViewModel workTaskViewModel;
         private ProjectViewModel projectViewModel;
         private CustomerViewModel customerViewModel;
         private TimecardViewModel timecardViewModel;
         private SettingViewModel settingViewModel;
         private FilterViewModel filterViewModel;
+        private TimelogViewModel timelogViewModel;
+
+        private bool usingTimelogInterface;
+        public bool UsingTimelogInterface
+        {
+            get { return usingTimelogInterface; }
+            set { usingTimelogInterface = value; }
+        }
 
         // Die ObservableCollection ist im Endeffekt auch nur eine Liste, 
         // jedoch hat sie eine spezielle Eigenschaft, welche sie für unseren Einsatzzweck sehr wertvoll macht: 
@@ -186,8 +195,6 @@ namespace TimecardApp.ViewModel
         // Class constructor, create the data context object.
         public AppViewModel(string dbConnectionString)
         {
-            
-
             connectionString = dbConnectionString;
             ConnectDB();
 
@@ -205,6 +212,13 @@ namespace TimecardApp.ViewModel
                 dellAppDB.Filter.InsertOnSubmit(newFilter);
                 dellAppDB.SubmitChanges();
             }
+
+            var settingObj = from Setting setting in dellAppDB.Setting select setting;
+            Setting tmpSetting = settingObj.Single();
+            if (tmpSetting.IsUsingTimelog.HasValue)
+                UsingTimelogInterface = tmpSetting.IsUsingTimelog.Value;
+            else
+                UsingTimelogInterface = false;
 
             LoadCollectionsFromDatabase();
         }
@@ -623,7 +637,7 @@ namespace TimecardApp.ViewModel
         {
             var settingObj = from Setting setting in dellAppDB.Setting
                              select setting;
-
+            
             Setting tmpSetting = settingObj.Single();
 
             var timecardsInDB = (from Timecard timecard in dellAppDB.Timecards

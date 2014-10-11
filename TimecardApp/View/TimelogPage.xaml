@@ -1,0 +1,45 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="TimecardApp.View.TimelogPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <phone:Pivot x:Name="SettingPivot" SelectionChanged="SettingPivot_SelectionChanged" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - timelog" VerticalAlignment="Top" Width="500">
+            <phone:PivotItem x:Name="TimelogSetting" CacheMode="{x:Null}" Header="setting">
+                <Grid x:Name="SettingPanel" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="sitename" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                    <TextBox Grid.Column="1" Grid.Row="0" Width="300" />
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="username" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                    <TextBox Grid.Column="1" Grid.Row="1" Width="300" />
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="password" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                    <PasswordBox Grid.Row="2" Grid.Column="1" Width="300"/>
+                    <Button Content="Login"  IsEnabled ="{Binding LoggedNotIn }"  Grid.Column="0" Grid.Row="3" Click="loginButton_Click"/>
+                    <Button Content="Import current data" IsEnabled ="{Binding LoggedIn }"  Grid.Column="1" Grid.Row="3" Click="loadDataButton_Click"/>
+
+                </Grid>
+            </phone:PivotItem>
+        </phone:Pivot>
+    </Grid>
+
+</phone:PhoneApplicationPage>

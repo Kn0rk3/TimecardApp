@@ -8,7 +8,7 @@ using TimecardApp.TimelogSecurityService;
 
 namespace TimecardApp.ViewModel
 {
-    class TimelogViewModel
+    public class TimelogViewModel
     {
         ProjectManagementService service = new ProjectManagementServiceClient();
             

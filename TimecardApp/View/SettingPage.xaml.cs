@@ -52,6 +52,36 @@ namespace TimecardApp.View
             appBarCancelButton.Click += new System.EventHandler(this.cancelButton_Click);
         }
 
+
+
+        private void SettingPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch ((sender as Pivot).SelectedIndex)
+            {
+                case 0:
+                    ApplicationBar = new ApplicationBar();
+                    ApplicationBar.Buttons.Add(appBarHomeButton);
+                    ApplicationBar.Buttons.Add(appBarSaveButton);
+                    ApplicationBar.Buttons.Add(appBarCancelButton);
+                    break;
+                case 1:
+                    appBarAddButton.Text = "New Project";
+                    ApplicationBar = new ApplicationBar();
+                    ApplicationBar.Buttons.Add(appBarHomeButton);
+                    ApplicationBar.Buttons.Add(appBarAddButton);
+                    break;
+
+                case 2:
+                    appBarAddButton.Text = "New Customer";
+                    ApplicationBar = new ApplicationBar();
+                    ApplicationBar.Buttons.Add(appBarHomeButton);
+                    ApplicationBar.Buttons.Add(appBarAddButton);
+                    break;
+
+                
+            }
+        }
+
         private void cancelButton_Click(object sender, EventArgs e)
         {
             HelperClass.FocusedTextBoxUpdateSource();
@@ -63,50 +93,25 @@ namespace TimecardApp.View
         {
             HelperClass.FocusedTextBoxUpdateSource();
             settingViewModel.saveThisSetting();
-            NavigationService.Navigate(new Uri("/View/SettingPage.xaml?item=2", UriKind.Relative));
+            //NavigationService.Navigate(new Uri("/View/SettingPage.xaml?item=2", UriKind.Relative));
         }
 
         private void newProjectOrCustomerButton_Click(object sender, EventArgs e)
         {
-            if (this.SettingPagePivot.SelectedIndex == 1)
+            if (this.SettingPagePivot.SelectedIndex == 2)
             {
                 NavigationService.Navigate(new Uri("/View/CustomerPage.xaml?customerIDParam=" + System.Guid.NewGuid().ToString(), UriKind.Relative));
             }
-            else if (this.SettingPagePivot.SelectedIndex == 0)
+            else if (this.SettingPagePivot.SelectedIndex == 1)
             {
                 NavigationService.Navigate(new Uri("/View/ProjectPage.xaml?projectIDParam=" + System.Guid.NewGuid().ToString(), UriKind.Relative));
             }
         }
 
-        private void SettingPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            switch ((sender as Pivot).SelectedIndex)
-            {
-                case 0:
-                    appBarAddButton.Text = "New Project";
-                    ApplicationBar = new ApplicationBar();
-                    ApplicationBar.Buttons.Add(appBarHomeButton);
-                    ApplicationBar.Buttons.Add(appBarAddButton);
-                    break;
-
-                case 1:
-                    appBarAddButton.Text = "New Customer";
-                    ApplicationBar = new ApplicationBar();
-                    ApplicationBar.Buttons.Add(appBarHomeButton);
-                    ApplicationBar.Buttons.Add(appBarAddButton);
-                    break;
-
-                case 2:
-                    ApplicationBar = new ApplicationBar();
-                    ApplicationBar.Buttons.Add(appBarHomeButton);
-                    ApplicationBar.Buttons.Add(appBarSaveButton);
-                    ApplicationBar.Buttons.Add(appBarCancelButton);
-                    break;
-            }
-        }
-
         private void homeButton_Click(object sender, EventArgs e)
         {
+            HelperClass.FocusedTextBoxUpdateSource();
+            App.AppViewModel.DiscardSettingViewModel();
             NavigationService.Navigate(new Uri("/View/MainPage.xaml", UriKind.Relative));
         }
 
@@ -194,8 +199,6 @@ namespace TimecardApp.View
             }
 
             this.DataContext = settingViewModel;
-            //this.appBarMenuOneDriveLogin.IsEnabled = SetBinding()
-
             base.OnNavigatedTo(e);
         }
     }
