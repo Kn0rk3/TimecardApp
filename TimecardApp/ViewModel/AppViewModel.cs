@@ -415,7 +415,6 @@ namespace TimecardApp.ViewModel
         {
             Customer newCustomer = (Customer)getDBObjectForID(DBObjects.Customer, customerID);
 
-            //prüfen ob es bereits diesen Worktask gibt oder ob er neu erstellt werden soll
             if (newCustomer != null)
             {
                 customerViewModel = new CustomerViewModel(newCustomer);
@@ -526,9 +525,30 @@ namespace TimecardApp.ViewModel
             var settingObj = from Setting setting in dellAppDB.Setting
                              select setting;
 
-            settingViewModel = new SettingViewModel(settingObj.Single());
-
             return settingViewModel;
+        }
+
+        public TimelogViewModel GetTimelogViewModel()
+        {
+            if (timelogViewModel != null)
+                return timelogViewModel;
+
+            var timelogSettingObj = from TimelogSetting tlSetting in dellAppDB.TimelogSetting
+                                    select tlSetting;
+
+            if (timelogSettingObj.Count() > 0)
+                timelogViewModel = new TimelogViewModel(timelogSettingObj.Single());
+            else
+            {
+                TimelogSetting newTlSetting = new TimelogSetting() { TimelogSettingID = System.Guid.NewGuid().ToString() };
+                dellAppDB.TimelogSetting.InsertOnSubmit(newTlSetting);
+                dellAppDB.SubmitChanges();
+                timelogViewModel = new TimelogViewModel(newTlSetting);
+            }
+
+            timelogViewModel = new TimelogViewModel(timelogSettingObj.Single());
+
+            return timelogViewModel;
         }
 
         public BackupViewModel GetBackupViewModel()
@@ -1022,7 +1042,7 @@ namespace TimecardApp.ViewModel
                     tmpDB.Dispose();
                     IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
                     iso.CopyFile(tmpPathDatabase, AppResources.DatabaseName + ".sdf", true);
-                    
+
                     iso.Dispose();
                 }
                 else
@@ -1050,9 +1070,6 @@ namespace TimecardApp.ViewModel
 
 
 
-        internal TimelogViewModel GetTimelogViewModel()
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

@@ -13,17 +13,18 @@ namespace TimecardApp.View
 {
     public partial class TimelogPage : PhoneApplicationPage
     {
-        TimelogViewModel timelogViewModel;
+        private TimelogViewModel timelogViewModel;
+
         public TimelogPage()
         {
             InitializeComponent();
         }
 
-        private void loginButton_Click(object sender, SelectionChangedEventArgs e)
+        private void loginButton_Click(object sender, EventArgs e)
         {
         }
 
-        private void loadDataButton_Click(object sender, SelectionChangedEventArgs e)
+        private void loadDataButton_Click(object sender, EventArgs e)
         {
         }
 

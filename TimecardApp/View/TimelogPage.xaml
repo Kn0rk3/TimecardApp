@@ -34,7 +34,7 @@
                     <TextBox Grid.Column="1" Grid.Row="1" Width="300"  Text="{Binding Username }"/>
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="password" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
                     <PasswordBox Grid.Row="2" Grid.Column="1" Width="300" Password="{Binding Password }" />
-                    <Button Content="Login"  IsEnabled ="{Binding LoggedNotIn }"  Grid.Column="0" Grid.Row="3" Click="loginButton_Click"/>
+                    <Button Content="Login"  IsEnabled ="{Binding NotLoggedIn }"  Grid.Column="0" Grid.Row="3" Click="loginButton_Click"/>
                     <Button Content="Import current data" IsEnabled ="{Binding LoggedIn }"  Grid.Column="1" Grid.Row="3" Click="loadDataButton_Click"/>
 
                 </Grid>

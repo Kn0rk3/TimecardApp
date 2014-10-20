@@ -70,6 +70,35 @@ namespace TimecardApp.ViewModel
             }
         }
 
+        private bool loggedIn;
+        public bool LoggedIn
+        {
+            get
+            {
+                return loggedIn;
+            }
+            set
+            {
+                loggedIn = value;
+                NotLoggedIn = !value;
+                NotifyPropertyChanged("LoggedIn");
+            }
+        }
+
+        private bool notLoggedIn;
+        public bool NotLoggedIn
+        {
+            get
+            {
+                return notLoggedIn;
+            }
+            set
+            {
+                notLoggedIn = value;
+                NotifyPropertyChanged("NotLoggedIn");
+            }
+        }
+
 
         private ObservableCollection<TimelogTask> tlTaskCollection;
         public ObservableCollection<TimelogTask> TlTaskCollection
@@ -96,21 +125,26 @@ namespace TimecardApp.ViewModel
 
             username = tlSetting.Username;
             url = tlSetting.TimelogUrl;
-
-            byte[] passwordByte = ProtectedData.Unprotect(Encoding.UTF8.GetBytes(tlSetting.Password), null);
-            password = Encoding.UTF8.GetString(passwordByte, 0, passwordByte.Length);
+            if (!String.IsNullOrEmpty(tlSetting.Password))
+            {
+                byte[] passwordByte = ProtectedData.Unprotect(Encoding.UTF8.GetBytes(tlSetting.Password), null);
+                password = Encoding.UTF8.GetString(passwordByte, 0, passwordByte.Length);
+            }
+            
+            LoggedIn = false;
         }
 
         public void saveThisSetting()
         {
 
             timelogSetting.Username = Username;
-            timelogSetting.TimelogUrl = Url;   
-
-            byte[] passwordInByte = Encoding.UTF8.GetBytes(password);
-            byte[] protectedPasswordByte = ProtectedData.Protect(passwordInByte, null);
-            timelogSetting.Password = Encoding.UTF8.GetString(protectedPasswordByte, 0, protectedPasswordByte.Length);
-                     
+            timelogSetting.TimelogUrl = Url;
+            if (!String.IsNullOrEmpty(password))
+            {
+                byte[] passwordInByte = Encoding.UTF8.GetBytes(password);
+                byte[] protectedPasswordByte = ProtectedData.Protect(passwordInByte, null);
+                timelogSetting.Password = Encoding.UTF8.GetString(protectedPasswordByte, 0, protectedPasswordByte.Length);
+            }
             App.AppViewModel.SaveChangesToDB();
         }
 
