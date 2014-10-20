@@ -7,18 +7,16 @@ using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
+using TimecardApp.ViewModel;
 
 namespace TimecardApp.View
 {
     public partial class TimelogPage : PhoneApplicationPage
     {
+        TimelogViewModel timelogViewModel;
         public TimelogPage()
         {
             InitializeComponent();
-        }
-
-        private void SettingPivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
         }
 
         private void loginButton_Click(object sender, SelectionChangedEventArgs e)
@@ -28,6 +26,14 @@ namespace TimecardApp.View
         private void loadDataButton_Click(object sender, SelectionChangedEventArgs e)
         {
         }
-        
+
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            timelogViewModel = App.AppViewModel.GetTimelogViewModel();
+
+            this.DataContext = timelogViewModel;
+            base.OnNavigatedTo(e);
+        }
     }
 }

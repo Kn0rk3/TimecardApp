@@ -271,7 +271,8 @@ namespace TimecardApp.ViewModel
 
                 App.AppViewModel.RestoreDatabase(tmpPathDatabase);
 
-                iso.DeleteFile(tmpPathDatabase);
+                if( iso.FileExists(tmpPathDatabase))
+                   iso.DeleteFile(tmpPathDatabase);
 
                 MessageBox.Show("Restore succesfull.");
                 RestoreLock = false;

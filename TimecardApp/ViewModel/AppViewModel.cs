@@ -12,6 +12,7 @@ using Microsoft.Phone.Tasks;
 using TimecardApp.Resources;
 using Microsoft.Phone.Data.Linq;
 using System.IO.IsolatedStorage;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.ViewModel
 {
@@ -637,7 +638,7 @@ namespace TimecardApp.ViewModel
         {
             var settingObj = from Setting setting in dellAppDB.Setting
                              select setting;
-            
+
             Setting tmpSetting = settingObj.Single();
 
             var timecardsInDB = (from Timecard timecard in dellAppDB.Timecards
@@ -993,34 +994,42 @@ namespace TimecardApp.ViewModel
 
         public void RestoreDatabase(string tmpPathDatabase)
         {
-                dellAppDB.Dispose();
-                //check downloaded database for version
+            dellAppDB.Dispose();
+            //check downloaded database for version
 
-                string tmpDBConnectionString = "Data Source=isostore:/" + tmpPathDatabase;
-                // Create the database if it does not exist.
-                using (DBClass tmpDB = new DBClass(tmpDBConnectionString))
+            string tmpDBConnectionString = "Data Source=isostore:/" + tmpPathDatabase;
+            // Create the database if it does not exist.
+            using (DBClass tmpDB = new DBClass(tmpDBConnectionString))
+            {
+                if (tmpDB.DatabaseExists() == true)
                 {
-                    if (tmpDB.DatabaseExists() == true)
+                    using (DBMigrator migrator = new DBMigrator(tmpDBConnectionString, App.DB_VERSION))
                     {
-                        DatabaseSchemaUpdater dbNewUpdater = tmpDB.CreateDatabaseSchemaUpdater();
-
-                        if (dbNewUpdater.DatabaseSchemaVersion < App.DB_VERSION)
+                        try
                         {
-
+                            if (migrator.hasToMigrate())
+                            {
+                                migrator.MigrateDatabase();
+                            }
                         }
-
-                        // version are equal -> replace database files 
-                        tmpDB.Dispose();
-                        IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
-                        iso.CopyFile(tmpPathDatabase, AppResources.DatabaseName + ".sdf", true);
-                        iso.DeleteFile(tmpPathDatabase);
-
+                        catch
+                        {
+                            throw new Exception("Database error in Timecard App: Connectionstring doesn't point to a existing database. Migration failed.");
+                        }
                     }
-                    else
-                        MessageBox.Show("Restore failed because the downloaded file is no database for this app.");
-                }
 
-                this.ConnectDB();
+                    // version are equal or db was migrated -> replace database files 
+                    tmpDB.Dispose();
+                    IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
+                    iso.CopyFile(tmpPathDatabase, AppResources.DatabaseName + ".sdf", true);
+                    
+                    iso.Dispose();
+                }
+                else
+                    MessageBox.Show("Restore failed because the downloaded file is no database for this app.");
+            }
+
+            this.ConnectDB();
         }
 
         #endregion
@@ -1040,5 +1049,10 @@ namespace TimecardApp.ViewModel
         #endregion
 
 
+
+        internal TimelogViewModel GetTimelogViewModel()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

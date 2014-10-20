@@ -8,6 +8,6 @@ namespace TimecardApp.Model
 {
     public interface ITimelogWrapper 
     {
-        void loginTimelog();
+        void LoginTimelog(string url, string initials, string password);
     }
 }

@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using TimecardApp.Model;
+using TimecardApp.Model.NonPersistent;
 using TimecardApp.ViewModel;
 using Microsoft.Phone.Data.Linq;
 using System.IO.IsolatedStorage;
@@ -108,21 +109,18 @@ namespace TimecardApp
                     }
                 }
 
-                // Check whether a database update is needed.
-                DatabaseSchemaUpdater dbUpdater = db.CreateDatabaseSchemaUpdater();
-
-                if (dbUpdater.DatabaseSchemaVersion < DB_VERSION)
+                using (DBMigrator migrator = new DBMigrator(DBConnectionString , DB_VERSION ))
                 {
-                    //performn here the changes for database in higher versions
-                    if (dbUpdater.DatabaseSchemaVersion == 1)
+                    try
                     {
-                        //dbUpdater.AddTable<TimelogProject>();
-                        //dbUpdater.AddTable<TimelogTask>();
-                        
-                        dbUpdater.AddColumn<Setting>("IsUsingTimelog");
-                        
-                        dbUpdater.DatabaseSchemaVersion = DB_VERSION;
-                        dbUpdater.Execute();
+                        if (migrator.hasToMigrate())
+                        {
+                            migrator.MigrateDatabase();
+                        }
+                    }
+                    catch
+                    {
+                        throw new Exception("Database error in Timecard App: Connectionstring doesn't point to a existing database. Migration failed.");
                     }
                 }
             }

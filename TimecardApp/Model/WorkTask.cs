@@ -73,6 +73,26 @@ namespace TimecardApp.Model
             }
         }
 
+        //db version 2
+        private string timelogTaskID;
+        [Column(CanBeNull = true)]
+        public string TimelogTaskID;
+
+        private EntityRef<TimelogTask> _TimelogTask;
+        [Association(Storage = "_TimelogTask", ThisKey = "TimelogTaskID", IsForeignKey = true)]
+        public TimelogTask TimelogTask
+        {
+            get { return this._TimelogTask.Entity; }
+            set
+            {
+                NotifyPropertyChanging("TimelogTaskID");
+                this._TimelogTask.Entity = value;
+                if (value != null)
+                    timelogTaskID = value.TimelogTaskID;
+                NotifyPropertyChanged("TimelogTaskID");
+            }
+        }
+
         private string timecardID;
         [Column(CanBeNull = true)]
         public string TimecardID;

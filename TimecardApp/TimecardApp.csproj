@@ -112,6 +112,8 @@
     <Compile Include="Model\NonPersistent\DBMigrator.cs" />
     <Compile Include="Model\NonPersistent\HelperClass.cs" />
     <Compile Include="Model\IDBObjects.cs" />
+    <Compile Include="Model\TimelogSetting.cs" />
+    <Compile Include="Model\Timelog\Session.cs" />
     <Compile Include="Model\Timelog\ITimelogWrapper.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\Setting.cs" />

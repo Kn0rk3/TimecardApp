@@ -23,7 +23,8 @@ namespace TimecardApp.Model
         public Table<Filter> Filter;
 
         //db version 2
-        //public Table<TimelogTask> TimelogTasks;
-        //public Table<TimelogProject> TimelogProjects;
+        public Table<TimelogTask> TimelogTasks;
+        public Table<TimelogProject> TimelogProjects;
+        public Table<TimelogSetting> TimelogSetting;
     }
 }
