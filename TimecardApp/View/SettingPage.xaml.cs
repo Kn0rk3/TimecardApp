@@ -21,7 +21,6 @@ namespace TimecardApp.View
         private ApplicationBarIconButton appBarHomeButton;
         private ApplicationBarIconButton appBarAddButton;
         private ApplicationBarIconButton appBarSaveButton;
-        private ApplicationBarIconButton appBarCancelButton;
 
         private SettingViewModel settingViewModel;
 
@@ -47,9 +46,6 @@ namespace TimecardApp.View
             appBarAddButton = new ApplicationBarIconButton(new Uri("Icons/add.png", UriKind.Relative));
             appBarAddButton.Click += new System.EventHandler(this.newProjectOrCustomerButton_Click);
 
-            appBarCancelButton = new ApplicationBarIconButton(new Uri("Toolkit.Content/ApplicationBar.Cancel.png", UriKind.Relative));
-            appBarCancelButton.Text = "Cancel";
-            appBarCancelButton.Click += new System.EventHandler(this.cancelButton_Click);
         }
 
 
@@ -62,7 +58,6 @@ namespace TimecardApp.View
                     ApplicationBar = new ApplicationBar();
                     ApplicationBar.Buttons.Add(appBarHomeButton);
                     ApplicationBar.Buttons.Add(appBarSaveButton);
-                    ApplicationBar.Buttons.Add(appBarCancelButton);
                     break;
                 case 1:
                     appBarAddButton.Text = "New Project";
@@ -76,17 +71,8 @@ namespace TimecardApp.View
                     ApplicationBar = new ApplicationBar();
                     ApplicationBar.Buttons.Add(appBarHomeButton);
                     ApplicationBar.Buttons.Add(appBarAddButton);
-                    break;
-
-                
+                    break;            
             }
-        }
-
-        private void cancelButton_Click(object sender, EventArgs e)
-        {
-            HelperClass.FocusedTextBoxUpdateSource();
-            App.AppViewModel.DiscardSettingViewModel();
-            NavigationService.Navigate(new Uri("/View/SettingPage.xaml?item=2", UriKind.Relative));
         }
 
         private void saveButton_Click(object sender, EventArgs e)

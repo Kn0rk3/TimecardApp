@@ -9,10 +9,23 @@ using TimecardApp.TimelogSecurityService;
 
 namespace TimecardApp.Model.Timelog
 {
-    class TimelogSession
+    public class TimelogSession
     {
         public string SessionUrl = "https://tl.timelog/leuschel";
-               
+        private static TimelogSession instance;
+
+        public static TimelogSession Instance
+        {
+            get
+            {
+                return instance ?? (instance = new TimelogSession());
+            }
+        }
+
+        private TimelogSession()
+        {
+        }
+        
         private ProjectManagementServiceClient projectManagementClient;
         public ProjectManagementServiceClient ProjectManagementClient
         {
@@ -42,15 +55,6 @@ namespace TimecardApp.Model.Timelog
                 }
 
                 return securityClient;
-            }
-        }
-
-        private static TimelogSession instance;
-        public static TimelogSession Instance
-        {
-            get
-            {
-                return instance ?? (instance = new TimelogSession());
             }
         }
 

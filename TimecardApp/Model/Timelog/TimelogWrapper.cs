@@ -7,6 +7,7 @@ using TimecardApp.TimelogSecurityService;
 using TimecardApp.TimelogProjectManagementService;
 using System.ServiceModel.Channels;
 using System.ServiceModel;
+using TimecardApp.Model.Timelog;
 
 
 
@@ -14,8 +15,29 @@ namespace TimecardApp.Model.Timelog
 {
     public class TimelogWrapper : ITimelogWrapper 
     {
+        /**
+         *  ################ Muss noch:
+         *  Es müssen hier noch die entsprechenden Funktionen für Worktasks und so eingetragen werden und alle müssen vor jeder Aktion zum Server über die SessionInstanz prüfen ob der Token noch gültig ist
+         *  Wenn nicht mehr gültig, dann muss ein neues Login durchgeführt werden (wenn nötig, mit Navigation auf die Setting seite, wenn speichern der Credentials nicht angekreuzt wurde)
+         **/
+        private TimelogSession tlSession;
+        private SecurityServiceClient tlSecurityClient;
+        private ViewModel.TimelogViewModel timelogViewModel;
+
+        public TimelogWrapper(ViewModel.TimelogViewModel timelogViewModel)
+        {
+            this.timelogViewModel = timelogViewModel;
+        }
+
         public void LoginTimelog(string url, string initials, string password)
         {
+            tlSession = TimelogSession.Instance;
+            tlSession.SessionUrl = url;
+            tlSecurityClient = tlSession.SecurityClient;
+
+            tlSecurityClient.GetTokenCompleted += tlSecurityClient_GetTokenCompleted;          
+            tlSecurityClient.GetTokenAsync(initials, password);            
+
         //    try
         //    {
             //    // Store the URL to support multiple TimeLog Project instances
@@ -60,6 +82,27 @@ namespace TimecardApp.Model.Timelog
             //return this.SignOn();
         }
 
+        private void tlSecurityClient_GetTokenCompleted(object sender, GetTokenCompletedEventArgs e)
+        {
+            try
+            {
+                if (e.Result.ResponseState == TimelogSecurityService.ExecutionStatus.Success)
+                {
+                    if (!String.IsNullOrEmpty(e.Result.Return[0].ToString()))
+                    {
+                        tlSession.SecurityToken = e.Result.Return[0];
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            { 
+                
+            }
+
+
+           
+        }
 
     }
 }

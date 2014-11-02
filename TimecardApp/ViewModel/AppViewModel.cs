@@ -525,6 +525,8 @@ namespace TimecardApp.ViewModel
             var settingObj = from Setting setting in dellAppDB.Setting
                              select setting;
 
+            settingViewModel = new SettingViewModel(settingObj.Single());
+
             return settingViewModel;
         }
 
@@ -813,6 +815,11 @@ namespace TimecardApp.ViewModel
             settingViewModel = null;
         }
 
+        public void DiscardTlSettingViewModel()
+        {
+            timelogViewModel  = null;
+        }
+
         #endregion
 
         #region add and delete methods
@@ -929,7 +936,7 @@ namespace TimecardApp.ViewModel
             else
             {
                 MessageBoxButton buttons = MessageBoxButton.OKCancel;
-                MessageBoxResult result = MessageBox.Show("There are still projects which references to this customer. Do you wanna try to delete all of them?");
+                MessageBoxResult result = MessageBox.Show("There are still projects which references to this customer. Do you wanna try to delete all of them?", "", buttons);
 
                 if (result == MessageBoxResult.OK)
                 {
@@ -1067,9 +1074,6 @@ namespace TimecardApp.ViewModel
             }
         }
         #endregion
-
-
-
 
     }
 }

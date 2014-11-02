@@ -113,7 +113,7 @@
     <Compile Include="Model\NonPersistent\HelperClass.cs" />
     <Compile Include="Model\IDBObjects.cs" />
     <Compile Include="Model\TimelogSetting.cs" />
-    <Compile Include="Model\Timelog\Session.cs" />
+    <Compile Include="Model\Timelog\TimelogSession.cs" />
     <Compile Include="Model\Timelog\ITimelogWrapper.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\Setting.cs" />
@@ -249,7 +249,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="ServiceReferences.ClientConfig" />
+    <Content Include="ServiceReferences.ClientConfig">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Service References\TimelogSecurityService\SecurityServiceSecure.wsdl" />
   </ItemGroup>
   <ItemGroup>

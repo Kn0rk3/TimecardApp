@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TimecardApp.Model;
+using TimecardApp.Model.Timelog;
 
 namespace TimecardApp.ViewModel
 {
@@ -99,6 +100,20 @@ namespace TimecardApp.ViewModel
             }
         }
 
+        private bool isSaveCredentials;
+        public bool IsSaveCredentials
+        {
+            get
+            {
+                return isSaveCredentials;
+            }
+            set
+            {
+                isSaveCredentials = value;
+                NotifyPropertyChanged("IsSaveCredentials");
+            }
+        }
+
 
         private ObservableCollection<TimelogTask> tlTaskCollection;
         public ObservableCollection<TimelogTask> TlTaskCollection
@@ -109,7 +124,7 @@ namespace TimecardApp.ViewModel
             }
         }
 
-        private ObservableCollection<TimelogProject > tlProjectCollection;
+        private ObservableCollection<TimelogProject> tlProjectCollection;
         public ObservableCollection<TimelogProject> TlProjectCollection
         {
             get
@@ -125,27 +140,52 @@ namespace TimecardApp.ViewModel
 
             username = tlSetting.Username;
             url = tlSetting.TimelogUrl;
+#if DEBUG
+            url = "https://tl.timelog.com/leuschel";
+#endif
             if (!String.IsNullOrEmpty(tlSetting.Password))
             {
                 byte[] passwordByte = ProtectedData.Unprotect(Encoding.UTF8.GetBytes(tlSetting.Password), null);
                 password = Encoding.UTF8.GetString(passwordByte, 0, passwordByte.Length);
             }
-            
+
+            if (!String.IsNullOrEmpty(username))
+                isSaveCredentials = true;
+            else
+                isSaveCredentials = false;
+
             LoggedIn = false;
         }
 
-        public void saveThisSetting()
+        public void SaveThisTlSetting()
         {
-
-            timelogSetting.Username = Username;
             timelogSetting.TimelogUrl = Url;
-            if (!String.IsNullOrEmpty(password))
+            if (isSaveCredentials)
             {
-                byte[] passwordInByte = Encoding.UTF8.GetBytes(password);
-                byte[] protectedPasswordByte = ProtectedData.Protect(passwordInByte, null);
-                timelogSetting.Password = Encoding.UTF8.GetString(protectedPasswordByte, 0, protectedPasswordByte.Length);
+                timelogSetting.Username = Username;
+
+                if (!String.IsNullOrEmpty(password))
+                {
+                    byte[] passwordInByte = Encoding.UTF8.GetBytes(password);
+                    byte[] protectedPasswordByte = ProtectedData.Protect(passwordInByte, null);
+                    timelogSetting.Password = Encoding.UTF8.GetString(protectedPasswordByte, 0, protectedPasswordByte.Length);
+                }
             }
+            else
+            {
+                timelogSetting.Username = String.Empty;
+                timelogSetting.Password = String.Empty;
+            }
+
             App.AppViewModel.SaveChangesToDB();
+        }
+
+        public void TL_loginToTimelog()
+        {
+            // der wrapper ist nur temporär, er wird erzeugt und benutzt. Die SessionInstanz im Hintergrund ist die die den SessionStatus aufrecht erhält. Der Wrapper ist nur eine weitere Abstraktionsschicht 
+            ITimelogWrapper wrapper = new TimelogWrapper(this);
+            wrapper.LoginTimelog(url, username, password);
+
         }
 
         #region INotifyPropertyChanged Members
