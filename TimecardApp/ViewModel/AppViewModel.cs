@@ -893,7 +893,7 @@ namespace TimecardApp.ViewModel
             else
             {
                 MessageBoxButton buttons = MessageBoxButton.OKCancel;
-                MessageBoxResult result = MessageBox.Show("There are still projects which references to this customer. Do you wanna try to delete all of them?");
+                MessageBoxResult result = MessageBox.Show("There are still projects which references to this customer. Do you wanna try to delete all of them?", "", buttons);
 
                 if (result == MessageBoxResult.OK)
                 {
