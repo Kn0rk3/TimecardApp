@@ -548,8 +548,6 @@ namespace TimecardApp.ViewModel
                 timelogViewModel = new TimelogViewModel(newTlSetting);
             }
 
-            timelogViewModel = new TimelogViewModel(timelogSettingObj.Single());
-
             return timelogViewModel;
         }
 

@@ -12,6 +12,7 @@ using System.IO.IsolatedStorage;
 using System.IO;
 using TimecardApp.Resources;
 using Microsoft.Phone.BackgroundTransfer;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.ViewModel
 {

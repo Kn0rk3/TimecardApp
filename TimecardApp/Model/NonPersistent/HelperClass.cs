@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace TimecardApp.Model
+namespace TimecardApp.Model.NonPersistent
 {
-    static class HelperClass
+    public static class HelperClass
     {
         public static void FocusedTextBoxUpdateSource()
         {
@@ -39,6 +40,20 @@ namespace TimecardApp.Model
                     }
                 }
             }
+        }
+
+        public static string GetEncryptedPWString(string clearPW)
+        {
+            byte[] passwordInByte = UTF8Encoding.UTF8.GetBytes(clearPW);
+            byte[] protectedPasswordByte = ProtectedData.Protect(passwordInByte, null);
+            return Convert.ToBase64String(protectedPasswordByte, 0, protectedPasswordByte.Length); 
+        }
+
+        public static string GetDecryptedPWString(string encrytpedPW)
+        {
+            byte[] encryptedBytes = UTF8Encoding.UTF8.GetBytes(encrytpedPW);
+            byte[] passwordByte = ProtectedData.Unprotect(encryptedBytes, null);
+            return Convert.ToBase64String(passwordByte, 0, passwordByte.Length); 
         }
 
         public static string GetShortDayName(DateTime date)

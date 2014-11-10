@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimecardApp.Model
+namespace TimecardApp.Model.Timelog
 {
     public interface ITimelogWrapper 
     {

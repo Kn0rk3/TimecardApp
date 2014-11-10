@@ -13,6 +13,7 @@ using TimecardApp.Model;
 using System.Collections.ObjectModel;
 using TimecardApp.ViewModel;
 using System.Windows.Data;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {

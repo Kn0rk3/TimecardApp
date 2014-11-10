@@ -9,8 +9,6 @@ using System.ServiceModel.Channels;
 using System.ServiceModel;
 using TimecardApp.Model.Timelog;
 
-
-
 namespace TimecardApp.Model.Timelog
 {
     public class TimelogWrapper : ITimelogWrapper 

@@ -16,6 +16,7 @@ using Microsoft.Phone.Tasks;
 using Windows.Storage.Pickers;
 using Windows.Storage;
 using Microsoft.Live;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {

@@ -13,6 +13,7 @@ using Windows.Storage.Pickers;
 using Windows.Storage;
 using Microsoft.Live;
 using System.Windows.Data;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {

@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using TimecardApp.ViewModel;
 using TimecardApp.Model;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {

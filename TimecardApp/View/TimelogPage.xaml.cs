@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using TimecardApp.ViewModel;
 using TimecardApp.Model;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {
@@ -31,6 +32,7 @@ namespace TimecardApp.View
             appBarHomeButton = new ApplicationBarIconButton(new Uri("Icons/map.neighborhood.png", UriKind.Relative));
             appBarHomeButton.Text = "Home";
             appBarHomeButton.Click += new System.EventHandler(this.homeButton_Click);
+
 
             appBarSaveButton = new ApplicationBarIconButton(new Uri("Icons/save.png", UriKind.Relative));
             appBarSaveButton.Text = "Save";
@@ -67,6 +69,19 @@ namespace TimecardApp.View
             
             this.DataContext = timelogViewModel;
             base.OnNavigatedTo(e);
+        }
+
+        private void TlSettingPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch ((sender as Pivot).SelectedIndex)
+            {
+                case 0:
+                    ApplicationBar = new ApplicationBar();
+                    ApplicationBar.Buttons.Add(appBarHomeButton);
+                    ApplicationBar.Buttons.Add(appBarSaveButton);
+                    break;
+                
+            }
         }
     }
 }

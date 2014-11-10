@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using TimecardApp.Model;
+using TimecardApp.Model.NonPersistent;
 using TimecardApp.Model.Timelog;
 
 namespace TimecardApp.ViewModel
@@ -133,7 +135,6 @@ namespace TimecardApp.ViewModel
             }
         }
 
-
         public TimelogViewModel(TimelogSetting tlSetting)
         {
             timelogSetting = tlSetting;
@@ -145,15 +146,8 @@ namespace TimecardApp.ViewModel
 #endif
             if (!String.IsNullOrEmpty(tlSetting.Password))
             {
-                byte[] passwordByte = ProtectedData.Unprotect(Encoding.UTF8.GetBytes(tlSetting.Password), null);
-                password = Encoding.UTF8.GetString(passwordByte, 0, passwordByte.Length);
+                password = HelperClass.GetDecryptedPWString(tlSetting.Password);
             }
-
-            if (!String.IsNullOrEmpty(username))
-                isSaveCredentials = true;
-            else
-                isSaveCredentials = false;
-
             LoggedIn = false;
         }
 
@@ -166,9 +160,7 @@ namespace TimecardApp.ViewModel
 
                 if (!String.IsNullOrEmpty(password))
                 {
-                    byte[] passwordInByte = Encoding.UTF8.GetBytes(password);
-                    byte[] protectedPasswordByte = ProtectedData.Protect(passwordInByte, null);
-                    timelogSetting.Password = Encoding.UTF8.GetString(protectedPasswordByte, 0, protectedPasswordByte.Length);
+                    timelogSetting.Password = HelperClass.GetEncryptedPWString(password);                  
                 }
             }
             else

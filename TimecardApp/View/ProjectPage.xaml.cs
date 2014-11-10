@@ -11,6 +11,7 @@ using TimecardApp.Model;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using TimecardApp.ViewModel;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {
