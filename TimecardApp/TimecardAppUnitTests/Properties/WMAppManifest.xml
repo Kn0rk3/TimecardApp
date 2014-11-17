@@ -1,17 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2014/deployment" AppPlatformVersion="8.1">
-  <DefaultLanguage xmlns="" code="de-DE"/>
+  <DefaultLanguage xmlns="" code="en" />
   <App xmlns="" ProductID="{ed6658dc-5ed1-4676-97fb-7045b29ef7e1}" Title="TimecardAppUnitTests" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="TimecardAppUnitTests author" Description="Sample description" SDOptOut="false" BackUpOptOut="false" Publisher="TimecardAppUnitTests" PublisherID="{069eadb8-d363-4a33-8661-ee1de921d97e}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
-      <Capability Name="ID_CAP_NETWORKING"/>
-      <Capability Name="ID_CAP_MEDIALIB_AUDIO"/>
-      <Capability Name="ID_CAP_MEDIALIB_PLAYBACK"/>
-      <Capability Name="ID_CAP_SENSORS"/>
-      <Capability Name="ID_CAP_WEBBROWSERCOMPONENT"/>
+      <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
     </Capabilities>
     <Tasks>
-      <DefaultTask Name="_default" NavigationPage="MainPage.xaml" ActivationPolicy="Resume"/>
+      <DefaultTask Name="_default" NavigationPage="MainPage.xaml" ActivationPolicy="Resume" />
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="TimecardAppUnitTestsToken" TaskName="_default">
@@ -20,26 +16,31 @@
           <Count>0</Count>
           <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
           <Title>TimecardAppUnitTests</Title>
-          <BackContent></BackContent>
-          <BackBackgroundImageURI></BackBackgroundImageURI>
-          <BackTitle></BackTitle>
-          <DeviceLockImageURI></DeviceLockImageURI>
-          <HasLarge></HasLarge>
+          <BackContent>
+          </BackContent>
+          <BackBackgroundImageURI>
+          </BackBackgroundImageURI>
+          <BackTitle>
+          </BackTitle>
+          <DeviceLockImageURI>
+          </DeviceLockImageURI>
+          <HasLarge>
+          </HasLarge>
         </TemplateFlip>
       </PrimaryToken>
     </Tokens>
     <ActivatableClasses>
       <InProcessServer>
         <Path>vstest_executionengine_platformbridge.dll</Path>
-        <ActivatableClass ActivatableClassId="vstest_executionengine_platformbridge.ServiceMain" ThreadingModel="both"/>
-        <ActivatableClass ActivatableClassId="vstest_executionengine_platformbridge.MessageTransmitter" ThreadingModel="both"/>
-        <ActivatableClass ActivatableClassId="vstest_executionengine_platformbridge.NativeMethods" ThreadingModel="both"/>
+        <ActivatableClass ActivatableClassId="vstest_executionengine_platformbridge.ServiceMain" ThreadingModel="both" />
+        <ActivatableClass ActivatableClassId="vstest_executionengine_platformbridge.MessageTransmitter" ThreadingModel="both" />
+        <ActivatableClass ActivatableClassId="vstest_executionengine_platformbridge.NativeMethods" ThreadingModel="both" />
       </InProcessServer>
     </ActivatableClasses>
     <ScreenResolutions>
-      <ScreenResolution Name="ID_RESOLUTION_WVGA"/>
-      <ScreenResolution Name="ID_RESOLUTION_WXGA"/>
-      <ScreenResolution Name="ID_RESOLUTION_HD720P"/>
+      <ScreenResolution Name="ID_RESOLUTION_WVGA" />
+      <ScreenResolution Name="ID_RESOLUTION_WXGA" />
+      <ScreenResolution Name="ID_RESOLUTION_HD720P" />
     </ScreenResolutions>
   </App>
 </Deployment>
