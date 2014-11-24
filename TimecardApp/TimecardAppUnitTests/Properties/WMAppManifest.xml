@@ -1,10 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2014/deployment" AppPlatformVersion="8.1">
   <DefaultLanguage xmlns="" code="en" />
+  <Languages xmlns="">
+    <Language code="en" />
+  </Languages>
   <App xmlns="" ProductID="{ed6658dc-5ed1-4676-97fb-7045b29ef7e1}" Title="TimecardAppUnitTests" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="TimecardAppUnitTests author" Description="Sample description" SDOptOut="false" BackUpOptOut="false" Publisher="TimecardAppUnitTests" PublisherID="{069eadb8-d363-4a33-8661-ee1de921d97e}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
+      <Capability Name="ID_CAP_NETWORKING" />
     </Capabilities>
     <Tasks>
       <DefaultTask Name="_default" NavigationPage="MainPage.xaml" ActivationPolicy="Resume" />
