@@ -51,9 +51,12 @@ namespace TimecardApp.Model.NonPersistent
 
         public static string GetDecryptedPWString(string encrytpedPW)
         {
-            byte[] encryptedBytes = UTF8Encoding.UTF8.GetBytes(encrytpedPW);
+            //byte[] encryptedBytes = UTF8Encoding.UTF8.GetBytes(encrytpedPW);
+            //byte[] passwordByte = ProtectedData.Unprotect(encryptedBytes, null);
+            //return Convert.ToBase64String(passwordByte, 0, passwordByte.Length); 
+            byte[] encryptedBytes = Convert.FromBase64String(encrytpedPW);
             byte[] passwordByte = ProtectedData.Unprotect(encryptedBytes, null);
-            return Convert.ToBase64String(passwordByte, 0, passwordByte.Length); 
+            return UTF8Encoding.UTF8.GetString(passwordByte, 0, passwordByte.Length);
         }
 
         public static string GetShortDayName(DateTime date)
