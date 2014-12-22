@@ -13,6 +13,7 @@ using TimecardApp.Resources;
 using Microsoft.Phone.Data.Linq;
 using System.IO.IsolatedStorage;
 using TimecardApp.Model.NonPersistent;
+using TimecardApp.View;
 
 namespace TimecardApp.ViewModel
 {
@@ -530,22 +531,25 @@ namespace TimecardApp.ViewModel
             return settingViewModel;
         }
 
-        public TimelogViewModel GetTimelogViewModel()
+        public TimelogViewModel GetTimelogViewModel(ITimelogUsingView view)
         {
             if (timelogViewModel != null)
+            {
+                timelogViewModel.TimelogUsingView = view;
                 return timelogViewModel;
-
+            }
+              
             var timelogSettingObj = from TimelogSetting tlSetting in dellAppDB.TimelogSetting
                                     select tlSetting;
 
             if (timelogSettingObj.Count() > 0)
-                timelogViewModel = new TimelogViewModel(timelogSettingObj.Single());
+                timelogViewModel = new TimelogViewModel(timelogSettingObj.Single(),  view);
             else
             {
                 TimelogSetting newTlSetting = new TimelogSetting() { TimelogSettingID = System.Guid.NewGuid().ToString() };
                 dellAppDB.TimelogSetting.InsertOnSubmit(newTlSetting);
                 dellAppDB.SubmitChanges();
-                timelogViewModel = new TimelogViewModel(newTlSetting);
+                timelogViewModel = new TimelogViewModel(newTlSetting, view);
             }
 
             return timelogViewModel;

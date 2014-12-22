@@ -9,5 +9,7 @@ namespace TimecardApp.Model.Timelog
     public interface ITimelogWrapper 
     {
         void LoginTimelog(string url, string initials, string password);
+        void GetTimelogTasks();
+        bool IsValidSecurityToken();
     }
 }

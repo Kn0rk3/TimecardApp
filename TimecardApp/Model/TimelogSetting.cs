@@ -92,6 +92,26 @@ namespace TimecardApp.Model
             }
         }
 
+        private bool loginBackground;
+        [Column(CanBeNull = true)]
+        public bool LoginBackground
+        {
+            get
+            {
+                return loginBackground;
+            }
+
+            set
+            {
+                if (loginBackground != value)
+                {
+                    NotifyPropertyChanging("LoginBackground");
+                    loginBackground = value;
+                    NotifyPropertyChanged("LoginBackground");
+                }
+            }
+        }
+
         // Version column aids update performance.
         [Column(IsVersion = true)]
         private Binary _version;

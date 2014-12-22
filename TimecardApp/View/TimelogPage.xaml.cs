@@ -8,80 +8,79 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using TimecardApp.ViewModel;
+using TimecardApp.Model.Timelog;
 using TimecardApp.Model;
 using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {
-    public partial class TimelogPage : PhoneApplicationPage
+    public partial class TimelogPage : PhoneApplicationPage, ITimelogUsingView
     {
         private TimelogViewModel timelogViewModel;
-
         private ApplicationBarIconButton appBarHomeButton;
-        private ApplicationBarIconButton appBarSaveButton;
+        private ApplicationBarIconButton appBarSyncData;
+        private ApplicationBarIconButton appBarEdit;
 
         public TimelogPage()
         {
             InitializeComponent();
             BuildLocalizedApplicationBar();
+            this.LoadingPanel.Visibility = Visibility.Collapsed;
         }
 
         private void BuildLocalizedApplicationBar()
         {
-            // ApplicationBar der Seite einer neuen Instanz von ApplicationBar zuweisen
+            ApplicationBar = new ApplicationBar();
             appBarHomeButton = new ApplicationBarIconButton(new Uri("Icons/map.neighborhood.png", UriKind.Relative));
             appBarHomeButton.Text = "Home";
             appBarHomeButton.Click += new System.EventHandler(this.homeButton_Click);
 
+            appBarSyncData = new ApplicationBarIconButton(new Uri("Icons/refresh.png", UriKind.Relative));
+            appBarSyncData.Text = "Load data";
+            appBarSyncData.Click += new System.EventHandler(this.synchronisationData_Click);
 
-            appBarSaveButton = new ApplicationBarIconButton(new Uri("Icons/save.png", UriKind.Relative));
-            appBarSaveButton.Text = "Save";
-            appBarSaveButton.Click += new System.EventHandler(this.saveButton_Click);
+            appBarEdit = new ApplicationBarIconButton(new Uri("Resources/edit.png", UriKind.Relative));
+            appBarEdit.Text = "Edit";
+            appBarEdit.Click += new System.EventHandler(this.editTimelogSetting_Click);
+
+            ApplicationBar.Buttons.Add(appBarHomeButton);
+            ApplicationBar.Buttons.Add(appBarEdit);
+            ApplicationBar.Buttons.Add(appBarSyncData);
         }
 
-        private void saveButton_Click(object sender, EventArgs e)
+        private void editTimelogSetting_Click(object sender, EventArgs e)
         {
-            HelperClass.FocusedTextBoxUpdateSource();
-            timelogViewModel.SaveThisTlSetting();
+            App.AppViewModel.DiscardTlSettingViewModel();
+            NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));
         }
 
         private void homeButton_Click(object sender, EventArgs e)
         {
-            HelperClass.FocusedTextBoxUpdateSource();
             App.AppViewModel.DiscardTlSettingViewModel();
             NavigationService.Navigate(new Uri("/View/MainPage.xaml", UriKind.Relative));
         }
 
-        private void loginButton_Click(object sender, EventArgs e)
+        private void synchronisationData_Click(object sender, EventArgs e)
         {
-            HelperClass.FocusedTextBoxUpdateSource();
-            timelogViewModel.TL_loginToTimelog();
+            timelogViewModel.ExecuteTlOperation(TimelogOperation.GetTasks);
         }
-
-        private void loadDataButton_Click(object sender, EventArgs e)
-        {
-        }
-
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            timelogViewModel = App.AppViewModel.GetTimelogViewModel();
+            timelogViewModel = App.AppViewModel.GetTimelogViewModel(this);
             
             this.DataContext = timelogViewModel;
             base.OnNavigatedTo(e);
         }
 
-        private void TlSettingPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void connectionFinished()
         {
-            switch ((sender as Pivot).SelectedIndex)
-            {
-                case 0:
-                    ApplicationBar = new ApplicationBar();
-                    ApplicationBar.Buttons.Add(appBarHomeButton);
-                    ApplicationBar.Buttons.Add(appBarSaveButton);
-                    break;
-                
-            }
+            this.LoadingPanel.Visibility = Visibility.Collapsed;
+        }
+
+        public void connectionStarted()
+        {
+            this.LoadingPanel.Visibility = Visibility.Visible;
         }
     }
 }

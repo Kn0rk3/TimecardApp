@@ -1,83 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using TimecardApp.TimelogSecurityService;
 using TimecardApp.TimelogProjectManagementService;
 using System.ServiceModel.Channels;
 using System.ServiceModel;
 using TimecardApp.Model.Timelog;
+using System.Collections.ObjectModel;
+using TimecardApp.ViewModel;
 
 namespace TimecardApp.Model.Timelog
 {
     public class TimelogWrapper : ITimelogWrapper 
     {
-        /**
-         *  ################ Muss noch:
-         *  Es müssen hier noch die entsprechenden Funktionen für Worktasks und so eingetragen werden und alle müssen vor jeder Aktion zum Server über die SessionInstanz prüfen ob der Token noch gültig ist
-         *  Wenn nicht mehr gültig, dann muss ein neues Login durchgeführt werden (wenn nötig, mit Navigation auf die Setting seite, wenn speichern der Credentials nicht angekreuzt wurde)
-         **/
-        private TimelogSession tlSession;
-        private SecurityServiceClient tlSecurityClient;
-        private ViewModel.TimelogViewModel timelogViewModel;
+        // this model reference is for locking the page during network activity
+        private ITimelogViewModel tlViewModel;
 
-        public TimelogWrapper(ViewModel.TimelogViewModel timelogViewModel)
+        public TimelogWrapper(ITimelogViewModel tlViewModel)
         {
-            this.timelogViewModel = timelogViewModel;
+            this.tlViewModel = tlViewModel;
         }
 
         public void LoginTimelog(string url, string initials, string password)
         {
-            tlSession = TimelogSession.Instance;
+            tlViewModel.ChangeState(TimelogState.Running, TimelogOperation.Login, String.Empty);
+
+            TimelogSession tlSession = TimelogSession.Instance;
             tlSession.SessionUrl = url;
-            tlSecurityClient = tlSession.SecurityClient;
 
-            tlSecurityClient.GetTokenCompleted += tlSecurityClient_GetTokenCompleted;          
+            SecurityServiceClient tlSecurityClient = tlSession.SecurityClient;
+            tlSecurityClient.GetTokenCompleted += tlSecurityClient_GetTokenCompleted;
+            
             tlSecurityClient.GetTokenAsync(initials, password);            
+        }
 
-        //    try
-        //    {
-            //    // Store the URL to support multiple TimeLog Project instances
-            //    TimelogSession.Instance.SessionUrl = url.Replace("http://", "https://").Trim('/');
+        //public void GetTimelogProjects(bool backgroundLoginBfore)
+        //{
+        //    tlViewModel.StartTimelogConnection();
 
-            //    // Fetch the token
-            //    TimelogSession.Instance.SecurityClient.GetTokenAsync(initials, password);
-                
-            //    // Did we get a token?
-            //    if (_response.ResponseState == TimelogSecurity.ExecutionStatus.Success)
-            //    {
-            //        // Store the token for later
-            //        SessionHelper.Instance.SecurityToken = _response.Return[0];
+        //    ObservableCollection<TimelogProject> projects = new ObservableCollection<TimelogProject>();
+        //    TimelogSession tlSession = TimelogSession.Instance;
 
-            //        // Get the name of the user
-            //        var _userResponse = SessionHelper.Instance.SecurityClient.GetUser(_response.Return[0]);
-            //        SessionHelper.Instance.FirstName = _userResponse.Return[0].FirstName;
-            //        SessionHelper.Instance.Url = url;
-            //        SessionHelper.Instance.Initials = initials;
-            //        SessionHelper.Instance.Authenticate(initials);
+        //    ProjectManagementServiceClient tlProjectClient = tlSession.ProjectManagementClient;
+            
+            
+        //}
 
-            //        // Authenticate with the application
-            //        return RedirectToAction("Index", "Dashboard");
-            //    }
-            //    else
-            //    {
-            //        // Loop through the error messages and print them to the user
-            //        foreach (var _item in _response.Messages.Where(m => m.ErrorCode > 0))
-            //        {
-            //            this.ViewData.ModelState.AddModelError(
-            //                "Initials",
-            //                _item.ErrorCode == 40001 ? "Initials or password wrong" : _item.Message);
-            //        }
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //    // Url is most likely wrong
-            //    ViewData.ModelState.AddModelError("Initials", "Unable to connect to the service. Please check the URL");
-            //}
+        public void  GetTimelogTasks()
+        {
+            tlViewModel.ChangeState(TimelogState.Running, TimelogOperation.GetTasks, String.Empty);
 
-            //return this.SignOn();
+            TimelogSession tlSession = TimelogSession.Instance;
+
+            ProjectManagementServiceClient tlProjectClient = tlSession.ProjectManagementClient;
+            tlProjectClient.GetTasksAllocatedToEmployeeCompleted += tlProjectClient_GetTasksCompleted;
+            tlProjectClient.GetTasksAllocatedToEmployeeAsync(tlSession.ProjectManagementToken.Initials , tlSession.ProjectManagementToken);
+        }
+
+        public  bool IsValidSecurityToken()
+        {
+            TimelogSession tlSession = TimelogSession.Instance;
+            if (tlSession.SecurityToken != null)
+            {
+                if (tlSession.SecurityToken.Expires > DateTime.UtcNow)
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+            
         }
 
         private void tlSecurityClient_GetTokenCompleted(object sender, GetTokenCompletedEventArgs e)
@@ -88,19 +84,38 @@ namespace TimecardApp.Model.Timelog
                 {
                     if (!String.IsNullOrEmpty(e.Result.Return[0].ToString()))
                     {
+                        TimelogSession tlSession = TimelogSession.Instance;
                         tlSession.SecurityToken = e.Result.Return[0];
-
+                        tlViewModel.ChangeState(TimelogState.ExectionSuccessfull, TimelogOperation.Login , String.Empty);                        
                     }
                 }
             }
             catch (Exception ex)
-            { 
-                
+            {
+                tlViewModel.ChangeState(TimelogState.UnexpectedError, TimelogOperation.Login, e.Error.Message );
+                throw new Exception("Exception during TimelogWrapper.tl_SecurityClient_GetTokenCompleted", ex.InnerException );
             }
-
-
-           
         }
 
+        private void tlProjectClient_GetTasksCompleted(object sender, GetTasksAllocatedToEmployeeCompletedEventArgs e)
+        {
+            try
+            {
+                if (e.Result.ResponseState == TimelogProjectManagementService.ExecutionStatus.Success)
+                {
+                    ObservableCollection<TimelogProjectManagementService.Task> colTasks = e.Result.Return;
+                    if (colTasks != null)
+                    {
+                        tlViewModel.SetTimelogTasks(colTasks);
+                        tlViewModel.ChangeState(TimelogState.ExectionSuccessfull, TimelogOperation.GetTasks, String.Empty);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                tlViewModel.ChangeState(TimelogState.UnexpectedError, TimelogOperation.GetTasks, e.Error.Message );
+                throw new Exception("Exception during TimelogWrapper.tlProjectClient_GetTasksCompleted", ex.InnerException);
+            }
+        }
     }
 }

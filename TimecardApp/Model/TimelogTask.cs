@@ -12,44 +12,105 @@ namespace TimecardApp.Model
     [Table]
     public class TimelogTask : INotifyPropertyChanged, INotifyPropertyChanging, IDBObjects 
     {
-        private string timelogTaskID;
+        private string timelogTaskUID;
         [Column(IsPrimaryKey = true, IsDbGenerated = false, CanBeNull = false, AutoSync = AutoSync.OnInsert)]
-        public string TimelogTaskID
+        public string TimelogTaskUID
         {
             get
             {
-                return timelogTaskID;
+                return timelogTaskUID;
             }
 
             set
             {
-                if (timelogTaskID != value)
+                if (timelogTaskUID != value)
                 {
-                    NotifyPropertyChanging("TimelogTaskID");
-                    timelogTaskID = value;
-                    NotifyPropertyChanged("TimelogTaskID");
+                    NotifyPropertyChanging("TimelogTaskUID");
+                    timelogTaskUID = value;
+                    NotifyPropertyChanged("TimelogTaskUID");
                 }
             }
         }
 
-        private string timelogProjectID;
-        [Column(CanBeNull = true)]
-        public string TimelogProjectID;
-
-        private EntityRef<TimelogProject> _TimelogProject;
-        [Association(Storage = "_TimelogProject", ThisKey = "TimelogProjectID", IsForeignKey = true)]
-        public TimelogProject TimelogProject
+        private string timelogTaskName;
+        [Column]
+        public string TimelogTaskName
         {
-            get { return this._TimelogProject.Entity; }
+            get
+            {
+                return timelogTaskName;
+            }
+
             set
             {
-                NotifyPropertyChanging("TimelogProjectID");
-                this._TimelogProject.Entity = value;
-                if (value != null)
-                    timelogProjectID = value.TimelogProjectID;
-                NotifyPropertyChanged("TimelogProjectID");
+                if (timelogTaskName != value)
+                {
+                    NotifyPropertyChanging("TimelogTaskName");
+                    timelogTaskName = value;
+                    NotifyPropertyChanged("TimelogTaskName");
+                }
             }
         }
+
+        private int timelogProjectID;
+        [Column]
+        public int TimelogProjectID
+        {
+            get
+            {
+                return timelogProjectID;
+            }
+
+            set
+            {
+                if (timelogProjectID != value)
+                {
+                    NotifyPropertyChanging("TimelogProjectID");
+                    timelogProjectID = value;
+                    NotifyPropertyChanged("TimelogProjectID");
+                }
+            }
+        }
+
+        private string timelogProjectName;
+        [Column]
+        public string TimelogProjectName
+        {
+            get
+            {
+                return timelogProjectName;
+            }
+
+            set
+            {
+                if (timelogProjectName != value)
+                {
+                    NotifyPropertyChanging("TimelogProjectName");
+                    timelogProjectName = value;
+                    NotifyPropertyChanged("TimelogProjectName");
+                }
+            }
+        }
+
+        
+        //private string timelogProjectID;
+        //[Column(CanBeNull = true)]
+        //public string TimelogProjectID;
+
+        //private EntityRef<TimelogProject> _TimelogProject;
+        //[Association(Storage = "_TimelogProject", ThisKey = "TimelogProjectID", IsForeignKey = true)]
+        //public TimelogProject TimelogProject
+        //{
+        //    get { return this._TimelogProject.Entity; }
+        //    set
+        //    {
+        //        NotifyPropertyChanging("TimelogProjectID");
+        //        this._TimelogProject.Entity = value;
+        //        if (value != null)
+        //            timelogProjectID = value.TimelogProjectID;
+        //        NotifyPropertyChanged("TimelogProjectID");
+        //    }
+        //}
 
         // Version column aids update performance.
         [Column(IsVersion = true)]

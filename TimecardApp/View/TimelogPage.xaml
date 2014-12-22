@@ -6,6 +6,7 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
@@ -15,33 +16,17 @@
 
     <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <phone:Pivot x:Name="SettingPivot" SelectionChanged="TlSettingPagePivot_SelectionChanged" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - timelog" VerticalAlignment="Top" Width="500">
-            <phone:PivotItem x:Name="TimelogSetting" CacheMode="{x:Null}" Header="Tl setting">
-                <Grid x:Name="SettingPanel" >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Timelog url" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
-                    <TextBox Grid.Column="1" Grid.Row="0" Width="300" Text="{Binding Url ,Mode=TwoWay}" />
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="username" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
-                    <TextBox Grid.Column="1" Grid.Row="1" Width="300"  Text="{Binding Username ,Mode=TwoWay }"/>
-                    <TextBlock Grid.Row="2" Grid.Column="0" Text="password" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
-                    <PasswordBox Grid.Row="2" Grid.Column="1" Width="300" Password="{Binding Password ,Mode=TwoWay}"/>
-                    <CheckBox  Grid.Row="3" Grid.Column="0" IsChecked="{Binding IsSaveCredentials, Mode=TwoWay}" Margin="12,12,12,10" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
-                    <TextBlock Grid.Row="3" Grid.Column="1" Width="300" Text="Save credentials (enycrypted)" VerticalAlignment="Center" Margin="12,12,12,10"/>
-                    <Button Content="Login"  IsEnabled ="{Binding NotLoggedIn }"  Grid.Column="0" Grid.Row="4" Click="loginButton_Click"/>
-                    <Button Content="Import project data" IsEnabled ="{Binding LoggedIn }"  Grid.Column="1" Grid.Row="4" Click="loadDataButton_Click"/>
-                </Grid>
+        <phone:Pivot x:Name="TimelogPivot" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - timelog" VerticalAlignment="Top" Width="500">
+            <phone:PivotItem x:Name="tlProjects" CacheMode="{x:Null}" Header="Tl-projects">
+                
+                <!-- Expanderlist for tasks (just show name and projectName, projectID)-->
+                
             </phone:PivotItem>
         </phone:Pivot>
+        <Grid x:Name="LoadingPanel" IsHitTestVisible="True" Visibility="Visible">
+            <Border Background="Black" Opacity="0.8" />
+            <TextBlock Text="Loading ... "/>
+        </Grid>
     </Grid>
 
 </phone:PhoneApplicationPage>

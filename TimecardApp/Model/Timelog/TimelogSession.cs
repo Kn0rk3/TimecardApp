@@ -58,8 +58,8 @@ namespace TimecardApp.Model.Timelog
             }
         }
 
-        private TimecardApp.TimelogSecurityService.SecurityToken securityToken;
-        public TimecardApp.TimelogSecurityService.SecurityToken SecurityToken
+        private TimelogSecurityService.SecurityToken securityToken;
+        public TimelogSecurityService.SecurityToken SecurityToken
         {
             get
             {
@@ -75,20 +75,17 @@ namespace TimecardApp.Model.Timelog
             }
         }
 
-        private TimecardApp.TimelogProjectManagementService.SecurityToken projectManagementToken;
-        public TimecardApp.TimelogProjectManagementService.SecurityToken ProjectManagementToken
+        private TimelogProjectManagementService.SecurityToken projectManagementToken;
+        public TimelogProjectManagementService.SecurityToken ProjectManagementToken
         {
             get
             {
-                if (projectManagementToken == null)
+                return new TimelogProjectManagementService.SecurityToken
                 {
-                    return null;
-                }
-                return projectManagementToken;
-            }
-            set
-            {
-                projectManagementToken = value;
+                    Expires = SecurityToken.Expires,
+                    Hash = SecurityToken.Hash,
+                    Initials = SecurityToken.Initials
+                };
             }
         }
     }

@@ -24,7 +24,6 @@ namespace TimecardApp.Model
 
         //db version 2
         public Table<TimelogTask> TimelogTasks;
-        public Table<TimelogProject> TimelogProjects;
         public Table<TimelogSetting> TimelogSetting;
     }
 }

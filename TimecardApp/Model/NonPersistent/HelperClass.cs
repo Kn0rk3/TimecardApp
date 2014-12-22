@@ -44,25 +44,36 @@ namespace TimecardApp.Model.NonPersistent
 
         public static string GetEncryptedPWString(string clearPW)
         {
-            byte[] passwordInByte = UTF8Encoding.UTF8.GetBytes(clearPW);
-            byte[] protectedPasswordByte = ProtectedData.Protect(passwordInByte, null);
-            return Convert.ToBase64String(protectedPasswordByte, 0, protectedPasswordByte.Length); 
+            try
+            {
+                byte[] passwordInByte = UTF8Encoding.UTF8.GetBytes(clearPW);
+                byte[] protectedPasswordByte = ProtectedData.Protect(passwordInByte, null);
+                return Convert.ToBase64String(protectedPasswordByte, 0, protectedPasswordByte.Length);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error during password encryption. Error message:" + ex.Message + " \n InnerException: " + ex.InnerException);
+            }
         }
 
         public static string GetDecryptedPWString(string encrytpedPW)
         {
-            //byte[] encryptedBytes = UTF8Encoding.UTF8.GetBytes(encrytpedPW);
-            //byte[] passwordByte = ProtectedData.Unprotect(encryptedBytes, null);
-            //return Convert.ToBase64String(passwordByte, 0, passwordByte.Length); 
-            byte[] encryptedBytes = Convert.FromBase64String(encrytpedPW);
-            byte[] passwordByte = ProtectedData.Unprotect(encryptedBytes, null);
-            return UTF8Encoding.UTF8.GetString(passwordByte, 0, passwordByte.Length);
+            try
+            {
+                byte[] encryptedBytes = Convert.FromBase64String(encrytpedPW);
+                byte[] passwordByte = ProtectedData.Unprotect(encryptedBytes, null);
+                return UTF8Encoding.UTF8.GetString(passwordByte, 0, passwordByte.Length);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error during password encryption. Error message:" + ex.Message + " \n InnerException: " + ex.InnerException);
+            }
         }
 
         public static string GetShortDayName(DateTime date)
         {
             // hier darf immer nur ein Montag gespeichert werden
-            switch (date.DayOfWeek )
+            switch (date.DayOfWeek)
             {
                 case DayOfWeek.Monday:
                     return "Mo";
@@ -114,7 +125,7 @@ namespace TimecardApp.Model.NonPersistent
 
         public static int NumberOfWeek(DateTime date)
         {
-             int weekNumber;
+            int weekNumber;
             // Aktuelle Kultur ermitteln
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
 
@@ -143,7 +154,7 @@ namespace TimecardApp.Model.NonPersistent
                     calendarWeek = 1;
             }
             weekNumber = calendarWeek;
-            
+
             // Das Jahr der Kalenderwoche ermitteln
             int year = date.Year;
             if (calendarWeek == 1 && date.Month == 12)
@@ -152,7 +163,7 @@ namespace TimecardApp.Model.NonPersistent
                 year--;
 
             return weekNumber;
-           
+
         }
     }
 }

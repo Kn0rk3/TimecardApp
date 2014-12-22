@@ -132,7 +132,7 @@ namespace TimecardApp.View
             if (App.AppViewModel.UsingTimelogInterface)
             {
                 appBarMenuTimelog = new ApplicationBarMenuItem();
-                appBarMenuTimelog.Text = "Timelog settings";
+                appBarMenuTimelog.Text = "Timelog data";
                 appBarMenuTimelog.Click += new System.EventHandler(this.timelogButton_Click);
             }
 

@@ -1,0 +1,65 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="TimecardApp.View.TimelogLoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="TimecardApp - timelog login" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="timelog login" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <Grid x:Name="SettingPanel" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Timelog url" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Width="300" Text="{Binding Url ,Mode=TwoWay}" />
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="username" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                <TextBox Grid.Column="1" Grid.Row="1" Width="300"  Text="{Binding Username ,Mode=TwoWay }"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="password" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                <PasswordBox Grid.Row="2" Grid.Column="1" Width="300" Password="{Binding Password ,Mode=TwoWay}"/>
+                <CheckBox  Grid.Row="3" Grid.Column="0" IsChecked="{Binding IsSaveCredentials, Mode=TwoWay}" Margin="12,12,12,10" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                <TextBlock Grid.Row="3" Grid.Column="1" Width="300" Text="Save credentials (enycrypted)" VerticalAlignment="Center" Margin="12,12,12,10"/>
+                <CheckBox  Grid.Row="4" Grid.Column="0" IsChecked="{Binding IsLoginBackground, Mode=TwoWay}" IsEnabled="{Binding IsSaveCredentials}"  Margin="12,12,12,10" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
+                <TextBlock Grid.Row="4" Grid.Column="1" Width="300" Text="automatically login" VerticalAlignment="Center" Margin="12,12,12,10"/>
+
+                <Button Content="Login"  Grid.Column="0" Grid.Row="5" Click="loginButton_Click"/>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="0" Grid.RowSpan="2" x:Name="LoadingPanel" IsHitTestVisible="True" Visibility="Visible">
+            <Border Background="Black" Opacity="0.8" />
+            <TextBlock Text="Loading ... "/>
+        </Grid>
+    </Grid>
+    
+
+</phone:PhoneApplicationPage>

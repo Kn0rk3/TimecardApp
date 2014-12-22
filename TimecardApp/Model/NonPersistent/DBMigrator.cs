@@ -60,11 +60,10 @@ namespace TimecardApp.Model.NonPersistent
 
         private void migrateFromVersion1 ()
         {
-            dbUpdater.AddTable<TimelogProject>();
             dbUpdater.AddTable<TimelogTask>();
             dbUpdater.AddTable<TimelogSetting>();
 
-            dbUpdater.AddAssociation<WorkTask>("TimelogTaskID");
+            dbUpdater.AddAssociation<WorkTask>("TimelogTaskUID");
             dbUpdater.AddColumn<Setting>("IsUsingTimelog");
 
             dbUpdater.DatabaseSchemaVersion = latestVersion;
