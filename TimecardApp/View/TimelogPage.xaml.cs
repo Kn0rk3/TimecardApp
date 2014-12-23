@@ -25,7 +25,7 @@ namespace TimecardApp.View
         {
             InitializeComponent();
             BuildLocalizedApplicationBar();
-            this.LoadingPanel.Visibility = Visibility.Collapsed;
+            //this.LoadingPanel.Visibility = Visibility.Collapsed;
         }
 
         private void BuildLocalizedApplicationBar()
@@ -50,19 +50,28 @@ namespace TimecardApp.View
 
         private void editTimelogSetting_Click(object sender, EventArgs e)
         {
-            App.AppViewModel.DiscardTlSettingViewModel();
-            NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));
+            if (timelogViewModel.CurrentState != TimelogState.Running)
+            {
+                App.AppViewModel.DiscardTlSettingViewModel();
+                NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));
+            }
         }
 
         private void homeButton_Click(object sender, EventArgs e)
         {
-            App.AppViewModel.DiscardTlSettingViewModel();
-            NavigationService.Navigate(new Uri("/View/MainPage.xaml", UriKind.Relative));
+            if (timelogViewModel.CurrentState != TimelogState.Running)
+            {
+                App.AppViewModel.DiscardTlSettingViewModel();
+                NavigationService.Navigate(new Uri("/View/MainPage.xaml", UriKind.Relative));
+            }
         }
 
         private void synchronisationData_Click(object sender, EventArgs e)
         {
-            timelogViewModel.ExecuteTlOperation(TimelogOperation.GetTasks);
+            if (timelogViewModel.CurrentState != TimelogState.Running)
+            {
+                timelogViewModel.ExecuteTlOperation(TimelogOperation.GetTasks);
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -73,14 +82,25 @@ namespace TimecardApp.View
             base.OnNavigatedTo(e);
         }
 
-        public void connectionFinished()
+        public void ShowErrorMessage(string message)
         {
-            this.LoadingPanel.Visibility = Visibility.Collapsed;
+            MessageBox.Show(message);
         }
 
-        public void connectionStarted()
+
+        public void NavigateLogin()
         {
-            this.LoadingPanel.Visibility = Visibility.Visible;
+            if (timelogViewModel.CurrentState != TimelogState.Running)
+            {
+                App.AppViewModel.DiscardTlSettingViewModel();
+                NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));
+            }
+        }
+
+
+        public void NavigateBack()
+        {
+            
         }
     }
 }

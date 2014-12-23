@@ -93,7 +93,6 @@ namespace TimecardApp.Model.Timelog
             catch (Exception ex)
             {
                 tlViewModel.ChangeState(TimelogState.UnexpectedError, TimelogOperation.Login, e.Error.Message );
-                throw new Exception("Exception during TimelogWrapper.tl_SecurityClient_GetTokenCompleted", ex.InnerException );
             }
         }
 
@@ -114,7 +113,6 @@ namespace TimecardApp.Model.Timelog
             catch (Exception ex)
             {
                 tlViewModel.ChangeState(TimelogState.UnexpectedError, TimelogOperation.GetTasks, e.Error.Message );
-                throw new Exception("Exception during TimelogWrapper.tlProjectClient_GetTasksCompleted", ex.InnerException);
             }
         }
     }

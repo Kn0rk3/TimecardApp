@@ -16,17 +16,43 @@ namespace TimecardApp.View
     public partial class TimelogLoginPage : PhoneApplicationPage, ITimelogUsingView 
     {
         private TimelogViewModel timelogViewModel;
+        private ApplicationBarIconButton backButton;
+        private ApplicationBarIconButton loginButton;
 
         public TimelogLoginPage()
         {
-            InitializeComponent();
-            this.LoadingPanel.Visibility = Visibility.Collapsed;
+            InitializeComponent(); BuildLocalizedApplicationBar();
+        }
+
+        private void BuildLocalizedApplicationBar()
+        {
+            ApplicationBar = new ApplicationBar();
+
+            backButton = new ApplicationBarIconButton(new Uri("Icons/back.png", UriKind.Relative));
+            backButton.Text = "Back";
+            backButton.Click += new System.EventHandler(this.backButton_Click);
+
+            loginButton = new ApplicationBarIconButton(new Uri("Icons/upload.png", UriKind.Relative));
+            loginButton.Text = "Login";
+            loginButton.Click += new System.EventHandler(this.loginButton_Click);
+
+            ApplicationBar.Buttons.Add(backButton);
+            ApplicationBar.Buttons.Add(loginButton);
+            
+        }
+
+        private void backButton_Click(object sender, EventArgs e)
+        {
+            NavigateBack();
         }
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            HelperClass.FocusedTextBoxUpdateSource();
-            timelogViewModel.ExecuteTlOperation(TimelogOperation.Login);
+            if (timelogViewModel.CurrentState != TimelogState.Running)
+            {
+                HelperClass.FocusedTextBoxUpdateSource();
+                timelogViewModel.ExecuteTlOperation(TimelogOperation.Login);
+            }
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -37,14 +63,29 @@ namespace TimecardApp.View
             base.OnNavigatedTo(e);
         }
 
-        public void connectionFinished()
+        public void ShowErrorMessage(string message)
         {
-            this.LoadingPanel.Visibility = Visibility.Collapsed;
+            MessageBox.Show(message);
         }
 
-        public void connectionStarted()
+
+        public void NavigateLogin()
         {
-            this.LoadingPanel.Visibility = Visibility.Visible;
+            if (timelogViewModel.CurrentState != TimelogState.Running)
+            {
+                App.AppViewModel.DiscardTlSettingViewModel();
+                NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));
+            }
+        }
+
+
+        public void NavigateBack()
+        {
+            if (timelogViewModel.CurrentState != TimelogState.Running)
+            {
+                App.AppViewModel.DiscardTlSettingViewModel();
+                NavigationService.GoBack();
+            }
         }
     }
 }

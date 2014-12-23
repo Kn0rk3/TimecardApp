@@ -8,7 +8,8 @@ namespace TimecardApp.View
 {
     public interface ITimelogUsingView
     {
-        void connectionFinished();
-        void connectionStarted();
+        void ShowErrorMessage(string message);
+        void NavigateLogin();
+        void NavigateBack();
     }
 }

@@ -6,6 +6,7 @@ using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.Model
 {
@@ -92,27 +93,15 @@ namespace TimecardApp.Model
             }
         }
 
-        
-        //private string timelogProjectID;
-        //[Column(CanBeNull = true)]
-        //public string TimelogProjectID;
+        private string timelogTaskIdent;
+        public string TimelogTaskIdent
+        {
+            get
+            {
+                return HelperClass.GetIdentForTimelogTask(timelogTaskName, timelogProjectName, timelogProjectID);
+            }
+        }
 
-        //private EntityRef<TimelogProject> _TimelogProject;
-        //[Association(Storage = "_TimelogProject", ThisKey = "TimelogProjectID", IsForeignKey = true)]
-        //public TimelogProject TimelogProject
-        //{
-        //    get { return this._TimelogProject.Entity; }
-        //    set
-        //    {
-        //        NotifyPropertyChanging("TimelogProjectID");
-        //        this._TimelogProject.Entity = value;
-        //        if (value != null)
-        //            timelogProjectID = value.TimelogProjectID;
-        //        NotifyPropertyChanged("TimelogProjectID");
-        //    }
-        //}
-
-        // Version column aids update performance.
         [Column(IsVersion = true)]
         private Binary _version;
 

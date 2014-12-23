@@ -768,6 +768,15 @@ namespace TimecardApp.ViewModel
             return new ObservableCollection<WorkTask>(worktasksForProjectsInDB);
         }
 
+
+        public ObservableCollection<TimelogTask> GetTimelogTasks()
+        {
+            var timelogTasksInDB = from TimelogTask task in dellAppDB.TimelogTasks 
+                                           select task;
+
+            return new ObservableCollection<TimelogTask>(timelogTasksInDB);
+        }
+
         public void LoadWorktasksForTimecard(string timecardID)
         {
             var worktasksOfThisTimecard = from WorkTask worktask in dellAppDB.WorkTasks
@@ -1077,5 +1086,11 @@ namespace TimecardApp.ViewModel
         }
         #endregion
 
+
+
+        internal void SaveNewTimelogTasks(ObservableCollection<TimelogTask> tlTaskCollection)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

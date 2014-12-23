@@ -8,6 +8,7 @@ namespace TimecardApp.Model.Timelog
 {
     public enum TimelogState
     {
+        None,
         NoValidToken,
         ValidToken,
         UnexpectedError,

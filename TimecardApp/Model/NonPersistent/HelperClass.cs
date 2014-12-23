@@ -123,6 +123,11 @@ namespace TimecardApp.Model.NonPersistent
             return GetShortDayName(date) + "-" + date.ToString("dd/MM/yyyy") + "-" + projecIdent;
         }
 
+        public static string GetIdentForTimelogTask(string taskName, string projectName, int projectID)
+        {
+            return taskName + " - " + projectName + " (ID:" +  projectID.ToString() + ")";
+        }
+
         public static int NumberOfWeek(DateTime date)
         {
             int weekNumber;

@@ -108,7 +108,7 @@ namespace TimecardApp.ViewModel
             set
             {
                 currentState = value;
-
+                NotifyPropertyChanged("CurrentState");
             }
         }
 
@@ -122,7 +122,7 @@ namespace TimecardApp.ViewModel
             set
             {
                 currentOperation = value;
-
+                NotifyPropertyChanged("CurrentOperation");
             }
         }
 
@@ -149,7 +149,7 @@ namespace TimecardApp.ViewModel
             timelogSetting = tlSetting;
             timelogUsingView = view;
 
-            username = tlSetting.Username;
+            Username = tlSetting.Username;
             isLoginBackground = tlSetting.LoginBackground;
             if (!String.IsNullOrEmpty(username))
                 IsSaveCredentials = true;
@@ -165,8 +165,7 @@ namespace TimecardApp.ViewModel
                 password = HelperClass.GetDecryptedPWString(tlSetting.Password);
             }
 
-            //TODO
-            //Load tasks of timelog
+            TlTaskCollection = App.AppViewModel.GetTimelogTasks();
         }
 
         public void SaveThisTlSetting()
@@ -189,14 +188,14 @@ namespace TimecardApp.ViewModel
             }
             
             //TODO
-            //Save TimelogTasks into DB
+            //Save TimelogTasks into DB (implement function in AppViewModel)
+            App.AppViewModel.SaveNewTimelogTasks(tlTaskCollection);
             App.AppViewModel.SaveChangesToDB();
         }
 
         public void ChangeState(TimelogState newState, TimelogOperation operationRunning, string message)
         {
-            if (newState == TimelogState.Running)
-                timelogUsingView.connectionStarted();
+            CurrentState = newState;
 
             switch (operationRunning)
             {
@@ -204,17 +203,9 @@ namespace TimecardApp.ViewModel
                     {
                         switch (newState)
                         {
-                            case TimelogState.ExectionSuccessfull:
-                                {
-                                    // response to view (unlock page)
-                                    timelogUsingView.connectionFinished();
-                                    break;
-                                }
                             case TimelogState.UnexpectedError:
                                 {
-                                    //TODO
-                                    // show the message to user
-                                    timelogUsingView.connectionFinished();
+                                    timelogUsingView.ShowErrorMessage(message);
                                     break;
                                 }
                         }
@@ -227,19 +218,19 @@ namespace TimecardApp.ViewModel
                             case TimelogState.ExectionSuccessfull:
                                 {
                                     if (currentOperation != operationRunning)
-                                    {
-                                        timelogUsingView.connectionFinished();
                                         ExecuteTlOperation(currentOperation);
-                                    }
                                     else
-                                        timelogUsingView.connectionFinished();
+                                    {
+                                        //only navigate back in case the login is not automatically
+                                        if (!isLoginBackground)
+                                            timelogUsingView.NavigateBack();
+                                    }
                                     break;
                                 }
                             case TimelogState.UnexpectedError:
                                 {
-                                    //TODO
-                                    //login was not possible --> user action required --> navigate to LoginPage
-                                    timelogUsingView.connectionFinished();
+                                    timelogUsingView.ShowErrorMessage(message);
+                                    timelogUsingView.NavigateLogin();
                                     break;
                                 }
                         }
@@ -251,12 +242,11 @@ namespace TimecardApp.ViewModel
         public void ExecuteTlOperation(TimelogOperation operation)
         {
             ITimelogWrapper wrapper = new TimelogWrapper(this);
-
+            CurrentOperation = operation;
             switch (operation)
             {
                 case TimelogOperation.GetTasks:
                     {
-                        currentOperation = operation;
                         if (wrapper.IsValidSecurityToken())
                             wrapper.GetTimelogTasks();
 
@@ -267,19 +257,23 @@ namespace TimecardApp.ViewModel
                             {
                                 wrapper.LoginTimelog(url, username, password);
                             }
-                            //TODO
-                            // navigate to loginPage
+                            else
+                            {
+                                timelogUsingView.ShowErrorMessage("You need to login to timelog first!");
+                                timelogUsingView.NavigateLogin();
+                            }
                         }
                         break;
                     }
 
                 case TimelogOperation.Login:
                     {
-                        currentOperation = operation;
                         if (!String.IsNullOrEmpty(url) && !String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
                         {
                             wrapper.LoginTimelog(url, username, password);
                         }
+                        else
+                            timelogUsingView.ShowErrorMessage("Make sure you typed in username, password and the timelogsite!");
                         break;
                     }
             }

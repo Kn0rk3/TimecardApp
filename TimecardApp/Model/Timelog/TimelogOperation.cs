@@ -8,6 +8,7 @@ namespace TimecardApp.Model.Timelog
 {
     public enum TimelogOperation
     {
+        None,
         GetTasks,
         Login,
         InsertWorkunits

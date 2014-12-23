@@ -165,8 +165,6 @@ namespace TimecardApp
             Timecard eigthTimecard = new Timecard() { TimecardID = System.Guid.NewGuid().ToString(), TimecardName = "KW 03", StartDate = new DateTime(2014, 3, 3).AddDays(-49) };
             Timecard ningthTimecard = new Timecard() { TimecardID = System.Guid.NewGuid().ToString(), TimecardName = "KW 21", StartDate = new DateTime(2014, 5, 19) };
 
-
-
             dellAppDB.Projects.InsertOnSubmit(firstProject);
             dellAppDB.Projects.InsertOnSubmit(secondProject);
             dellAppDB.Projects.InsertOnSubmit(thirdProject);
@@ -197,6 +195,14 @@ namespace TimecardApp
             DEBUG_NewTimecard(dellAppDB, seventhTimecard);
             DEBUG_NewTimecard(dellAppDB, eigthTimecard);
             DEBUG_NewTimecard(dellAppDB, ningthTimecard);
+
+            TimelogTask firstTask = new TimelogTask() { TimelogTaskUID = System.Guid.NewGuid().ToString(), TimelogProjectID = 15, TimelogProjectName = "Allianz", TimelogTaskName = "Implementerung Q4" };
+            TimelogTask secondTask = new TimelogTask() { TimelogTaskUID = System.Guid.NewGuid().ToString(), TimelogProjectID = 16, TimelogProjectName = "Allianz", TimelogTaskName = "Implementerung Q3" };
+
+            dellAppDB.TimelogTasks.InsertOnSubmit(firstTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(secondTask);
+            dellAppDB.SubmitChanges();
+        
         }
 
         private void fillTutorialDataInDatabase(DBClass dellAppDB)

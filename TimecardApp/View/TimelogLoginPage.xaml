@@ -18,6 +18,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
@@ -39,7 +40,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <!--<RowDefinition Height="Auto"/>-->
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Timelog url" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
                 <TextBox Grid.Column="1" Grid.Row="0" Width="300" Text="{Binding Url ,Mode=TwoWay}" />
@@ -52,12 +53,25 @@
                 <CheckBox  Grid.Row="4" Grid.Column="0" IsChecked="{Binding IsLoginBackground, Mode=TwoWay}" IsEnabled="{Binding IsSaveCredentials}"  Margin="12,12,12,10" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
                 <TextBlock Grid.Row="4" Grid.Column="1" Width="300" Text="automatically login" VerticalAlignment="Center" Margin="12,12,12,10"/>
 
-                <Button Content="Login"  Grid.Column="0" Grid.Row="5" Click="loginButton_Click"/>
+                <!--<Button Content="Login"  Grid.Column="0" Grid.Row="5" Click="loginButton_Click"/>-->
             </Grid>
         </Grid>
-        <Grid Grid.Row="0" Grid.RowSpan="2" x:Name="LoadingPanel" IsHitTestVisible="True" Visibility="Visible">
-            <Border Background="Black" Opacity="0.8" />
-            <TextBlock Text="Loading ... "/>
+        <Grid  Grid.Row="2"   x:Name="InformationGrid" Background="Transparent" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock HorizontalAlignment="Left" Text="user:" Grid.Row="0" Grid.Column="0" FontSize="25" Height="33" />
+            <TextBlock HorizontalAlignment="Left" Text="{Binding Username}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" FontSize="25" Height="33" />
+            <TextBlock HorizontalAlignment="Left" Text="state:"  Grid.Row="1" Grid.Column="0" FontSize="25" Height="33" />
+            <TextBlock HorizontalAlignment="Left" Text="{Binding CurrentState}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" FontSize="25" Height="33" />
+            <TextBlock HorizontalAlignment="Left" Text="operation:"  Grid.Row="2" Grid.Column="0" FontSize="25" Height="33" />
+            <TextBlock HorizontalAlignment="Left" Text="{Binding CurrentOperation}" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" FontSize="25" Height="33" />
         </Grid>
     </Grid>
     
