@@ -263,6 +263,29 @@ namespace TimecardApp.ViewModel
             dellAppDB.SubmitChanges();
         }
 
+        public void SaveNewTimelogTasks(ObservableCollection<TimelogTask> tlTaskCollection)
+        {
+            // delete the old ones
+            var oldTasks = from TimelogTask tasks in dellAppDB.TimelogTasks
+                                select tasks;
+
+            ObservableCollection<TimelogTask> oldTaskCollection = new ObservableCollection<TimelogTask>(oldTasks);
+            foreach (TimelogTask oldTask in oldTaskCollection)
+            {
+                if (!tlTaskCollection.Contains(oldTask))
+                    dellAppDB.TimelogTasks.DeleteOnSubmit(oldTask);
+            }
+            dellAppDB.SubmitChanges();
+
+            //insert new ones
+            foreach(TimelogTask newTask in tlTaskCollection )
+            {
+                if (!oldTaskCollection.Contains(newTask))
+                    dellAppDB.TimelogTasks.InsertOnSubmit(newTask);
+            }
+            dellAppDB.SubmitChanges();
+        }
+
         public bool SaveCopiedTimecard(Timecard newTimecard)
         {
             if (!dellAppDB.Timecards.Where(u => u.StartDate.Year == newTimecard.StartDate.Year && u.StartDate.Day == newTimecard.StartDate.Day && u.StartDate.Month == newTimecard.StartDate.Month).Any() || dellAppDB.Timecards.Count() == 0)
@@ -1086,11 +1109,5 @@ namespace TimecardApp.ViewModel
         }
         #endregion
 
-
-
-        internal void SaveNewTimelogTasks(ObservableCollection<TimelogTask> tlTaskCollection)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

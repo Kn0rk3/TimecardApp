@@ -53,6 +53,26 @@ namespace TimecardApp.Model
             }
         }
 
+        private int timelogTaskID;
+        [Column]
+        public int TimelogTaskID
+        {
+            get
+            {
+                return timelogTaskID;
+            }
+
+            set
+            {
+                if (timelogTaskID != value)
+                {
+                    NotifyPropertyChanging("TimelogTaskID");
+                    timelogTaskID = value;
+                    NotifyPropertyChanged("TimelogTaskID");
+                }
+            }
+        }
+
         private int timelogProjectID;
         [Column]
         public int TimelogProjectID
@@ -93,7 +113,46 @@ namespace TimecardApp.Model
             }
         }
 
-        private string timelogTaskIdent;
+        private DateTime startDate;
+        [Column(CanBeNull = true)]
+        public DateTime StartDate
+        {
+            get
+            {
+                return startDate;
+            }
+
+            set
+            {
+                if (startDate != value)
+                {
+                    NotifyPropertyChanging("StartDate");
+                    startDate = value;
+                    NotifyPropertyChanged("StartDate");
+                }
+            }
+        }
+
+        private DateTime endDate;
+        [Column(CanBeNull = true)]
+        public DateTime EndDate
+        {
+            get
+            {
+                return endDate;
+            }
+
+            set
+            {
+                if (endDate != value)
+                {
+                    NotifyPropertyChanging("EndDate");
+                    endDate = value;
+                    NotifyPropertyChanged("EndDate");
+                }
+            }
+        }
+
         public string TimelogTaskIdent
         {
             get

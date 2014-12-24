@@ -37,8 +37,7 @@ namespace TimecardApp.View
             loginButton.Click += new System.EventHandler(this.loginButton_Click);
 
             ApplicationBar.Buttons.Add(backButton);
-            ApplicationBar.Buttons.Add(loginButton);
-            
+            ApplicationBar.Buttons.Add(loginButton);      
         }
 
         private void backButton_Click(object sender, EventArgs e)
@@ -71,11 +70,7 @@ namespace TimecardApp.View
 
         public void NavigateLogin()
         {
-            if (timelogViewModel.CurrentState != TimelogState.Running)
-            {
-                App.AppViewModel.DiscardTlSettingViewModel();
-                NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));
-            }
+
         }
 
 
@@ -83,6 +78,7 @@ namespace TimecardApp.View
         {
             if (timelogViewModel.CurrentState != TimelogState.Running)
             {
+                timelogViewModel.SaveThisTlSetting();
                 App.AppViewModel.DiscardTlSettingViewModel();
                 NavigationService.GoBack();
             }

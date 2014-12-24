@@ -52,6 +52,7 @@ namespace TimecardApp.View
         {
             if (timelogViewModel.CurrentState != TimelogState.Running)
             {
+                timelogViewModel.SaveThisTlSetting();
                 App.AppViewModel.DiscardTlSettingViewModel();
                 NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));
             }
@@ -61,6 +62,7 @@ namespace TimecardApp.View
         {
             if (timelogViewModel.CurrentState != TimelogState.Running)
             {
+                timelogViewModel.SaveThisTlSetting();
                 App.AppViewModel.DiscardTlSettingViewModel();
                 NavigationService.Navigate(new Uri("/View/MainPage.xaml", UriKind.Relative));
             }
@@ -96,7 +98,6 @@ namespace TimecardApp.View
                 NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));
             }
         }
-
 
         public void NavigateBack()
         {

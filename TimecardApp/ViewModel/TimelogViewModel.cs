@@ -291,7 +291,10 @@ namespace TimecardApp.ViewModel
                         TimelogTaskUID = task.ID.ToString(),
                         TimelogProjectID = task.Details.ProjectHeader.ID,
                         TimelogProjectName = task.Details.ProjectHeader.Name,
-                        TimelogTaskName = task.Name
+                        TimelogTaskName = task.Name,
+                        EndDate = task.EndDate,
+                        StartDate = task.StartDate,
+                        TimelogTaskID = task.TaskID
                     };
                     tlTasks.Add(newTask);
                 }

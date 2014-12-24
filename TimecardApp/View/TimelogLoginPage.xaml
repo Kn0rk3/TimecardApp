@@ -28,7 +28,7 @@
         </StackPanel>
 
         <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
-        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0"  >
             <Grid x:Name="SettingPanel" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -40,7 +40,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <!--<RowDefinition Height="Auto"/>-->
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Timelog url" Margin="12" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
                 <TextBox Grid.Column="1" Grid.Row="0" Width="300" Text="{Binding Url ,Mode=TwoWay}" />
@@ -52,11 +52,9 @@
                 <TextBlock Grid.Row="3" Grid.Column="1" Width="300" Text="Save credentials (enycrypted)" VerticalAlignment="Center" Margin="12,12,12,10"/>
                 <CheckBox  Grid.Row="4" Grid.Column="0" IsChecked="{Binding IsLoginBackground, Mode=TwoWay}" IsEnabled="{Binding IsSaveCredentials}"  Margin="12,12,12,10" FontSize="30" FontFamily="{StaticResource PhoneFontFamilyLight}"/>
                 <TextBlock Grid.Row="4" Grid.Column="1" Width="300" Text="automatically login" VerticalAlignment="Center" Margin="12,12,12,10"/>
-
-                <!--<Button Content="Login"  Grid.Column="0" Grid.Row="5" Click="loginButton_Click"/>-->
             </Grid>
         </Grid>
-        <Grid  Grid.Row="2"   x:Name="InformationGrid" Background="Transparent" >
+        <Grid  Grid.Row="2" x:Name="InformationGrid" Background="Transparent" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

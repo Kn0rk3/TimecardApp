@@ -19,6 +19,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <phone:Pivot Grid.Row="0" x:Name="TimelogPivot" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - timelog" VerticalAlignment="Top" Width="500">
             <phone:PivotItem x:Name="tlTasks" CacheMode="{x:Null}" Header="Tl - Tasks">
@@ -33,7 +34,7 @@
                                     <TextBlock 
                                         Grid.Column="0"
                                         Text="{Binding TimelogTaskIdent}"
-                                        FontSize="25"
+                                        FontSize="20"
                                         Margin="0,0,0,0">
                                     </TextBlock>
                                 </Grid>
