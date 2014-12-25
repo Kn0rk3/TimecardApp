@@ -14,11 +14,9 @@
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
 
-    <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
         <phone:Pivot x:Name="TimecardPagePivot" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - timecard" VerticalAlignment="Top" >
             <phone:PivotItem x:Name="mainTimecardItem" CacheMode="{x:Null}" Header="worktasks" Margin="12,28,-13,0">
-                <!--ContentPanel - place additional content here-->
                 <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,-30,12,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -35,7 +33,6 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-
                         <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding TimecardPageWorkTime}" FontSize="30" />
                         <TextBlock HorizontalAlignment="Left" Text="workingtime" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" FontSize="30" />
                         <CheckBox IsChecked="{Binding IsClosed, Mode=TwoWay}"  Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,0,0" />
@@ -55,30 +52,29 @@
                                             <RowDefinition Height="75"/>
                                         </Grid.RowDefinitions>
                                         <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"                                              
-                                        Grid.Column="0" Grid.Row="0"
-                                        VerticalAlignment="Center"
-                                              Margin="0,0,0,0"
-                                        />
+                                            Grid.Column="0" Grid.Row="0"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,0,0"/>
                                         <Button
-                                        Grid.Column="1" Grid.Row="0"
-                                        Margin="-20,0,0,0"
-                                        BorderThickness="1"
-                                        Content="{Binding Ident_WorkTask}"
-                                        FontSize="20"
-                                        Width="300"
-                                        VerticalAlignment="Center" 
-                                        HorizontalAlignment="Left"
-                                        Click="editWorktaskButton_Click">
+                                            Grid.Column="1" Grid.Row="0"
+                                            Margin="-20,0,0,0"
+                                            BorderThickness="1"
+                                            Content="{Binding Ident_WorkTask}"
+                                            FontSize="20"
+                                            Width="300"
+                                            VerticalAlignment="Center" 
+                                            HorizontalAlignment="Left"
+                                            Click="editWorktaskButton_Click">
                                         </Button>
                                         <Button
-                                        Grid.Column="2" Grid.Row="0"
-                                        Margin="-30,0,0,0"
-                                        BorderThickness="0"
-                                        Content="{Binding TotalWorkTimeString}"
-                                        FontSize="20"
-                                        VerticalAlignment="Center" 
-                                        HorizontalAlignment="Left"
-                                        Click="editWorktaskButton_Click">
+                                            Grid.Column="2" Grid.Row="0"
+                                            Margin="-30,0,0,0"
+                                            BorderThickness="0"
+                                            Content="{Binding TotalWorkTimeString}"
+                                            FontSize="20"
+                                            VerticalAlignment="Center" 
+                                            HorizontalAlignment="Left"
+                                            Click="editWorktaskButton_Click">
                                         </Button>
                                     </Grid>
                                 </DataTemplate>
@@ -88,12 +84,10 @@
                 </Grid>
             </phone:PivotItem>
             <phone:PivotItem x:Name="projectsTimecardItem" CacheMode="{x:Null}" Header="projects">
-                <!--ContentPanel - place additional content here.-->
                 <Grid x:Name="projectContentPanel" Margin="12,0,12,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" MinHeight="400"/>
                     </Grid.RowDefinitions>
-
                     <ListBox x:Name="projects" ItemsSource="{Binding ProjectCollection}" 
                      Grid.Row="0" Margin="12, 0, 12, 0" Width="440" >
                         <ListBox.ItemTemplate>
@@ -104,10 +98,10 @@
                                         <ColumnDefinition Width="130" />
                                     </Grid.ColumnDefinitions>
                                     <TextBlock 
-                                Grid.Column="0"
-                                Text="{Binding Ident_Project}"
-                                FontSize="25"
-                                Margin="0,0,0,0">
+                                        Grid.Column="0"
+                                        Text="{Binding Ident_Project}"
+                                        FontSize="25"
+                                        Margin="0,0,0,0">
                                     </TextBlock>
                                     <TextBlock 
                                         Grid.Column="1" Grid.Row="0"
@@ -125,6 +119,4 @@
             </phone:PivotItem>
         </phone:Pivot>
     </Grid>
-
-
 </phone:PhoneApplicationPage>

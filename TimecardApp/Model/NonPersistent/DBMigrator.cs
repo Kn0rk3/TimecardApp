@@ -64,12 +64,13 @@ namespace TimecardApp.Model.NonPersistent
             dbUpdater.AddTable<TimelogSetting>();
 
             dbUpdater.AddAssociation<WorkTask>("TimelogTaskUID");
+            dbUpdater.AddColumn<WorkTask>("LastTimelogRegistration");
+            dbUpdater.AddColumn<WorkTask>("IsForTimelogRegistration");
             dbUpdater.AddColumn<Setting>("IsUsingTimelog");
 
             dbUpdater.DatabaseSchemaVersion = latestVersion;
             dbUpdater.Execute();
         }
-
          
         // Destruktor
         ~DBMigrator()

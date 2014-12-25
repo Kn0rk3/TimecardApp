@@ -132,6 +132,5 @@ namespace TimecardApp.View
             App.AppViewModel.DiscardWorktaskViewModel();
             base.OnBackKeyPress(e);
         }
-
     }
 }

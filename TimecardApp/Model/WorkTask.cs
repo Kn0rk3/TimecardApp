@@ -93,6 +93,54 @@ namespace TimecardApp.Model
             }
         }
 
+        //db version 2
+        private string lastTimelogRegistration;
+        [Column(CanBeNull = true)]
+        public string LastTimelogRegistration
+        {
+            get
+            {
+                return lastTimelogRegistration;
+            }
+
+            set
+            {
+                if (lastTimelogRegistration != value)
+                {
+                    NotifyPropertyChanging("LastTimelogRegistration");
+                    lastTimelogRegistration = value;
+                    NotifyPropertyChanged("LastTimelogRegistration");
+                }
+            }
+        }
+
+        //db version 2
+        private bool isForTimelogRegistration;
+        [Column(CanBeNull = true)]
+        public bool? IsForTimelogRegistration
+        {
+            get
+            {
+                return isForTimelogRegistration;
+            }
+
+            set
+            {
+                if (value.HasValue)
+                {
+                    if (isForTimelogRegistration != value)
+                    {
+                        NotifyPropertyChanging("IsForTimelogRegistration");
+                        isForTimelogRegistration = value.Value;
+                        NotifyPropertyChanged("IsForTimelogRegistration");
+                    }
+                }
+                else
+                    isForTimelogRegistration = false;
+
+            }
+        }
+
         private string timecardID;
         [Column(CanBeNull = true)]
         public string TimecardID;

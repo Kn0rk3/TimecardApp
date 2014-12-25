@@ -668,6 +668,15 @@ namespace TimecardApp.ViewModel
             return quoteWorkTimeString;
         }
 
+        public ObservableCollection<TimelogTask> GetTimelogTasksForDate(DateTime dateTime)
+        {
+            var timelogTasks = from TimelogTask task in dellAppDB.TimelogTasks 
+                                where task.StartDate.Date <= dateTime.Date && task.EndDate.Date >= dateTime.Date
+                                select task;
+
+            return new ObservableCollection<TimelogTask>(timelogTasks);
+        }
+
         public void LoadCollectionsFromDatabase()
         {
             var customersInDB = from Customer customer in dellAppDB.Customer
@@ -1109,5 +1118,7 @@ namespace TimecardApp.ViewModel
         }
         #endregion
 
+
+        
     }
 }

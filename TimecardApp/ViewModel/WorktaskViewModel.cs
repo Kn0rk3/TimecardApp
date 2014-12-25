@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TimecardApp.Model.NonPersistent;
+using TimecardApp.Model;
 
 namespace TimecardApp.ViewModel
 {
@@ -26,13 +27,13 @@ namespace TimecardApp.ViewModel
         public string WorktaskPageTimecardName
         {
             get { return worktaskPageTimecardName; }
-            set 
+            set
             {
                 worktaskPageTimecardName = value;
                 NotifyPropertyChanged("WorktaskPageTimecardName");
             }
         }
-        
+
         private string worktaskPageName;
         public string WorktaskPageName
         {
@@ -78,6 +79,7 @@ namespace TimecardApp.ViewModel
                             WorktaskPageIdent = HelperClass.GetIdentForWorktask(value, "");
 
                         worktaskPageDayDate = value;
+                        loadTimelogTasksForDate(worktaskPageDayDate);
                         NotifyPropertyChanged("WorktaskPageDayDate");
                     }
                     else
@@ -86,7 +88,7 @@ namespace TimecardApp.ViewModel
                         NotifyPropertyChanged("WorktaskPageDayDate");
                     }
                 }
-                
+
             }
         }
 
@@ -178,7 +180,7 @@ namespace TimecardApp.ViewModel
             {
                 if (worktaskPageProject != value)
                 {
-                    WorktaskPageIdent = HelperClass.GetIdentForWorktask(worktaskPageDayDate, value.Ident_Project );
+                    WorktaskPageIdent = HelperClass.GetIdentForWorktask(worktaskPageDayDate, value.Ident_Project);
 
                     worktaskPageProject = value;
                     NotifyPropertyChanged("WorktaskPageProject");
@@ -215,14 +217,108 @@ namespace TimecardApp.ViewModel
             }
         }
 
+        private ObservableCollection<TimelogTask> timelogTaskCollection;
+        public ObservableCollection<TimelogTask> TimelogTaskCollection
+        {
+            get
+            {
+                return timelogTaskCollection;
+            }
+            set
+            {
+                timelogTaskCollection = value;
+                NotifyPropertyChanged("TimelogTaskCollection");
+            }
+        }
+
+        private TimelogTask timelogTask;
+        public TimelogTask TimelogTask
+        {
+            get
+            {
+                return timelogTask;
+            }
+            set
+            {
+                if (timelogTask != value)
+                {
+                    timelogTask = value;
+                    SelectedTimelogTaskIdent = timelogTask.TimelogTaskIdent;
+                    NotifyPropertyChanged("TimelogTask");
+                }
+
+            }
+        }
+
+        private string selectedTimelogTaskIdent;
+        public string SelectedTimelogTaskIdent
+        {
+            get
+            {
+                return selectedTimelogTaskIdent;
+            }
+            set
+            {
+                if (selectedTimelogTaskIdent != value)
+                {
+                    selectedTimelogTaskIdent = value;
+                    NotifyPropertyChanged("SelectedTimelogTaskIdent");
+                }
+            }
+        }
+
+        private bool forTimelog;
+        public bool? ForTimelog
+        {
+            get
+            {
+                return forTimelog;
+            }
+            set
+            {
+                if (value.HasValue)
+                {
+                    if (forTimelog != value)
+                    {
+                        forTimelog = value.Value;
+                        loadTimelogTasksForDate(worktaskPageDayDate);
+                        NotifyPropertyChanged("ForTimelog");
+                    }
+
+                }
+                else
+                    forTimelog = false;
+            }
+        }
+
+        private Visibility timelogActive;
+        public Visibility TimelogActive
+        {
+            get { return timelogActive; }
+            set
+            {
+
+                if (timelogActive != value)
+                {
+                    timelogActive = value;
+                    NotifyPropertyChanged("TimelogActive");
+                }
+            }
+        }
+
         // Class constructor, create the data context object.
         public WorktaskViewModel(WorkTask newWorkTask)
         {
             thisWorkTask = newWorkTask;
 
+            if (App.AppViewModel.UsingTimelogInterface)
+                timelogActive = Visibility.Visible;
+            else
+                timelogActive = Visibility.Collapsed;
+
             worktaskID = thisWorkTask.WorkTaskID;
             WorktaskPageTimecard = thisWorkTask.Timecard;
-            
+
             // fill the properties for this datacontext
             if (worktaskPageTimecard.IsComplete)
                 worktaskPageEnabled = false;
@@ -252,8 +348,44 @@ namespace TimecardApp.ViewModel
                     worktaskPageProjectCollection.Add(worktaskPageProject);
                 }
             }
+
+            // timelog
+            ForTimelog = thisWorkTask.IsForTimelogRegistration;
+            if (forTimelog)
+            {
+                loadTimelogTasksForDate(thisWorkTask.DayDate);
+
+                if (thisWorkTask.TimelogTask != null)
+                {
+                    TimelogTask = thisWorkTask.TimelogTask;
+                    if (!TimelogTaskCollection.Contains(timelogTask))
+                    {
+                        TimelogTaskCollection.Add(timelogTask);
+                    }
+                }
+            }
+        }
+
+        public void SaveThisWorkTask()
+        {
+            thisWorkTask.EndTime = worktaskPageEndTime;
+            thisWorkTask.StartTime = worktaskPageStartTime;
+            thisWorkTask.PauseTimeTicks = worktaskPagePauseTime.TimeOfDay.Ticks;
+            thisWorkTask.WorkTimeTicks = worktaskPageWorkTime.TimeOfDay.Ticks;
+            thisWorkTask.WorkDescription = worktaskPageWorkDescription;
+
+            if (worktaskPageProject != null)
+                thisWorkTask.Project = worktaskPageProject;
             
-            
+            thisWorkTask.IsOnsite = worktaskPageIsOnsite;
+            thisWorkTask.Ident_WorkTask = worktaskPageIdent;
+            thisWorkTask.DayDate = worktaskPageDayDate;
+            thisWorkTask.Timecard = worktaskPageTimecard;
+            thisWorkTask.IsForTimelogRegistration = forTimelog;
+            if (timelogTask != null)
+                thisWorkTask.TimelogTask = TimelogTask;
+
+            App.AppViewModel.SaveWorkTaskToDB(thisWorkTask);
         }
 
         public void CalculateWorkTime()
@@ -268,25 +400,9 @@ namespace TimecardApp.ViewModel
                 WorktaskPageWorkTime = new DateTime(0);
         }
 
-        public void SaveThisWorkTask()
+        private void loadTimelogTasksForDate(DateTime date)
         {
-            thisWorkTask.EndTime = worktaskPageEndTime;
-            thisWorkTask.StartTime = worktaskPageStartTime;
-            thisWorkTask.PauseTimeTicks = worktaskPagePauseTime.TimeOfDay.Ticks;
-            thisWorkTask.WorkTimeTicks = worktaskPageWorkTime.TimeOfDay.Ticks;
-            thisWorkTask.WorkDescription = worktaskPageWorkDescription;
-
-            if (worktaskPageProject != null)
-            {
-                thisWorkTask.Project = worktaskPageProject;
-            }
-
-            thisWorkTask.IsOnsite = worktaskPageIsOnsite;
-            thisWorkTask.Ident_WorkTask = worktaskPageIdent;
-            thisWorkTask.DayDate = worktaskPageDayDate;
-            thisWorkTask.Timecard = worktaskPageTimecard;
-
-            App.AppViewModel.SaveWorkTaskToDB(thisWorkTask);
+            TimelogTaskCollection = App.AppViewModel.GetTimelogTasksForDate(thisWorkTask.DayDate);
         }
 
         public void DeleteThisWorktask()
@@ -343,5 +459,7 @@ namespace TimecardApp.ViewModel
         #endregion
 
 
+
+        
     }
 }

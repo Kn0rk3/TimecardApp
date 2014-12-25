@@ -196,11 +196,61 @@ namespace TimecardApp
             DEBUG_NewTimecard(dellAppDB, eigthTimecard);
             DEBUG_NewTimecard(dellAppDB, ningthTimecard);
 
-            TimelogTask firstTask = new TimelogTask() { TimelogTaskUID = System.Guid.NewGuid().ToString(), TimelogProjectID = 15, TimelogProjectName = "Allianz", TimelogTaskName = "Implementerung Q4" };
-            TimelogTask secondTask = new TimelogTask() { TimelogTaskUID = System.Guid.NewGuid().ToString(), TimelogProjectID = 16, TimelogProjectName = "Allianz", TimelogTaskName = "Implementerung Q3" };
+            TimelogTask firstTask = new TimelogTask() { 
+                TimelogTaskUID = System.Guid.NewGuid().ToString(), 
+                TimelogProjectID = 15, 
+                TimelogProjectName = "Allianz", 
+                TimelogTaskName = "Implementerung Q4",
+                StartDate = new DateTime(2014,10,01), 
+                EndDate = new DateTime(2014,12,31)};
+            TimelogTask secondTask = new TimelogTask() { 
+                TimelogTaskUID = System.Guid.NewGuid().ToString(), 
+                TimelogProjectID = 15, 
+                TimelogProjectName = "Allianz", 
+                TimelogTaskName = "Implementerung Q3",
+                StartDate = new DateTime(2014,07,01), 
+                EndDate = new DateTime(2014,09,30)};
+            TimelogTask thirdTask = new TimelogTask() { 
+                TimelogTaskUID = System.Guid.NewGuid().ToString(), 
+                TimelogProjectID = 16, 
+                TimelogProjectName = "MunichRe",
+                TimelogTaskName = "Implementerung",
+                StartDate = new DateTime(2014, 01, 01),
+                EndDate = new DateTime(2014, 09, 30)};
+            TimelogTask forthTask = new TimelogTask()
+            {
+                TimelogTaskUID = System.Guid.NewGuid().ToString(),
+                TimelogProjectID = 15,
+                TimelogProjectName = "Allianz",
+                TimelogTaskName = "Implementerung Q4-1",
+                StartDate = new DateTime(2014, 10, 01),
+                EndDate = new DateTime(2014, 12, 31)
+            };
+            TimelogTask fifthTask = new TimelogTask()
+            {
+                TimelogTaskUID = System.Guid.NewGuid().ToString(),
+                TimelogProjectID = 15,
+                TimelogProjectName = "Allianz",
+                TimelogTaskName = "Implementerung Q4-2",
+                StartDate = new DateTime(2014, 10, 01),
+                EndDate = new DateTime(2014, 12, 31)
+            };
+            TimelogTask sixthTask = new TimelogTask()
+            {
+                TimelogTaskUID = System.Guid.NewGuid().ToString(),
+                TimelogProjectID = 15,
+                TimelogProjectName = "Allianz",
+                TimelogTaskName = "Implementerung Q4-3",
+                StartDate = new DateTime(2014, 10, 01),
+                EndDate = new DateTime(2014, 12, 31)
+            };
 
             dellAppDB.TimelogTasks.InsertOnSubmit(firstTask);
             dellAppDB.TimelogTasks.InsertOnSubmit(secondTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(thirdTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(forthTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(fifthTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(sixthTask);
             dellAppDB.SubmitChanges();
         
         }
