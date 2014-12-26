@@ -335,9 +335,10 @@ namespace TimecardApp.ViewModel
                         newWorktask.Ident_WorkTask = HelperClass.GetIdentForWorktask(newDate, singleWorktask.Project.Ident_Project);
                     else
                         newWorktask.Ident_WorkTask = HelperClass.GetIdentForWorktask(newDate, "");
+                    newWorktask.IsForTimelogRegistration = singleWorktask.IsForTimelogRegistration;
+                    newWorktask.TimelogTask = singleWorktask.TimelogTask;
                     WorktaskCopyCollection.Add(newWorktask);
                 }
-
             }
             else
             {

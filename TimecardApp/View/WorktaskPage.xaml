@@ -29,7 +29,7 @@
         </StackPanel>
 
         <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
-        <ScrollViewer HorizontalAlignment="Left"  Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Top" Height="Auto" >
+        <ScrollViewer HorizontalAlignment="Left"  Margin="0,0,0,0" Grid.Row="1" VerticalAlignment="Top" Height="Auto">
             <Grid x:Name="WorkingGrid" Margin="0,0,12,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="110"/>
@@ -38,6 +38,8 @@
                     <ColumnDefinition Width="Auto" MinWidth="100"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -94,8 +96,8 @@
                 <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="for Timelog" VerticalAlignment="Center" Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" FontSize="25" Height="33" Visibility="{Binding TimelogActive}"/>
                 <CheckBox x:Name="forTimelogCheckbox" Grid.Column="3" Grid.Row="9" Margin="020,0,0,0" IsChecked="{Binding ForTimelog, Mode=TwoWay}" Visibility="{Binding TimelogActive}"/>
                 <TextBlock HorizontalAlignment="Left" Margin="23,0,0,2" Text="select timelog task:" VerticalAlignment="Center" Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20"  Visibility="{Binding TimelogActive}"/>
-                <TextBlock HorizontalAlignment="Left" Margin="23,0,0,2" Text="{Binding SelectedTimelogTaskIdent}" VerticalAlignment="Center" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="4" FontSize="30" Visibility="{Binding TimelogActive}"/>
-                <toolkit:ListPicker x:Name="TimelogTasks" Margin="23,0,12,0" Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="4" ItemsSource="{Binding TimelogTaskCollection}" IsEnabled="{Binding ForTimelog}" Visibility="{Binding TimelogActive}" SelectedItem="{Binding TimelogTask, Mode=TwoWay}" >
+                <TextBlock HorizontalAlignment="Left" Margin="23,0,0,2" MaxWidth="400" Text="{Binding SelectedTimelogTaskIdent}" VerticalAlignment="Center" Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="4" FontSize="25" Visibility="{Binding TimelogActive}"/>
+                <toolkit:ListPicker x:Name="TimelogTasks" Margin="23,0,12,0" MaxWidth="400" Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="4" ItemsSource="{Binding TimelogTaskCollection}" IsEnabled="{Binding ForTimelog}" Visibility="{Binding TimelogActive}" SelectedItem="{Binding TimelogTask, Mode=TwoWay}" >
                     <toolkit:ListPicker.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding TimelogTaskIdent}" />
@@ -107,7 +109,8 @@
                         </DataTemplate>
                     </toolkit:ListPicker.FullModeItemTemplate>
                 </toolkit:ListPicker>
-                
+                <TextBlock HorizontalAlignment="Left" Margin="23,0,0,2" Text="last timelog registration" VerticalAlignment="Center" Grid.Row="13" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20"  Visibility="{Binding TimelogActive}"/>
+                <TextBlock HorizontalAlignment="Left" Margin="23,0,0,2" Text="{Binding LastTimelogRegistration}" VerticalAlignment="Center" Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="4" FontSize="30" Visibility="{Binding TimelogActive}"/>
             </Grid>
         </ScrollViewer>
     </Grid>

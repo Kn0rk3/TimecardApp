@@ -14,6 +14,8 @@ namespace TimecardApp.ViewModel
 {
     public class WorktaskViewModel : INotifyPropertyChanged
     {
+        #region variables
+
         private WorkTask thisWorkTask;
 
         private string worktaskID;
@@ -267,6 +269,23 @@ namespace TimecardApp.ViewModel
             }
         }
 
+        private string lastTimelogRegistration;
+        public string LastTimelogRegistration
+        {
+            get
+            {
+                return lastTimelogRegistration;
+            }
+            set
+            {
+                if (lastTimelogRegistration != value)
+                {
+                    lastTimelogRegistration = value;
+                    NotifyPropertyChanged("LastTimelogRegistration");
+                }
+            }
+        }
+
         private bool forTimelog;
         public bool? ForTimelog
         {
@@ -305,6 +324,8 @@ namespace TimecardApp.ViewModel
                 }
             }
         }
+
+        #endregion
 
         // Class constructor, create the data context object.
         public WorktaskViewModel(WorkTask newWorkTask)
@@ -354,6 +375,7 @@ namespace TimecardApp.ViewModel
             if (forTimelog)
             {
                 loadTimelogTasksForDate(thisWorkTask.DayDate);
+                lastTimelogRegistration = thisWorkTask.LastTimelogRegistration;
 
                 if (thisWorkTask.TimelogTask != null)
                 {
@@ -382,6 +404,8 @@ namespace TimecardApp.ViewModel
             thisWorkTask.DayDate = worktaskPageDayDate;
             thisWorkTask.Timecard = worktaskPageTimecard;
             thisWorkTask.IsForTimelogRegistration = forTimelog;
+            thisWorkTask.LastTimelogRegistration = lastTimelogRegistration;
+
             if (timelogTask != null)
                 thisWorkTask.TimelogTask = TimelogTask;
 

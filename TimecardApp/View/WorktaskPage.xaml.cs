@@ -12,6 +12,7 @@ using TimecardApp.Model;
 using TimecardApp.ViewModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {
@@ -20,6 +21,8 @@ namespace TimecardApp.View
         private WorktaskViewModel workTaskViewModel;
         private ApplicationBarIconButton appBarDeleteButton;
         private ApplicationBarIconButton appBarSaveButton;
+        private ApplicationBarIconButton appBarCancelButton;
+        private ApplicationBarMenuItem appBarMenuTimelog;
 
         // every time the worktaskpage is created, create a new ViewModel for the Worktask 
         public WorktaskPage()
@@ -30,15 +33,22 @@ namespace TimecardApp.View
 
         private void BuildLocalizedApplicationBar()
         {
-            // ApplicationBar der Seite einer neuen Instanz von ApplicationBar zuweisen
             ApplicationBar = new ApplicationBar();
+
+            if (App.AppViewModel.UsingTimelogInterface)
+            {
+                appBarMenuTimelog = new ApplicationBarMenuItem();
+                appBarMenuTimelog.Text = "Register into Timelog";
+                appBarMenuTimelog.Click += new System.EventHandler(this.timelogButton_Click);
+                ApplicationBar.MenuItems.Add(appBarMenuTimelog);
+            }
 
             appBarSaveButton = new ApplicationBarIconButton(new Uri("Icons/save.png", UriKind.Relative));
             appBarSaveButton.Text = "Save";
             appBarSaveButton.Click += new System.EventHandler(this.saveButton_Click);
             ApplicationBar.Buttons.Add(appBarSaveButton);
 
-            ApplicationBarIconButton appBarCancelButton = new ApplicationBarIconButton(new Uri("Toolkit.Content/ApplicationBar.Cancel.png", UriKind.Relative));
+            appBarCancelButton = new ApplicationBarIconButton(new Uri("Toolkit.Content/ApplicationBar.Cancel.png", UriKind.Relative));
             appBarCancelButton.Text = "Discard";
             appBarCancelButton.Click += new System.EventHandler(this.discardButton_Click);
             ApplicationBar.Buttons.Add(appBarCancelButton);
@@ -47,6 +57,13 @@ namespace TimecardApp.View
             appBarDeleteButton.Text = "Delete";
             appBarDeleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             ApplicationBar.Buttons.Add(appBarDeleteButton);
+        }
+
+        private void timelogButton_Click(object sender, EventArgs e)
+        {
+            HelperClass.FocusedTextBoxUpdateSource();
+            workTaskViewModel.SaveThisWorkTask();
+            NavigationService.Navigate(new Uri("/View/TimelogPage.xaml", UriKind.Relative));
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -97,7 +114,8 @@ namespace TimecardApp.View
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            workTaskViewModel.WorktaskPageWorkDescription = workDescriptionTextBox.Text;
+            //workTaskViewModel.WorktaskPageWorkDescription = workDescriptionTextBox.Text;
+            HelperClass.FocusedTextBoxUpdateSource();
             workTaskViewModel.SaveThisWorkTask();
             NavigationService.Navigate(new Uri("/View/TimecardPage.xaml?timecardIDParam=" + workTaskViewModel.WorktaskPageTimecard.TimecardID, UriKind.Relative));
         }

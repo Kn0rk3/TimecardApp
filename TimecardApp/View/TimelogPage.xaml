@@ -22,6 +22,32 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <phone:Pivot Grid.Row="0" x:Name="TimelogPivot" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - timelog" VerticalAlignment="Top" Width="500">
+            <phone:PivotItem x:Name="tlWorktasksForRegister" CacheMode="{x:Null}" Header="worktasks">
+                <Grid x:Name="worktaskContentPanel" Margin="12,0,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock HorizontalAlignment="Left" Text="worktasks for timelog registration" Grid.Row="0" Grid.Column="0" FontSize="25" Height="33" />
+                    <ListBox x:Name="worktaskListBox" Grid.Row="1" ItemsSource="{Binding TlWorktasks}" Margin="12, 0, 12, 0" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Stretch" Width="440">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock 
+                                        Grid.Column="0"
+                                        Text="{Binding TimelogTaskIdent}"
+                                        FontSize="20"
+                                        Margin="0,0,0,0">
+                                    </TextBlock>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </phone:PivotItem>
             <phone:PivotItem x:Name="tlTasks" CacheMode="{x:Null}" Header="Tl - Tasks">
                 <Grid x:Name="taskContentPanel" Margin="12,0,12,0">
                     <ListBox x:Name="taskListBox" ItemsSource="{Binding TlTaskCollection}" Margin="12, 0, 12, 0" >
