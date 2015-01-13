@@ -38,7 +38,7 @@ namespace TimecardApp.View
             if (App.AppViewModel.UsingTimelogInterface)
             {
                 appBarMenuTimelog = new ApplicationBarMenuItem();
-                appBarMenuTimelog.Text = "Register into Timelog";
+                appBarMenuTimelog.Text = "send to Timelog";
                 appBarMenuTimelog.Click += new System.EventHandler(this.timelogButton_Click);
                 ApplicationBar.MenuItems.Add(appBarMenuTimelog);
             }

@@ -34,7 +34,7 @@ namespace TimecardApp.Model
         }
 
         private string timelogTaskName;
-        [Column]
+        [Column(CanBeNull = true)]
         public string TimelogTaskName
         {
             get
@@ -54,7 +54,7 @@ namespace TimecardApp.Model
         }
 
         private int timelogTaskID;
-        [Column]
+        [Column(CanBeNull = true)]
         public int TimelogTaskID
         {
             get
@@ -74,7 +74,7 @@ namespace TimecardApp.Model
         }
 
         private int timelogProjectID;
-        [Column]
+        [Column(CanBeNull = true)]
         public int TimelogProjectID
         {
             get
@@ -94,7 +94,7 @@ namespace TimecardApp.Model
         }
 
         private string timelogProjectName;
-        [Column]
+        [Column(CanBeNull = true)]
         public string TimelogProjectName
         {
             get
@@ -158,6 +158,37 @@ namespace TimecardApp.Model
             get
             {
                 return HelperClass.GetIdentForTimelogTask(timelogTaskName, timelogProjectName, timelogProjectID);
+            }
+        }
+
+        private bool isExpanded;
+        public bool IsExpanded
+        {
+            get
+            {
+                return isExpanded;
+            }
+            set
+            {
+                if (isExpanded != value)
+                {
+                    NotifyPropertyChanging("IsExpanded");
+                    isExpanded = value;
+                    NotifyPropertyChanged("IsExpanded");
+                }
+            }
+        }
+
+        public IList<string> ExpandItems
+        {
+            get
+            {
+                IList<string> expandItems = new List<string>();
+                expandItems.Add("ProjectID: " + timelogProjectID.ToString());
+                expandItems.Add("Task: " + timelogTaskName + ", ID: " +  timelogTaskID.ToString());
+                expandItems.Add("StartDate: " + startDate.ToString("yyyy-MM-dd"));
+                expandItems.Add("EndDate: " + endDate.ToString("yyyy-MM-dd"));
+                return expandItems;
             }
         }
 

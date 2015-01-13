@@ -25,32 +25,46 @@ namespace TimecardApp.View
         {
             InitializeComponent();
             BuildLocalizedApplicationBar();
-            //this.LoadingPanel.Visibility = Visibility.Collapsed;
         }
 
         private void BuildLocalizedApplicationBar()
         {
-            ApplicationBar = new ApplicationBar();
             appBarHomeButton = new ApplicationBarIconButton(new Uri("Icons/map.neighborhood.png", UriKind.Relative));
             appBarHomeButton.Text = "Home";
             appBarHomeButton.Click += new System.EventHandler(this.homeButton_Click);
 
             appBarSyncData = new ApplicationBarIconButton(new Uri("Icons/refresh.png", UriKind.Relative));
-            appBarSyncData.Text = "Load data";
+            appBarSyncData.Text = "Load Tl tasks";
             appBarSyncData.Click += new System.EventHandler(this.synchronisationData_Click);
 
             appBarEdit = new ApplicationBarIconButton(new Uri("Resources/edit.png", UriKind.Relative));
             appBarEdit.Text = "Edit";
             appBarEdit.Click += new System.EventHandler(this.editTimelogSetting_Click);
 
-            ApplicationBar.Buttons.Add(appBarHomeButton);
-            ApplicationBar.Buttons.Add(appBarEdit);
-            ApplicationBar.Buttons.Add(appBarSyncData);
+        }
+
+
+
+        private void TimelogPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch ((sender as Pivot).SelectedIndex)
+            {
+                case 0:
+                    ApplicationBar = new ApplicationBar();
+                    ApplicationBar.Buttons.Add(appBarHomeButton);
+                    break;
+                case 1:
+                    ApplicationBar = new ApplicationBar();
+                    ApplicationBar.Buttons.Add(appBarHomeButton);
+                    ApplicationBar.Buttons.Add(appBarEdit);
+                    ApplicationBar.Buttons.Add(appBarSyncData);
+                    break;
+            }
         }
 
         private void editTimelogSetting_Click(object sender, EventArgs e)
         {
-            if (timelogViewModel.CurrentState != TimelogState.Running)
+            if (timelogViewModel.CurrentState != ETimelogState.Running)
             {
                 timelogViewModel.SaveThisTlSetting();
                 App.AppViewModel.DiscardTlSettingViewModel();
@@ -60,7 +74,7 @@ namespace TimecardApp.View
 
         private void homeButton_Click(object sender, EventArgs e)
         {
-            if (timelogViewModel.CurrentState != TimelogState.Running)
+            if (timelogViewModel.CurrentState != ETimelogState.Running)
             {
                 timelogViewModel.SaveThisTlSetting();
                 App.AppViewModel.DiscardTlSettingViewModel();
@@ -70,9 +84,9 @@ namespace TimecardApp.View
 
         private void synchronisationData_Click(object sender, EventArgs e)
         {
-            if (timelogViewModel.CurrentState != TimelogState.Running)
+            if (timelogViewModel.CurrentState != ETimelogState.Running)
             {
-                timelogViewModel.ExecuteTlOperation(TimelogOperation.GetTasks);
+                timelogViewModel.ExecuteTlOperation(ETimelogOperation.GetTasks);
             }
         }
 
@@ -92,7 +106,7 @@ namespace TimecardApp.View
 
         public void NavigateLogin()
         {
-            if (timelogViewModel.CurrentState != TimelogState.Running)
+            if (timelogViewModel.CurrentState != ETimelogState.Running)
             {
                 App.AppViewModel.DiscardTlSettingViewModel();
                 NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));

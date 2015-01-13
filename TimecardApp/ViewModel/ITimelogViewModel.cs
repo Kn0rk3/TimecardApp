@@ -10,7 +10,7 @@ namespace TimecardApp.ViewModel
 {
     public interface ITimelogViewModel
     {
-        void ChangeState(TimelogState newState, TimelogOperation runningOperation, string message);
+        void ChangeState(ETimelogState newState, ETimelogOperation runningOperation, string message);
         void SetTimelogTasks(ObservableCollection<TimelogProjectManagementService.Task> tasks);
     }
 }

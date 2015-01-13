@@ -286,7 +286,7 @@ namespace TimecardApp.ViewModel
             }
         }
 
-        private bool forTimelog;
+        private bool? forTimelog;
         public bool? ForTimelog
         {
             get
@@ -371,8 +371,8 @@ namespace TimecardApp.ViewModel
             }
 
             // timelog
-            ForTimelog = thisWorkTask.IsForTimelogRegistration;
-            if (forTimelog)
+            forTimelog = thisWorkTask.IsForTimelogRegistration;
+            if (forTimelog == true)
             {
                 loadTimelogTasksForDate(thisWorkTask.DayDate);
                 lastTimelogRegistration = thisWorkTask.LastTimelogRegistration;

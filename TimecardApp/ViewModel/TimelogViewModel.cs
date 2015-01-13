@@ -70,6 +70,20 @@ namespace TimecardApp.ViewModel
             }
         }
 
+        private string lastSynchronisationTimestamp;
+        public string LastSynchronisationTimestamp
+        {
+            get
+            {
+                return lastSynchronisationTimestamp;
+            }
+            set
+            {
+                lastSynchronisationTimestamp = value;
+                NotifyPropertyChanged("LastSynchronisationTimestamp");
+            }
+        }
+
         private bool isSaveCredentials;
         public bool IsSaveCredentials
         {
@@ -98,8 +112,8 @@ namespace TimecardApp.ViewModel
             }
         }
 
-        private TimelogState currentState;
-        public TimelogState CurrentState
+        private ETimelogState currentState;
+        public ETimelogState CurrentState
         {
             get
             {
@@ -112,8 +126,8 @@ namespace TimecardApp.ViewModel
             }
         }
 
-        private TimelogOperation currentOperation;
-        public TimelogOperation CurrentOperation
+        private ETimelogOperation currentOperation;
+        public ETimelogOperation CurrentOperation
         {
             get
             {
@@ -144,27 +158,44 @@ namespace TimecardApp.ViewModel
             
         }
 
+        private ObservableCollection<WorkTask> tlWorktaskCollection;
+        public ObservableCollection<WorkTask> TlWorktaskCollection
+        {
+            get
+            {
+                return tlWorktaskCollection;
+            }
+            set
+            {
+                if (tlWorktaskCollection != value)
+                {
+                    tlWorktaskCollection = value;
+                    NotifyPropertyChanged("TlWorktaskCollection");
+                }
+            }
+        }
+
         public TimelogViewModel(TimelogSetting tlSetting, ITimelogUsingView view)
         {
             timelogSetting = tlSetting;
             timelogUsingView = view;
 
-            Username = tlSetting.Username;
+            username = tlSetting.Username;
             isLoginBackground = tlSetting.LoginBackground;
             if (!String.IsNullOrEmpty(username))
-                IsSaveCredentials = true;
+                isSaveCredentials = true;
             else
-                IsSaveCredentials = false;
+                isSaveCredentials = false;
 
             url = tlSetting.TimelogUrl;
 #if DEBUG
-            url = "https://tl.timelog.com/leuschel";
+            url = "https://app1.timelog.com/Leuschel";
 #endif
             if (!String.IsNullOrEmpty(tlSetting.Password))
             {
                 password = HelperClass.GetDecryptedPWString(tlSetting.Password);
             }
-
+            lastSynchronisationTimestamp = tlSetting.LastSynchronisationTimestamp;
             TlTaskCollection = App.AppViewModel.GetTimelogTasks();
         }
 
@@ -186,24 +217,25 @@ namespace TimecardApp.ViewModel
                 timelogSetting.Username = String.Empty;
                 timelogSetting.Password = String.Empty;
             }
-            
-            //TODO
-            //Save TimelogTasks into DB (implement function in AppViewModel)
-            App.AppViewModel.SaveNewTimelogTasks(tlTaskCollection);
+            if (timelogSetting.LastSynchronisationTimestamp != LastSynchronisationTimestamp)
+            {
+                timelogSetting.LastSynchronisationTimestamp = LastSynchronisationTimestamp;
+                App.AppViewModel.SaveNewTimelogTasks(tlTaskCollection);
+            }
             App.AppViewModel.SaveChangesToDB();
         }
 
-        public void ChangeState(TimelogState newState, TimelogOperation operationRunning, string message)
+        public void ChangeState(ETimelogState newState, ETimelogOperation operationRunning, string message)
         {
             CurrentState = newState;
 
             switch (operationRunning)
             {
-                case TimelogOperation.GetTasks:
+                case ETimelogOperation.GetTasks:
                     {
                         switch (newState)
                         {
-                            case TimelogState.UnexpectedError:
+                            case ETimelogState.UnexpectedError:
                                 {
                                     timelogUsingView.ShowErrorMessage(message);
                                     break;
@@ -211,11 +243,11 @@ namespace TimecardApp.ViewModel
                         }
                         break;
                     }
-                case TimelogOperation.Login:
+                case ETimelogOperation.Login:
                     {
                         switch (newState)
                         {
-                            case TimelogState.ExectionSuccessfull:
+                            case ETimelogState.ExectionSuccessfull:
                                 {
                                     if (currentOperation != operationRunning)
                                         ExecuteTlOperation(currentOperation);
@@ -227,7 +259,7 @@ namespace TimecardApp.ViewModel
                                     }
                                     break;
                                 }
-                            case TimelogState.UnexpectedError:
+                            case ETimelogState.UnexpectedError:
                                 {
                                     timelogUsingView.ShowErrorMessage(message);
                                     timelogUsingView.NavigateLogin();
@@ -239,13 +271,13 @@ namespace TimecardApp.ViewModel
             }
         }
 
-        public void ExecuteTlOperation(TimelogOperation operation)
+        public void ExecuteTlOperation(ETimelogOperation operation)
         {
             ITimelogWrapper wrapper = new TimelogWrapper(this);
             CurrentOperation = operation;
             switch (operation)
             {
-                case TimelogOperation.GetTasks:
+                case ETimelogOperation.GetTasks:
                     {
                         if (wrapper.IsValidSecurityToken())
                             wrapper.GetTimelogTasks();
@@ -266,7 +298,7 @@ namespace TimecardApp.ViewModel
                         break;
                     }
 
-                case TimelogOperation.Login:
+                case ETimelogOperation.Login:
                     {
                         if (!String.IsNullOrEmpty(url) && !String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
                         {
@@ -281,6 +313,7 @@ namespace TimecardApp.ViewModel
 
         public void SetTimelogTasks(ObservableCollection<TimelogProjectManagementService.Task> tasks)
         {
+            LastSynchronisationTimestamp = "Last synchronisation: " +  DateTime.Now.ToString("yy-MM-dd hh:mm:ss");
             if (tasks != null)
             {
                 ObservableCollection<TimelogTask> tlTasks = new ObservableCollection<TimelogTask>();

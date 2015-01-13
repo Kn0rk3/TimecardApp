@@ -272,16 +272,27 @@ namespace TimecardApp.ViewModel
             ObservableCollection<TimelogTask> oldTaskCollection = new ObservableCollection<TimelogTask>(oldTasks);
             foreach (TimelogTask oldTask in oldTaskCollection)
             {
-                if (!tlTaskCollection.Contains(oldTask))
+                // try to match the UID
+                if (!tlTaskCollection.Where(u => u.TimelogTaskUID  == oldTask.TimelogTaskUID).Any())
                     dellAppDB.TimelogTasks.DeleteOnSubmit(oldTask);
             }
             dellAppDB.SubmitChanges();
 
-            //insert new ones
+            //insert new ones (or update)
             foreach(TimelogTask newTask in tlTaskCollection )
             {
-                if (!oldTaskCollection.Contains(newTask))
+                if (!oldTaskCollection.Where(u => u.TimelogTaskUID == newTask.TimelogTaskUID).Any())
+                    //Insert
                     dellAppDB.TimelogTasks.InsertOnSubmit(newTask);
+                else
+                {
+                    TimelogTask toUpdateTask = oldTaskCollection.Where(u => u.TimelogTaskUID == newTask.TimelogTaskUID).Single();
+                    toUpdateTask.TimelogTaskName = newTask.TimelogTaskName;
+                    toUpdateTask.TimelogProjectName = newTask.TimelogProjectName;
+                    toUpdateTask.TimelogProjectID = newTask.TimelogProjectID;
+                    toUpdateTask.StartDate = newTask.StartDate;
+                    toUpdateTask.EndDate = newTask.EndDate;
+                }
             }
             dellAppDB.SubmitChanges();
         }
@@ -672,7 +683,7 @@ namespace TimecardApp.ViewModel
         public ObservableCollection<TimelogTask> GetTimelogTasksForDate(DateTime dateTime)
         {
             var timelogTasks = from TimelogTask task in dellAppDB.TimelogTasks 
-                                where task.StartDate.Date <= dateTime.Date && task.EndDate.Date >= dateTime.Date
+                                where (task.StartDate.Date <= dateTime.Date && task.EndDate.Date >= dateTime.Date) || (task.StartDate == null || task.EndDate == null)
                                 select task;
 
             return new ObservableCollection<TimelogTask>(timelogTasks);
@@ -1083,9 +1094,9 @@ namespace TimecardApp.ViewModel
                                 migrator.MigrateDatabase();
                             }
                         }
-                        catch
+                        catch (Exception e)
                         {
-                            throw new Exception("Database error in Timecard App: Connectionstring doesn't point to a existing database. Migration failed.");
+                            throw new Exception("Error during migration. Migration failed.");
                         }
                     }
 

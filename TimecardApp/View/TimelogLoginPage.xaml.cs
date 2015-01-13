@@ -47,10 +47,10 @@ namespace TimecardApp.View
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            if (timelogViewModel.CurrentState != TimelogState.Running)
+            if (timelogViewModel.CurrentState != ETimelogState.Running)
             {
                 HelperClass.FocusedTextBoxUpdateSource();
-                timelogViewModel.ExecuteTlOperation(TimelogOperation.Login);
+                timelogViewModel.ExecuteTlOperation(ETimelogOperation.Login);
             }
         }
 
@@ -76,7 +76,7 @@ namespace TimecardApp.View
 
         public void NavigateBack()
         {
-            if (timelogViewModel.CurrentState != TimelogState.Running)
+            if (timelogViewModel.CurrentState != ETimelogState.Running)
             {
                 timelogViewModel.SaveThisTlSetting();
                 App.AppViewModel.DiscardTlSettingViewModel();

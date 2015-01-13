@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TimecardApp.Model.Timelog
 {
-    public enum TimelogOperation
+    public enum ETimelogOperation
     {
         None,
         GetTasks,

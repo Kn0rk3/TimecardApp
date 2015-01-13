@@ -63,7 +63,8 @@ namespace TimecardApp.Model.NonPersistent
             dbUpdater.AddTable<TimelogTask>();
             dbUpdater.AddTable<TimelogSetting>();
 
-            dbUpdater.AddAssociation<WorkTask>("TimelogTaskUID");
+            dbUpdater.AddColumn<WorkTask>("TimelogTaskUID");
+            dbUpdater.AddAssociation<WorkTask>("TimelogTask");
             dbUpdater.AddColumn<WorkTask>("LastTimelogRegistration");
             dbUpdater.AddColumn<WorkTask>("IsForTimelogRegistration");
             dbUpdater.AddColumn<Setting>("IsUsingTimelog");

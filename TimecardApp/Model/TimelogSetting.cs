@@ -73,7 +73,7 @@ namespace TimecardApp.Model
         }
 
         private string timelogUrl;
-        [Column]
+        [Column(CanBeNull = true)]
         public string TimelogUrl
         {
             get
@@ -88,6 +88,27 @@ namespace TimecardApp.Model
                     NotifyPropertyChanging("TimelogUrl");
                     timelogUrl = value;
                     NotifyPropertyChanged("TimelogUrl");
+                }
+            }
+        }
+
+
+        private string lastSynchronisationTimestamp;
+        [Column(CanBeNull = true)]
+        public string LastSynchronisationTimestamp
+        {
+            get
+            {
+                return lastSynchronisationTimestamp;
+            }
+
+            set
+            {
+                if (lastSynchronisationTimestamp != value)
+                {
+                    NotifyPropertyChanging("LastSynchronisationTimestamp");
+                    lastSynchronisationTimestamp = value;
+                    NotifyPropertyChanged("LastSynchronisationTimestamp");
                 }
             }
         }
