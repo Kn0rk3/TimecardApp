@@ -245,27 +245,24 @@ namespace TimecardApp.ViewModel
                 if (timelogTask != value)
                 {
                     timelogTask = value;
-                    SelectedTimelogTaskIdent = timelogTask.TimelogTaskIdent;
+                    TaskInformation = value.ExpandItems;
                     NotifyPropertyChanged("TimelogTask");
                 }
 
             }
         }
 
-        private string selectedTimelogTaskIdent;
-        public string SelectedTimelogTaskIdent
+        private IList<string> taskInformation;
+        public IList<string> TaskInformation
         {
             get
             {
-                return selectedTimelogTaskIdent;
+                return taskInformation;
             }
             set
             {
-                if (selectedTimelogTaskIdent != value)
-                {
-                    selectedTimelogTaskIdent = value;
-                    NotifyPropertyChanged("SelectedTimelogTaskIdent");
-                }
+                taskInformation = value;
+                NotifyPropertyChanged("TaskInformation");
             }
         }
 
