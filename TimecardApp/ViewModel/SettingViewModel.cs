@@ -12,7 +12,6 @@ using System.Windows;
 namespace TimecardApp.ViewModel
 {
     public class SettingViewModel : INotifyPropertyChanged
-
     {
         private Setting thisSetting;
 

@@ -689,6 +689,17 @@ namespace TimecardApp.ViewModel
             return new ObservableCollection<TimelogTask>(timelogTasks);
         }
 
+        public ObservableCollection<WorkTask> GetAllWorktasksForTimelog()
+        {
+            var worktasks = from WorkTask worktask in dellAppDB.WorkTasks
+                            where worktask.IsForTimelogRegistration == true && 
+                                    (worktask.LastTimelogRegistration == String.Empty || worktask.LastTimelogRegistration == null) &&
+                                    worktask.TimelogTask != null 
+                            select worktask;
+
+            return new ObservableCollection<WorkTask>(worktasks);
+        }
+
         public void LoadCollectionsFromDatabase()
         {
             var customersInDB = from Customer customer in dellAppDB.Customer
@@ -1131,6 +1142,8 @@ namespace TimecardApp.ViewModel
         #endregion
 
 
-        
+
+
+
     }
 }

@@ -197,6 +197,7 @@ namespace TimecardApp.ViewModel
             }
             lastSynchronisationTimestamp = tlSetting.LastSynchronisationTimestamp;
             TlTaskCollection = App.AppViewModel.GetTimelogTasks();
+            TlWorktaskCollection = App.AppViewModel.GetAllWorktasksForTimelog();
         }
 
         public void SaveThisTlSetting()

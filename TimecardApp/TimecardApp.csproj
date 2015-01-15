@@ -113,14 +113,14 @@
     <Compile Include="Model\NonPersistent\HelperClass.cs" />
     <Compile Include="Model\IDBObjects.cs" />
     <Compile Include="Model\TimelogSetting.cs" />
-    <Compile Include="Model\Timelog\TimelogOperation.cs" />
+    <Compile Include="Model\Timelog\ETimelogOperation.cs" />
     <Compile Include="Model\Timelog\TimelogSession.cs" />
     <Compile Include="Model\Timelog\ITimelogWrapper.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Model\Timecard.cs" />
     <Compile Include="Model\TimelogTask.cs" />
-    <Compile Include="Model\Timelog\TimelogState.cs" />
+    <Compile Include="Model\Timelog\ETimelogState.cs" />
     <Compile Include="Model\Timelog\TimelogWrapper.cs" />
     <Compile Include="Model\WorkTask.cs" />
     <Compile Include="Service References\TimelogProjectManagementService\Reference.cs">

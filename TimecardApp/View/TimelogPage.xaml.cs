@@ -117,5 +117,10 @@ namespace TimecardApp.View
         {
             
         }
+
+        private void editWorktaskButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
