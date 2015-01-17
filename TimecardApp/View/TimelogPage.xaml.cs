@@ -42,9 +42,7 @@ namespace TimecardApp.View
             appBarEdit.Click += new System.EventHandler(this.editTimelogSetting_Click);
 
         }
-
-
-
+        
         private void TimelogPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch ((sender as Pivot).SelectedIndex)
@@ -120,7 +118,22 @@ namespace TimecardApp.View
 
         private void editWorktaskButton_Click(object sender, RoutedEventArgs e)
         {
+            if (timelogViewModel.CurrentState != ETimelogState.Running)
+            {            
+                var button = sender as Button;
 
+                if (button != null)
+                {
+                    // Get a handle for the to-do item bound to the button.
+                    WorkTask worktask = button.DataContext as WorkTask;
+
+                    timelogViewModel.SaveThisTlSetting();
+                    App.AppViewModel.DiscardTlSettingViewModel();
+
+                    // hier muss noch die ID mitgegeben werden, dass die Timecard korrekt geladen werden kann
+                    NavigationService.Navigate(new Uri("/View/WorktaskPage.xaml?worktaskIDParam=" + worktask.WorkTaskID, UriKind.Relative));
+                }
+            }
         }
     }
 }

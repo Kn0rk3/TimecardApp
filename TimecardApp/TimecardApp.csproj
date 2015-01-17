@@ -259,6 +259,9 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
+    <Content Include="Icons\feature.alarm.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Toolkit.Content\Microsoft.Phone.Controls.Toolkit.dll" />
     <Content Include="ServiceReferences.ClientConfig">
       <SubType>Designer</SubType>
@@ -308,14 +311,18 @@
     <Content Include="Icons\feature.settings.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\map.neighborhood.png" />
+    <Content Include="Icons\map.neighborhood.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\refresh.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\save.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\search.refine.png" />
+    <Content Include="Icons\search.refine.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\tabs.2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

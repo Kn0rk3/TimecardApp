@@ -349,10 +349,8 @@ namespace TimecardApp.Model
             }
         }
 
-
-
-        private String totalWorkTimeString;
-        public String TotalWorkTimeString
+        private string totalWorkTimeString;
+        public string TotalWorkTimeString
         {
             get
             {
@@ -367,6 +365,53 @@ namespace TimecardApp.Model
                     totalWorkTimeString = value;
                     NotifyPropertyChanged("TotalWorkTimeString");
                 }
+            }
+        }
+
+        private bool isExpanded;
+        public bool IsExpanded
+        {
+            get
+            {
+                return isExpanded;
+            }
+            set
+            {
+                if (isExpanded != value)
+                {
+                    NotifyPropertyChanging("IsExpanded");
+                    isExpanded = value;
+                    NotifyPropertyChanged("IsExpanded");
+                }
+            }
+        }
+
+
+        public string TimelogTaskIdent
+        {
+            get
+            {
+                if (TimelogTask != null)
+                    return TimelogTask.TimelogTaskName;
+                else
+                    return "";
+            }
+        }
+
+
+        public IList<string> ExpandItems
+        {
+            get
+            {
+                if (TimelogTask != null)
+                {
+                    IList<string> expandItems = new List<string>();
+                    expandItems.Add("Tl Project: " + TimelogTask.TimelogProjectName);
+                    expandItems.Add("Worktime: " + TotalWorkTimeString);
+                    return expandItems;
+                }
+                else
+                    return new List<string>();
             }
         }
 

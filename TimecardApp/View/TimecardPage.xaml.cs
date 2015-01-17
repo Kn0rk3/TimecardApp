@@ -38,10 +38,10 @@ namespace TimecardApp.View
             appBarHomeButton.Click += new System.EventHandler(this.homeButton_Click);
             ApplicationBar.Buttons.Add(appBarHomeButton);
 
-            ApplicationBarIconButton appBarSettingsButton = new ApplicationBarIconButton(new Uri("Icons/feature.settings.png", UriKind.Relative));
-            appBarSettingsButton.Text = "Settings";
-            appBarSettingsButton.Click += new System.EventHandler(this.settingsButton_Click);
-            ApplicationBar.Buttons.Add(appBarSettingsButton);
+            //ApplicationBarIconButton appBarSettingsButton = new ApplicationBarIconButton(new Uri("Icons/feature.settings.png", UriKind.Relative));
+            //appBarSettingsButton.Text = "Settings";
+            //appBarSettingsButton.Click += new System.EventHandler(this.settingsButton_Click);
+            //ApplicationBar.Buttons.Add(appBarSettingsButton);
 
             ApplicationBarIconButton appBarNewWorkTaskButton = new ApplicationBarIconButton(new Uri("Icons/add.png", UriKind.Relative));
             appBarNewWorkTaskButton.Text = "New Task";
@@ -52,6 +52,11 @@ namespace TimecardApp.View
             appBarCopyTimecardButton.Text = "Copy Timecard";
             appBarCopyTimecardButton.Click += new System.EventHandler(this.copyTimecardButton_Click);
             ApplicationBar.Buttons.Add(appBarCopyTimecardButton);
+
+            ApplicationBarIconButton  appBarTimelogButton = new ApplicationBarIconButton(new Uri("Icons/feature.alarm.png", UriKind.Relative));
+            appBarTimelogButton.Text = "Timelog";
+            appBarTimelogButton.Click += new System.EventHandler(this.timelogButton_Click);
+            ApplicationBar.Buttons.Add(appBarTimelogButton);
 
         }
 
@@ -105,6 +110,11 @@ namespace TimecardApp.View
                 // hier muss noch die ID mitgegeben werden, dass die Timecard korrekt geladen werden kann
                 NavigationService.Navigate(new Uri("/View/WorktaskPage.xaml?worktaskIDParam=" + worktask.WorkTaskID , UriKind.Relative));
             }
+        }
+
+        private void timelogButton_Click(object sender, EventArgs e)
+        {
+            NavigationService.Navigate(new Uri("/View/TimelogPage.xaml", UriKind.Relative));
         }
 
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)

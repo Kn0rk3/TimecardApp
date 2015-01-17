@@ -17,7 +17,7 @@
     <!-- Templates for Expanderview -->
     <phone:PhoneApplicationPage.Resources>
         
-        <DataTemplate x:Key="CustomExpanderTemplate">
+        <DataTemplate x:Key="TlTaskCustomExpanderTemplate">
             <StackPanel Orientation="Vertical">
                 <TextBlock FontSize="20" Margin="0,0,0,0">
                     <TextBlock.Text>
@@ -26,8 +26,8 @@
                 </TextBlock>
             </StackPanel>
         </DataTemplate>
-        
-        <DataTemplate x:Key="CustomHeaderTemplate">
+
+        <DataTemplate x:Key="TlTaskCustomHeaderTemplate">
             <TextBlock 
                                         Grid.Column="0"
                                         Text="{Binding TimelogTaskIdent}"
@@ -36,9 +36,36 @@
             </TextBlock>
         </DataTemplate>
 
-        <DataTemplate x:Key="CustomItemTemplate">
+        <DataTemplate x:Key="TlTaskCustomItemTemplate">
             <StackPanel Orientation="Vertical">
                 <TextBlock FontSize="20" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="WorktaskCustomExpanderTemplate">
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontSize="20" Margin="0,0,0,0">
+                    <TextBlock.Text>
+                        <Binding Path="TimelogTaskIdent" StringFormat="Tl task: {0}" />
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="WorktaskCustomHeaderTemplate">
+            <TextBlock 
+                                        Grid.Column="0"
+                                        Text="{Binding Ident_WorkTask}"
+                                        FontSize="30"
+                                        Margin="0,0,0,0">
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="WorktaskCustomItemTemplate">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock FontSize="20" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
+                </StackPanel>
             </StackPanel>
         </DataTemplate>
 
@@ -59,10 +86,33 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <TextBlock HorizontalAlignment="Left" Text="worktasks for timelog registration" Grid.Row="0" Grid.Column="0" FontSize="25" Height="33" />
-                    <ListBox x:Name="worktaskListBox" Grid.Row="1" ItemsSource="{Binding TlWorktaskCollection}" Margin="12, 0, 12, 0" >
+                    <ListBox x:Name="worktaskListBox" Grid.Row="1" ItemsSource="{Binding TlWorktaskCollection}" Margin="0, 0, 12, 0" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Grid HorizontalAlignment="Stretch" Width="440">
+                                <Grid HorizontalAlignment="Left" Width="440">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="80" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Button
+                                Grid.Column="0"
+                                x:Name="editWorktask"
+                                BorderThickness="0"                                
+                                Margin="-10,0"
+                                Click="editWorktaskButton_Click">
+                                        <Image Source="/Resources/edit.png"/>
+                                    </Button>
+                                    <toolkit:ExpanderView Grid.Column="1" Header="{Binding}" Expander="{Binding}"  
+                                    ExpanderTemplate="{StaticResource WorktaskCustomExpanderTemplate}"
+                                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
+                                    HeaderTemplate="{StaticResource WorktaskCustomHeaderTemplate}" 
+                                    ItemTemplate="{StaticResource WorktaskCustomItemTemplate}"
+                                    ItemsSource="{Binding ExpandItems}"
+                                    />
+                                </Grid>
+                            </DataTemplate>
+
+                                <!--<Grid HorizontalAlignment="Stretch" Width="440">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="300" />
                                         <ColumnDefinition Width="*" />
@@ -91,8 +141,7 @@
                                             HorizontalAlignment="Left"
                                             Click="editWorktaskButton_Click">
                                     </Button>
-                                </Grid>
-                            </DataTemplate>
+                                </Grid>-->
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
@@ -108,10 +157,10 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <toolkit:ExpanderView Header="{Binding}" Expander="{Binding}"  
-                                    ExpanderTemplate="{StaticResource CustomExpanderTemplate}"
+                                    ExpanderTemplate="{StaticResource TlTaskCustomExpanderTemplate}"
                                     IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
-                                    HeaderTemplate="{StaticResource CustomHeaderTemplate}" 
-                                    ItemTemplate="{StaticResource CustomItemTemplate}"
+                                    HeaderTemplate="{StaticResource TlTaskCustomHeaderTemplate}" 
+                                    ItemTemplate="{StaticResource TlTaskCustomItemTemplate}"
                                     ItemsSource="{Binding ExpandItems}"
                                     />
                             </DataTemplate>
@@ -120,7 +169,7 @@
                 </Grid>
             </phone:PivotItem>
         </phone:Pivot>
-        <Grid  Grid.Row="2"   x:Name="InformationGrid" Background="Transparent" >
+        <Grid Margin="12,0,0,0" Grid.Row="2"   x:Name="InformationGrid" Background="Transparent" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>

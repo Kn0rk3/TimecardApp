@@ -28,6 +28,7 @@ namespace TimecardApp.View
         private ApplicationBarIconButton appBarAddWorktaskButton;
         private ApplicationBarIconButton appBarRefreshButton;
         private ApplicationBarIconButton appBarSendMailButton;
+        private ApplicationBarIconButton appBarTimelogButton;
 
         private ApplicationBarMenuItem appBarMenuBackup;
         private ApplicationBarMenuItem appBarMenuTimelog;
@@ -132,9 +133,13 @@ namespace TimecardApp.View
             if (App.AppViewModel.UsingTimelogInterface)
             {
                 appBarMenuTimelog = new ApplicationBarMenuItem();
-                appBarMenuTimelog.Text = "Timelog data";
+                appBarMenuTimelog.Text = "Timelog";
                 appBarMenuTimelog.Click += new System.EventHandler(this.timelogButton_Click);
-            }
+
+                appBarTimelogButton = new ApplicationBarIconButton(new Uri("Icons/feature.alarm.png", UriKind.Relative));
+                appBarTimelogButton.Text = "Timelog";
+                appBarTimelogButton.Click += new System.EventHandler(this.timelogButton_Click);
+            }            
 
             appBarSettingsButton = new ApplicationBarIconButton(new Uri("Icons/feature.settings.png", UriKind.Relative));
             appBarSettingsButton.Text = "Settings";
@@ -239,6 +244,8 @@ namespace TimecardApp.View
                     ApplicationBar.Buttons.Add(appBarSettingsButton);
                     ApplicationBar.Buttons.Add(appBarAddWorktaskButton);
                     ApplicationBar.Buttons.Add(appBarSendMailButton);
+                    if (App.AppViewModel.UsingTimelogInterface)
+                        ApplicationBar.Buttons.Add(appBarTimelogButton);
                     break;
 
                 case 1:
