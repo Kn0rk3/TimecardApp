@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using TimecardApp.Model;
 using TimecardApp.Model.NonPersistent;
 using TimecardApp.Model.Timelog;
+using TimecardApp.TimelogProjectManagementService;
 using TimecardApp.View;
 
 namespace TimecardApp.ViewModel
@@ -299,6 +300,43 @@ namespace TimecardApp.ViewModel
                         break;
                     }
 
+                case ETimelogOperation.UploadWorkunits:
+                    {
+                        if (wrapper.IsValidSecurityToken())
+                        {
+                            ObservableCollection<WorkUnit> units = new ObservableCollection<WorkUnit>();
+                            foreach (WorkTask worktask in tlWorktaskCollection)
+                            {
+                                WorkUnit _unit = new WorkUnit();
+                                _unit.TaskID = worktask.TimelogTask.TimelogTaskID;
+                                _unit.StartDateTime = worktask.DayDate;
+                                _unit.GUID = System.Guid.NewGuid();
+                                _unit.EmployeeInitials = username;
+                                _unit.Description = worktask.WorkDescription;
+                                _unit.EndDateTime = worktask.DayDate.AddTicks(worktask.WorkTimeTicks);
+                                _unit.Duration = TimeSpan.FromTicks(worktask.WorkTimeTicks);
+                                units.Add(_unit);
+                            }
+
+                            if (units.Count > 0)
+                                wrapper.UploadWorkunits(units);
+                        }
+                        else
+                        {
+                            //login has to be performed before
+                            if (isLoginBackground && !String.IsNullOrEmpty(url) && !String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
+                            {
+                                wrapper.LoginTimelog(url, username, password);
+                            }
+                            else
+                            {
+                                timelogUsingView.ShowErrorMessage("You need to login to timelog first!");
+                                timelogUsingView.NavigateLogin();
+                            }
+                        }
+                        break;
+                    }
+
                 case ETimelogOperation.Login:
                     {
                         if (!String.IsNullOrEmpty(url) && !String.IsNullOrEmpty(username) && !String.IsNullOrEmpty(password))
@@ -309,6 +347,8 @@ namespace TimecardApp.ViewModel
                             timelogUsingView.ShowErrorMessage("Make sure you typed in username, password and the timelogsite!");
                         break;
                     }
+
+
             }
         }
 

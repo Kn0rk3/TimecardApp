@@ -20,6 +20,7 @@ namespace TimecardApp.View
         private ApplicationBarIconButton appBarHomeButton;
         private ApplicationBarIconButton appBarSyncData;
         private ApplicationBarIconButton appBarEdit;
+        private ApplicationBarIconButton appBarUploadButton;
 
         public TimelogPage()
         {
@@ -41,8 +42,12 @@ namespace TimecardApp.View
             appBarEdit.Text = "Edit";
             appBarEdit.Click += new System.EventHandler(this.editTimelogSetting_Click);
 
+            appBarUploadButton = new ApplicationBarIconButton(new Uri("Icons/upload.png", UriKind.Relative));
+            appBarUploadButton.Text = "Upload";
+            appBarUploadButton.Click += new System.EventHandler(this.uploadWorkunitsButton_Click);
+
         }
-        
+
         private void TimelogPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch ((sender as Pivot).SelectedIndex)
@@ -50,6 +55,8 @@ namespace TimecardApp.View
                 case 0:
                     ApplicationBar = new ApplicationBar();
                     ApplicationBar.Buttons.Add(appBarHomeButton);
+                    ApplicationBar.Buttons.Add(appBarEdit);
+                    ApplicationBar.Buttons.Add(appBarUploadButton);
                     break;
                 case 1:
                     ApplicationBar = new ApplicationBar();
@@ -67,6 +74,14 @@ namespace TimecardApp.View
                 timelogViewModel.SaveThisTlSetting();
                 App.AppViewModel.DiscardTlSettingViewModel();
                 NavigationService.Navigate(new Uri("/View/TimelogLoginPage.xaml", UriKind.Relative));
+            }
+        }
+
+        private void uploadWorkunitsButton_Click(object sender, EventArgs e)
+        {
+            if (timelogViewModel.CurrentState != ETimelogState.Running)
+            {
+                timelogViewModel.ExecuteTlOperation(ETimelogOperation.UploadWorkunits);
             }
         }
 

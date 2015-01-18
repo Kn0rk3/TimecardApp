@@ -16,8 +16,8 @@ namespace TimecardApp.View
     public partial class TimelogLoginPage : PhoneApplicationPage, ITimelogUsingView 
     {
         private TimelogViewModel timelogViewModel;
-        private ApplicationBarIconButton backButton;
-        private ApplicationBarIconButton loginButton;
+        private ApplicationBarIconButton appBarBackButton;
+        private ApplicationBarIconButton appBarLoginButton;
 
         public TimelogLoginPage()
         {
@@ -28,16 +28,16 @@ namespace TimecardApp.View
         {
             ApplicationBar = new ApplicationBar();
 
-            backButton = new ApplicationBarIconButton(new Uri("Icons/back.png", UriKind.Relative));
-            backButton.Text = "Back";
-            backButton.Click += new System.EventHandler(this.backButton_Click);
+            appBarBackButton = new ApplicationBarIconButton(new Uri("Icons/back.png", UriKind.Relative));
+            appBarBackButton.Text = "Back";
+            appBarBackButton.Click += new System.EventHandler(this.backButton_Click);
 
-            loginButton = new ApplicationBarIconButton(new Uri("Icons/upload.png", UriKind.Relative));
-            loginButton.Text = "Login";
-            loginButton.Click += new System.EventHandler(this.loginButton_Click);
+            appBarLoginButton = new ApplicationBarIconButton(new Uri("Icons/check.png", UriKind.Relative));
+            appBarLoginButton.Text = "Login";
+            appBarLoginButton.Click += new System.EventHandler(this.loginButton_Click);
 
-            ApplicationBar.Buttons.Add(backButton);
-            ApplicationBar.Buttons.Add(loginButton);      
+            ApplicationBar.Buttons.Add(appBarBackButton);
+            ApplicationBar.Buttons.Add(appBarLoginButton);      
         }
 
         private void backButton_Click(object sender, EventArgs e)

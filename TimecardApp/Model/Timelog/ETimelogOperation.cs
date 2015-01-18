@@ -11,6 +11,7 @@ namespace TimecardApp.Model.Timelog
         None,
         GetTasks,
         Login,
-        InsertWorkunits
+        InsertWorkunits,
+        UploadWorkunits
     }
 }

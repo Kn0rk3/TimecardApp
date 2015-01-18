@@ -38,18 +38,6 @@ namespace TimecardApp.Model.Timelog
             tlSecurityClient.GetTokenAsync(initials, password);            
         }
 
-        //public void GetTimelogProjects(bool backgroundLoginBfore)
-        //{
-        //    tlViewModel.StartTimelogConnection();
-
-        //    ObservableCollection<TimelogProject> projects = new ObservableCollection<TimelogProject>();
-        //    TimelogSession tlSession = TimelogSession.Instance;
-
-        //    ProjectManagementServiceClient tlProjectClient = tlSession.ProjectManagementClient;
-            
-            
-        //}
-
         public void  GetTimelogTasks()
         {
             tlViewModel.ChangeState(ETimelogState.Running, ETimelogOperation.GetTasks, String.Empty);
@@ -59,6 +47,17 @@ namespace TimecardApp.Model.Timelog
             ProjectManagementServiceClient tlProjectClient = tlSession.ProjectManagementClient;
             tlProjectClient.GetTasksAllocatedToEmployeeCompleted += tlProjectClient_GetTasksCompleted;
             tlProjectClient.GetTasksAllocatedToEmployeeAsync(tlSession.ProjectManagementToken.Initials , tlSession.ProjectManagementToken);
+        }
+
+        public void UploadWorkunits(ObservableCollection<WorkUnit> units)
+        {
+            tlViewModel.ChangeState(ETimelogState.Running, ETimelogOperation.UploadWorkunits, String.Empty);
+
+            TimelogSession tlSession = TimelogSession.Instance;
+
+            ProjectManagementServiceClient tlProjectClient = tlSession.ProjectManagementClient;
+            tlProjectClient.InsertWorkCompleted += tlProjectClient_InsertWorkCompleted;
+            tlProjectClient.InsertWorkAsync(units, 0, tlSession.ProjectManagementToken);
         }
 
         public  bool IsValidSecurityToken()
@@ -74,6 +73,11 @@ namespace TimecardApp.Model.Timelog
             else
                 return false;
             
+        }
+
+        private void tlProjectClient_InsertWorkCompleted(object sender, InsertWorkCompletedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private void tlSecurityClient_GetTokenCompleted(object sender, GetTokenCompletedEventArgs e)
