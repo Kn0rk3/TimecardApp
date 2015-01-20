@@ -12,5 +12,6 @@ namespace TimecardApp.ViewModel
     {
         void ChangeState(ETimelogState newState, ETimelogOperation runningOperation, string message);
         void SetTimelogTasks(ObservableCollection<TimelogProjectManagementService.Task> tasks);
+        void UpdateWorktasksForReturnedWorkunits(ObservableCollection<TimelogProjectManagementService.BatchContainerOfWorkUnit> returnWorkunits);
     }
 }

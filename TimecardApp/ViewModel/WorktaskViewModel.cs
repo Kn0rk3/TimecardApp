@@ -278,6 +278,10 @@ namespace TimecardApp.ViewModel
                 if (lastTimelogRegistration != value)
                 {
                     lastTimelogRegistration = value;
+                    if (String.IsNullOrEmpty(value))
+                        IsResetableForTimelog = false;
+                    else
+                        IsResetableForTimelog = true;
                     NotifyPropertyChanged("LastTimelogRegistration");
                 }
             }
@@ -304,6 +308,25 @@ namespace TimecardApp.ViewModel
                 }
                 else
                     forTimelog = false;
+            }
+        }
+
+        private bool isResetableForTimelog;
+        public bool IsResetableForTimelog
+        {
+            get
+            {
+                return isResetableForTimelog;
+            }
+            set
+            {
+
+                if (isResetableForTimelog != value)
+                {
+                    isResetableForTimelog = value;
+                    NotifyPropertyChanged("IsResetableForTimelog");
+                }
+
             }
         }
 
@@ -373,6 +396,10 @@ namespace TimecardApp.ViewModel
             {
                 loadTimelogTasksForDate(thisWorkTask.DayDate);
                 lastTimelogRegistration = thisWorkTask.LastTimelogRegistration;
+                if (String.IsNullOrEmpty(lastTimelogRegistration))
+                    isResetableForTimelog = false;
+                else
+                    isResetableForTimelog = true;
 
                 if (thisWorkTask.TimelogTask != null)
                 {
@@ -395,7 +422,7 @@ namespace TimecardApp.ViewModel
 
             if (worktaskPageProject != null)
                 thisWorkTask.Project = worktaskPageProject;
-            
+
             thisWorkTask.IsOnsite = worktaskPageIsOnsite;
             thisWorkTask.Ident_WorkTask = worktaskPageIdent;
             thisWorkTask.DayDate = worktaskPageDayDate;
@@ -481,6 +508,6 @@ namespace TimecardApp.ViewModel
 
 
 
-        
+
     }
 }

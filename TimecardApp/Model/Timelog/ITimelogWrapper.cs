@@ -13,6 +13,7 @@ namespace TimecardApp.Model.Timelog
         void LoginTimelog(string url, string initials, string password);
         void GetTimelogTasks();
         bool IsValidSecurityToken();
-        void UploadWorkunits(ObservableCollection<WorkUnit> units);
+        void UploadWorkunits(ObservableCollection<WorkUnit> insertUnits, ObservableCollection<WorkUnit> updateUnits);
+        
     }
 }

@@ -49,7 +49,7 @@ namespace TimecardApp.Model.Timelog
             tlProjectClient.GetTasksAllocatedToEmployeeAsync(tlSession.ProjectManagementToken.Initials , tlSession.ProjectManagementToken);
         }
 
-        public void UploadWorkunits(ObservableCollection<WorkUnit> units)
+        public void UploadWorkunits(ObservableCollection<WorkUnit> insertUnits, ObservableCollection<WorkUnit> updateUnits)
         {
             tlViewModel.ChangeState(ETimelogState.Running, ETimelogOperation.UploadWorkunits, String.Empty);
 
@@ -57,7 +57,12 @@ namespace TimecardApp.Model.Timelog
 
             ProjectManagementServiceClient tlProjectClient = tlSession.ProjectManagementClient;
             tlProjectClient.InsertWorkCompleted += tlProjectClient_InsertWorkCompleted;
-            tlProjectClient.InsertWorkAsync(units, 0, tlSession.ProjectManagementToken);
+            tlProjectClient.UpdateWorkCompleted += tlProjectClient_UpdateWorkCompleted;
+            
+            if (insertUnits.Count > 0)
+                tlProjectClient.InsertWorkAsync(insertUnits, 0, tlSession.ProjectManagementToken);
+            if (updateUnits.Count > 0)
+                tlProjectClient.UpdateWorkAsync(updateUnits, 0, tlSession.ProjectManagementToken);
         }
 
         public  bool IsValidSecurityToken()
@@ -75,9 +80,44 @@ namespace TimecardApp.Model.Timelog
             
         }
 
+        private void tlProjectClient_UpdateWorkCompleted(object sender, UpdateWorkCompletedEventArgs e)
+        {
+            try
+            {
+                if (e.Result.ResponseState == TimelogProjectManagementService.ExecutionStatus.Success)
+                {
+                    ObservableCollection<BatchContainerOfWorkUnit> returnWorkunits = e.Result.Return;
+                    if (returnWorkunits != null)
+                    {
+                        tlViewModel.UpdateWorktasksForReturnedWorkunits(returnWorkunits);
+                        tlViewModel.ChangeState(ETimelogState.ExectionSuccessfull, ETimelogOperation.UploadWorkunits, String.Empty);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, e.Error.Message);
+            }
+        }
+
         private void tlProjectClient_InsertWorkCompleted(object sender, InsertWorkCompletedEventArgs e)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (e.Result.ResponseState == TimelogProjectManagementService.ExecutionStatus.Success)
+                {
+                    ObservableCollection<BatchContainerOfWorkUnit> returnWorkunits = e.Result.Return;
+                    if (returnWorkunits != null)
+                    {
+                        tlViewModel.UpdateWorktasksForReturnedWorkunits(returnWorkunits);
+                        tlViewModel.ChangeState(ETimelogState.ExectionSuccessfull, ETimelogOperation.UploadWorkunits, String.Empty);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, e.Error.Message);
+            }
         }
 
         private void tlSecurityClient_GetTokenCompleted(object sender, GetTokenCompletedEventArgs e)

@@ -22,7 +22,6 @@ namespace TimecardApp.View
         private ApplicationBarIconButton appBarDeleteButton;
         private ApplicationBarIconButton appBarSaveButton;
         private ApplicationBarIconButton appBarCancelButton;
-        private ApplicationBarMenuItem appBarMenuTimelog;
 
         // every time the worktaskpage is created, create a new ViewModel for the Worktask 
         public WorktaskPage()
@@ -34,14 +33,6 @@ namespace TimecardApp.View
         private void BuildLocalizedApplicationBar()
         {
             ApplicationBar = new ApplicationBar();
-
-            if (App.AppViewModel.UsingTimelogInterface)
-            {
-                appBarMenuTimelog = new ApplicationBarMenuItem();
-                appBarMenuTimelog.Text = "send to Timelog";
-                appBarMenuTimelog.Click += new System.EventHandler(this.timelogButton_Click);
-                ApplicationBar.MenuItems.Add(appBarMenuTimelog);
-            }
 
             appBarSaveButton = new ApplicationBarIconButton(new Uri("Icons/save.png", UriKind.Relative));
             appBarSaveButton.Text = "Save";
@@ -57,13 +48,6 @@ namespace TimecardApp.View
             appBarDeleteButton.Text = "Delete";
             appBarDeleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             ApplicationBar.Buttons.Add(appBarDeleteButton);
-        }
-
-        private void timelogButton_Click(object sender, EventArgs e)
-        {
-            HelperClass.FocusedTextBoxUpdateSource();
-            workTaskViewModel.SaveThisWorkTask();
-            NavigationService.Navigate(new Uri("/View/TimelogPage.xaml", UriKind.Relative));
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -105,7 +89,7 @@ namespace TimecardApp.View
 
         private void workDescriptionTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (String.Equals(workTaskViewModel.WorktaskPageWorkDescription, "What have you done today?"))
+            if (String.Equals(workTaskViewModel.WorktaskPageWorkDescription, "task description"))
             {
                 // Clear the text box when it gets focus and only if there is still the standard text
                 workTaskViewModel.WorktaskPageWorkDescription = "";
@@ -149,6 +133,11 @@ namespace TimecardApp.View
         {
             App.AppViewModel.DiscardWorktaskViewModel();
             base.OnBackKeyPress(e);
+        }
+
+        private void ResetForTimelogButton_Click(object sender, RoutedEventArgs e)
+        {
+            workTaskViewModel.LastTimelogRegistration = "";
         }
     }
 }

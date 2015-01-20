@@ -62,11 +62,11 @@
         </DataTemplate>
 
         <DataTemplate x:Key="WorktaskCustomItemTemplate">
-            <StackPanel Orientation="Vertical">
+            
                 <StackPanel Orientation="Vertical">
                     <TextBlock FontSize="20" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
                 </StackPanel>
-            </StackPanel>
+            
         </DataTemplate>
 
     </phone:PhoneApplicationPage.Resources>
@@ -111,37 +111,6 @@
                                     />
                                 </Grid>
                             </DataTemplate>
-
-                                <!--<Grid HorizontalAlignment="Stretch" Width="440">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="300" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="75"/>
-                                    </Grid.RowDefinitions>
-                                    <Button
-                                            Grid.Column="0" Grid.Row="0"
-                                            Margin="-20,0,0,0"
-                                            BorderThickness="1"
-                                            Content="{Binding Ident_WorkTask}"
-                                            FontSize="20"
-                                            Width="300"
-                                            VerticalAlignment="Center" 
-                                            HorizontalAlignment="Left"
-                                            Click="editWorktaskButton_Click">
-                                    </Button>
-                                    <Button
-                                            Grid.Column="1" Grid.Row="0"
-                                            Margin="-30,0,0,0"
-                                            BorderThickness="0"
-                                            Content="{Binding TotalWorkTimeString}"
-                                            FontSize="20"
-                                            VerticalAlignment="Center" 
-                                            HorizontalAlignment="Left"
-                                            Click="editWorktaskButton_Click">
-                                    </Button>
-                                </Grid>-->
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
@@ -152,17 +121,22 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <TextBlock HorizontalAlignment="Left" Text="{Binding LastSynchronisationTimestamp}" Grid.Row="0" Grid.Column="0" FontSize="25" Height="33" />
-                    <ListBox x:Name="taskListBox" ItemsSource="{Binding TlTaskCollection}" Margin="12, 0, 12, 0"  Grid.Row="1" >
+                    <ListBox x:Name="taskListBox" ItemsSource="{Binding TlTaskCollection}" Margin="12, 0, 12, 0"  Grid.Row="1">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <toolkit:ExpanderView Header="{Binding}" Expander="{Binding}"  
+                                <Grid HorizontalAlignment="Left" Width="440">
+                                    <toolkit:ExpanderView Header="{Binding}" Expander="{Binding}"  
                                     ExpanderTemplate="{StaticResource TlTaskCustomExpanderTemplate}"
                                     IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
                                     HeaderTemplate="{StaticResource TlTaskCustomHeaderTemplate}" 
                                     ItemTemplate="{StaticResource TlTaskCustomItemTemplate}"
-                                    ItemsSource="{Binding ExpandItems}"
-                                    />
+                                    ItemsSource="{Binding ExpandItems}" />
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

@@ -184,10 +184,10 @@ namespace TimecardApp.Model
             get
             {
                 IList<string> expandItems = new List<string>();
-                expandItems.Add("ProjectID: " + timelogProjectID.ToString());
+                expandItems.Add("Project ID: " + timelogProjectID.ToString());
                 expandItems.Add("Task: " + timelogTaskName + ", ID: " +  timelogTaskID.ToString());
-                expandItems.Add("StartDate: " + startDate.ToString("yyyy-MM-dd"));
-                expandItems.Add("EndDate: " + endDate.ToString("yyyy-MM-dd"));
+                expandItems.Add("Start: " + startDate.ToString("yyyy-MM-dd") + " End: " + endDate.ToString("yyyy-MM-dd"));
+                //expandItems.Add("EndDate: " + );
                 return expandItems;
             }
         }

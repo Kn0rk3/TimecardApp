@@ -115,6 +115,27 @@ namespace TimecardApp.Model
         }
 
         //db version 2
+        private string timelogWorkunitGUID;
+        [Column(CanBeNull = true)]
+        public string TimelogWorkunitGUID
+        {
+            get
+            {
+                return timelogWorkunitGUID;
+            }
+
+            set
+            {
+                if (timelogWorkunitGUID != value)
+                {
+                    NotifyPropertyChanging("TimelogWorkunitGUID");
+                    timelogWorkunitGUID = value;
+                    NotifyPropertyChanged("TimelogWorkunitGUID");
+                }
+            }
+        }
+
+        //db version 2
         private bool isForTimelogRegistration;
         [Column(CanBeNull = true)]
         public bool? IsForTimelogRegistration

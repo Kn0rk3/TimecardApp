@@ -245,6 +245,18 @@ namespace TimecardApp.ViewModel
                         }
                         break;
                     }
+
+                case ETimelogOperation.UploadWorkunits:
+                        switch (newState)
+                        {
+                            case ETimelogState.UnexpectedError:
+                                {
+                                    timelogUsingView.ShowErrorMessage(message);
+                                    break;
+                                }
+                        }
+                        break;
+
                 case ETimelogOperation.Login:
                     {
                         switch (newState)
@@ -304,22 +316,35 @@ namespace TimecardApp.ViewModel
                     {
                         if (wrapper.IsValidSecurityToken())
                         {
-                            ObservableCollection<WorkUnit> units = new ObservableCollection<WorkUnit>();
+                            ObservableCollection<WorkUnit> insertUnits = new ObservableCollection<WorkUnit>();
+                            ObservableCollection<WorkUnit> updateUnits = new ObservableCollection<WorkUnit>();
                             foreach (WorkTask worktask in tlWorktaskCollection)
                             {
                                 WorkUnit _unit = new WorkUnit();
                                 _unit.TaskID = worktask.TimelogTask.TimelogTaskID;
                                 _unit.StartDateTime = worktask.DayDate;
-                                _unit.GUID = System.Guid.NewGuid();
                                 _unit.EmployeeInitials = username;
                                 _unit.Description = worktask.WorkDescription;
                                 _unit.EndDateTime = worktask.DayDate.AddTicks(worktask.WorkTimeTicks);
                                 _unit.Duration = TimeSpan.FromTicks(worktask.WorkTimeTicks);
-                                units.Add(_unit);
+                                if (String.IsNullOrEmpty(worktask.TimelogWorkunitGUID))
+                                {
+                                    _unit.GUID = System.Guid.NewGuid();
+                                    insertUnits.Add(_unit);
+                                    //_unit.IsEditable = true;
+                                }
+                                else
+                                {
+                                    _unit.GUID = System.Guid.Parse(worktask.TimelogWorkunitGUID);
+                                    //_unit.IsEditable = true;
+                                    //_unit.AllocationGUID = System.Guid.Parse(worktask.TimelogWorkunitGUID);
+                                    updateUnits.Add(_unit);
+                                }
                             }
 
-                            if (units.Count > 0)
-                                wrapper.UploadWorkunits(units);
+                            if (insertUnits.Count > 0 || updateUnits.Count >0)
+                                wrapper.UploadWorkunits(insertUnits, updateUnits);
+                            
                         }
                         else
                         {
@@ -349,6 +374,31 @@ namespace TimecardApp.ViewModel
                     }
 
 
+            }
+        }
+
+        public void UpdateWorktasksForReturnedWorkunits(ObservableCollection<BatchContainerOfWorkUnit> returnWorkunits)
+        {
+            if (returnWorkunits != null)
+            {
+                foreach (TimelogProjectManagementService.BatchContainerOfWorkUnit  workUnit in returnWorkunits)
+                {
+                    var worktaskForUnit = from WorkTask task in tlWorktaskCollection  
+                                where (task.DayDate  == workUnit.Item.StartDateTime.Date && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID )
+                                select task;
+
+                    if (worktaskForUnit.Count() == 1)
+                    {
+                        // timestamp setzen und GUID
+                        WorkTask worktask = worktaskForUnit.Single();
+                        worktask.TimelogWorkunitGUID = workUnit.Item.GUID.ToString();
+                        worktask.LastTimelogRegistration = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "\nTimelog Task ID: " + workUnit.Item.TaskID + "\nTimelog Taskname: " 
+                            + worktask.TimelogTask.TimelogTaskName + "\nWorktime: " + worktask.TotalWorkTimeString;
+                        App.AppViewModel.SaveChangesToDB();
+                    }
+                    
+                }
+                
             }
         }
 
@@ -388,5 +438,6 @@ namespace TimecardApp.ViewModel
             }
         }
         #endregion
+
     }
 }

@@ -52,11 +52,13 @@ namespace TimecardApp.View
             appBarCopyTimecardButton.Text = "Copy Timecard";
             appBarCopyTimecardButton.Click += new System.EventHandler(this.copyTimecardButton_Click);
             ApplicationBar.Buttons.Add(appBarCopyTimecardButton);
-
-            ApplicationBarIconButton  appBarTimelogButton = new ApplicationBarIconButton(new Uri("Icons/feature.alarm.png", UriKind.Relative));
-            appBarTimelogButton.Text = "Timelog";
-            appBarTimelogButton.Click += new System.EventHandler(this.timelogButton_Click);
-            ApplicationBar.Buttons.Add(appBarTimelogButton);
+            if (App.AppViewModel.UsingTimelogInterface)
+            {
+                ApplicationBarIconButton appBarTimelogButton = new ApplicationBarIconButton(new Uri("Icons/feature.alarm.png", UriKind.Relative));
+                appBarTimelogButton.Text = "Timelog";
+                appBarTimelogButton.Click += new System.EventHandler(this.timelogButton_Click);
+                ApplicationBar.Buttons.Add(appBarTimelogButton);
+            }
 
         }
 
