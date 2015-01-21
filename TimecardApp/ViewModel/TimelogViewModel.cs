@@ -331,13 +331,10 @@ namespace TimecardApp.ViewModel
                                 {
                                     _unit.GUID = System.Guid.NewGuid();
                                     insertUnits.Add(_unit);
-                                    //_unit.IsEditable = true;
                                 }
                                 else
                                 {
                                     _unit.GUID = System.Guid.Parse(worktask.TimelogWorkunitGUID);
-                                    //_unit.IsEditable = true;
-                                    //_unit.AllocationGUID = System.Guid.Parse(worktask.TimelogWorkunitGUID);
                                     updateUnits.Add(_unit);
                                 }
                             }
@@ -387,18 +384,28 @@ namespace TimecardApp.ViewModel
                                 where (task.DayDate  == workUnit.Item.StartDateTime.Date && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID )
                                 select task;
 
-                    if (worktaskForUnit.Count() == 1)
+                    if (worktaskForUnit.Count() == 1 && workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Success)
                     {
-                        // timestamp setzen und GUID
+                        //success --> set timestamp and GUID and remove from collection
                         WorkTask worktask = worktaskForUnit.Single();
                         worktask.TimelogWorkunitGUID = workUnit.Item.GUID.ToString();
-                        worktask.LastTimelogRegistration = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "\nTimelog Task ID: " + workUnit.Item.TaskID + "\nTimelog Taskname: " 
+                        worktask.LastTimelogRegistration = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "\nTl Task ID: " + workUnit.Item.TaskID + "\nTl Taskname: " 
                             + worktask.TimelogTask.TimelogTaskName + "\nWorktime: " + worktask.TotalWorkTimeString;
                         App.AppViewModel.SaveChangesToDB();
+
+                        if (TlWorktaskCollection.Contains(worktask))
+                            TlWorktaskCollection.Remove(worktask);
                     }
-                    
+                    else if (worktaskForUnit.Count() == 1 && workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Error)
+                    {
+                        //error --> keep it in the list --> do nothing
+                    }
+                    else if(worktaskForUnit.Count() != 1)
+                    {
+                        //unexpected error
+                        timelogUsingView.ShowErrorMessage("There are more than one worktask for the same date and Timelog task ID. If so, move them into one worktask and try again!");
+                    }
                 }
-                
             }
         }
 

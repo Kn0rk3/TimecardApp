@@ -82,6 +82,7 @@ namespace TimecardApp.ViewModel
             get
             {
                 return projectCollection;
+
             }
         }
 
