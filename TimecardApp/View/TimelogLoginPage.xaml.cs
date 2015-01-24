@@ -64,7 +64,8 @@ namespace TimecardApp.View
 
         public void ShowErrorMessage(string message)
         {
-            MessageBox.Show(message);
+            if (!String.IsNullOrEmpty(message))
+                MessageBox.Show(message);
         }
 
 

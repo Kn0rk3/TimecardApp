@@ -429,6 +429,10 @@ namespace TimecardApp.Model
                     IList<string> expandItems = new List<string>();
                     expandItems.Add("Tl Project: " + TimelogTask.TimelogProjectName);
                     expandItems.Add("Worktime: " + TotalWorkTimeString);
+                    if (String.IsNullOrEmpty(TimelogWorkunitGUID))
+                        expandItems.Add("Action: Insert in Timelog");
+                    else
+                        expandItems.Add("Action: Update in Timelog");
                     return expandItems;
                 }
                 else

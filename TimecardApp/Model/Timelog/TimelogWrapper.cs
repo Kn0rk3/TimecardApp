@@ -15,7 +15,7 @@ using TimecardApp.ViewModel;
 
 namespace TimecardApp.Model.Timelog
 {
-    public class TimelogWrapper : ITimelogWrapper 
+    public class TimelogWrapper : ITimelogWrapper
     {
         // this model reference is for locking the page during network activity
         private ITimelogViewModel tlViewModel;
@@ -34,11 +34,11 @@ namespace TimecardApp.Model.Timelog
 
             SecurityServiceClient tlSecurityClient = tlSession.SecurityClient;
             tlSecurityClient.GetTokenCompleted += tlSecurityClient_GetTokenCompleted;
-            
-            tlSecurityClient.GetTokenAsync(initials, password);            
+
+            tlSecurityClient.GetTokenAsync(initials, password);
         }
 
-        public void  GetTimelogTasks()
+        public void GetTimelogTasks()
         {
             tlViewModel.ChangeState(ETimelogState.Running, ETimelogOperation.GetTasks, String.Empty);
 
@@ -46,7 +46,7 @@ namespace TimecardApp.Model.Timelog
 
             ProjectManagementServiceClient tlProjectClient = tlSession.ProjectManagementClient;
             tlProjectClient.GetTasksAllocatedToEmployeeCompleted += tlProjectClient_GetTasksCompleted;
-            tlProjectClient.GetTasksAllocatedToEmployeeAsync(tlSession.ProjectManagementToken.Initials , tlSession.ProjectManagementToken);
+            tlProjectClient.GetTasksAllocatedToEmployeeAsync(tlSession.ProjectManagementToken.Initials, tlSession.ProjectManagementToken);
         }
 
         public void UploadWorkunits(ObservableCollection<WorkUnit> insertUnits, ObservableCollection<WorkUnit> updateUnits)
@@ -58,14 +58,14 @@ namespace TimecardApp.Model.Timelog
             ProjectManagementServiceClient tlProjectClient = tlSession.ProjectManagementClient;
             tlProjectClient.InsertWorkCompleted += tlProjectClient_InsertWorkCompleted;
             tlProjectClient.UpdateWorkCompleted += tlProjectClient_UpdateWorkCompleted;
-            
+
             if (insertUnits.Count > 0)
                 tlProjectClient.InsertWorkAsync(insertUnits, 0, tlSession.ProjectManagementToken);
             if (updateUnits.Count > 0)
                 tlProjectClient.UpdateWorkAsync(updateUnits, 0, tlSession.ProjectManagementToken);
         }
 
-        public  bool IsValidSecurityToken()
+        public bool IsValidSecurityToken()
         {
             TimelogSession tlSession = TimelogSession.Instance;
             if (tlSession.SecurityToken != null)
@@ -77,26 +77,33 @@ namespace TimecardApp.Model.Timelog
             }
             else
                 return false;
-            
+
         }
 
         private void tlProjectClient_UpdateWorkCompleted(object sender, UpdateWorkCompletedEventArgs e)
         {
             try
             {
-                if (e.Result.ResponseState == TimelogProjectManagementService.ExecutionStatus.Success)
+                ObservableCollection<BatchContainerOfWorkUnit> returnWorkunits = e.Result.Return;
+                if (returnWorkunits != null)
                 {
-                    ObservableCollection<BatchContainerOfWorkUnit> returnWorkunits = e.Result.Return;
-                    if (returnWorkunits != null)
-                    {
-                        tlViewModel.UpdateWorktasksForReturnedWorkunits(returnWorkunits);
+                    tlViewModel.UpdateWorktasksForReturnedWorkunits(returnWorkunits);
+                    if (e.Result.ResponseState == TimelogProjectManagementService.ExecutionStatus.Success)
                         tlViewModel.ChangeState(ETimelogState.ExectionSuccessfull, ETimelogOperation.UploadWorkunits, String.Empty);
-                    }
+                    else
+                        if (e.Error != null)
+                            tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, e.Error.Message);
+                        else
+                            tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, String.Empty);
                 }
+
             }
             catch (Exception ex)
             {
-                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, e.Error.Message);
+                if (e.Error != null)
+                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, e.Error.Message);
+                else
+                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, ex.Message);
             }
         }
 
@@ -104,19 +111,26 @@ namespace TimecardApp.Model.Timelog
         {
             try
             {
-                if (e.Result.ResponseState == TimelogProjectManagementService.ExecutionStatus.Success)
+                ObservableCollection<BatchContainerOfWorkUnit> returnWorkunits = e.Result.Return;
+                if (returnWorkunits != null)
                 {
-                    ObservableCollection<BatchContainerOfWorkUnit> returnWorkunits = e.Result.Return;
-                    if (returnWorkunits != null)
-                    {
-                        tlViewModel.UpdateWorktasksForReturnedWorkunits(returnWorkunits);
+                    tlViewModel.UpdateWorktasksForReturnedWorkunits(returnWorkunits);
+                    if (e.Result.ResponseState == TimelogProjectManagementService.ExecutionStatus.Success)
                         tlViewModel.ChangeState(ETimelogState.ExectionSuccessfull, ETimelogOperation.UploadWorkunits, String.Empty);
-                    }
+                    else
+                        if (e.Error != null)
+                            tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, e.Error.Message);
+                        else
+                            tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, String.Empty);
                 }
+
             }
             catch (Exception ex)
             {
-                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, e.Error.Message);
+                if (e.Error != null)
+                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, e.Error.Message);
+                else
+                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.UploadWorkunits, ex.Message);
             }
         }
 
@@ -130,13 +144,13 @@ namespace TimecardApp.Model.Timelog
                     {
                         TimelogSession tlSession = TimelogSession.Instance;
                         tlSession.SecurityToken = e.Result.Return[0];
-                        tlViewModel.ChangeState(ETimelogState.ExectionSuccessfull, ETimelogOperation.Login , String.Empty);                        
+                        tlViewModel.ChangeState(ETimelogState.ExectionSuccessfull, ETimelogOperation.Login, String.Empty);
                     }
                 }
             }
             catch (Exception ex)
             {
-                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.Login, e.Error.Message );
+                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.Login, e.Error.Message);
             }
         }
 
@@ -156,7 +170,7 @@ namespace TimecardApp.Model.Timelog
             }
             catch (Exception ex)
             {
-                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.GetTasks, e.Error.Message );
+                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.GetTasks, e.Error.Message);
             }
         }
     }

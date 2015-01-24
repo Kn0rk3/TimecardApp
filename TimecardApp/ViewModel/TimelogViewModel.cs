@@ -369,8 +369,6 @@ namespace TimecardApp.ViewModel
                             timelogUsingView.ShowErrorMessage("Make sure you typed in username, password and the timelogsite!");
                         break;
                     }
-
-
             }
         }
 
@@ -389,23 +387,39 @@ namespace TimecardApp.ViewModel
                         //success --> set timestamp and GUID and remove from collection
                         WorkTask worktask = worktaskForUnit.Single();
                         worktask.TimelogWorkunitGUID = workUnit.Item.GUID.ToString();
-                        worktask.LastTimelogRegistration = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "\nTl Task ID: " + workUnit.Item.TaskID + "\nTl Taskname: " 
+                        worktask.LastTimelogRegistration = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "\nTask-ID: " + workUnit.Item.TaskID + "\nTask: " 
                             + worktask.TimelogTask.TimelogTaskName + "\nWorktime: " + worktask.TotalWorkTimeString;
                         App.AppViewModel.SaveChangesToDB();
-
-                        if (TlWorktaskCollection.Contains(worktask))
-                            TlWorktaskCollection.Remove(worktask);
                     }
                     else if (worktaskForUnit.Count() == 1 && workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Error)
                     {
-                        //error --> keep it in the list --> do nothing
+                        // when error for update workunit check for error message
+                        WorkTask worktask = worktaskForUnit.Single();
+                        if (String.IsNullOrEmpty(worktask.TimelogWorkunitGUID))
+                        {
+                            //error during inserting this workunit
+                            
+                        }
+                        else
+                        {
+                            //error during updating this workunit
+                            if (workUnit.Message == "Object reference not set to an instance of an object.")
+                            {
+                                //in this particular case the workunit was deleted in timelog but not in this app
+                                //Reset worktask (it will keep in the list so no error message 
+                                worktask.TimelogWorkunitGUID = String.Empty;
+                                App.AppViewModel.SaveChangesToDB();
+                            }
+
+                        }
                     }
-                    else if(worktaskForUnit.Count() != 1)
+                    else if(worktaskForUnit.Count() > 1)
                     {
-                        //unexpected error
-                        timelogUsingView.ShowErrorMessage("There are more than one worktask for the same date and Timelog task ID. If so, move them into one worktask and try again!");
+                        timelogUsingView.ShowErrorMessage("There are more than one worktask for date " + workUnit.Item.StartDateTime.Date.ToShortDateString() + 
+                            " and task ID " + workUnit.Item.TaskID + ". If so, move them into one worktask and try again!");
                     }
                 }
+                TlWorktaskCollection = App.AppViewModel.GetAllWorktasksForTimelog();
             }
         }
 
