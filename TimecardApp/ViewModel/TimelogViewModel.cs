@@ -410,7 +410,6 @@ namespace TimecardApp.ViewModel
                                 worktask.TimelogWorkunitGUID = String.Empty;
                                 App.AppViewModel.SaveChangesToDB();
                             }
-
                         }
                     }
                     else if(worktaskForUnit.Count() > 1)

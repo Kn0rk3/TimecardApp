@@ -112,11 +112,11 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="12,0,0,0" Text="for Timelog" VerticalAlignment="Center"  Grid.ColumnSpan="2" FontSize="25" Height="33" Visibility="{Binding TimelogActive}"/>
-                    <CheckBox Grid.Column="1" Grid.Row="0" x:Name="forTimelogCheckbox" Margin="12,0,0,0" IsChecked="{Binding ForTimelog, Mode=TwoWay}" Visibility="{Binding TimelogActive}"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Margin="12,0,0,0" Text="for Timelog" VerticalAlignment="Center"  Grid.ColumnSpan="2" FontSize="25" Height="33"  />
+                    <CheckBox Grid.Column="1" Grid.Row="0" x:Name="forTimelogCheckbox" Margin="12,0,0,0" IsChecked="{Binding ForTimelog, Mode=TwoWay}"  IsEnabled="{Binding WorktaskPageEnabled}"/>
                     <TextBlock  Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Margin="12,0,0,0" Text="select timelog task:" VerticalAlignment="Center" Grid.ColumnSpan="2" FontSize="25"  Visibility="{Binding TimelogActive}"/>
 
-                    <toolkit:ListPicker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="TimelogTasks" Margin="0,0,12,0" MaxWidth="400"  ItemsSource="{Binding TimelogTaskCollection}" IsEnabled="{Binding ForTimelog}" Visibility="{Binding TimelogActive}" SelectedItem="{Binding TimelogTask, Mode=TwoWay}" >
+                    <toolkit:ListPicker Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" x:Name="TimelogTasks" Margin="0,0,12,0" MaxWidth="400"  ItemsSource="{Binding TimelogTaskCollection}"  IsEnabled="{Binding WorktaskPageEnabled}" Visibility="{Binding TimelogActive}" SelectedItem="{Binding TimelogTask, Mode=TwoWay}" >
                         <toolkit:ListPicker.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding TimelogTaskIdent}" />

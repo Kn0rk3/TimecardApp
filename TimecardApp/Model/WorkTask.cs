@@ -107,6 +107,8 @@ namespace TimecardApp.Model
             {
                 if (lastTimelogRegistration != value)
                 {
+                    if (!String.IsNullOrEmpty(value))
+                        IsComplete = true;
                     NotifyPropertyChanging("LastTimelogRegistration");
                     lastTimelogRegistration = value;
                     NotifyPropertyChanged("LastTimelogRegistration");

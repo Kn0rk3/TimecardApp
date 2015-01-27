@@ -81,7 +81,7 @@ namespace TimecardApp.ViewModel
                             WorktaskPageIdent = HelperClass.GetIdentForWorktask(value, "");
 
                         worktaskPageDayDate = value;
-                        loadTimelogTasksForDate(worktaskPageDayDate);
+                        loadTimelogTasksForDate(value);
                         NotifyPropertyChanged("WorktaskPageDayDate");
                     }
                     else
@@ -301,6 +301,10 @@ namespace TimecardApp.ViewModel
                     if (forTimelog != value)
                     {
                         forTimelog = value.Value;
+                        if (value.Value)
+                            TimelogActive = Visibility.Visible;
+                        else
+                            TimelogActive = Visibility.Collapsed;
                         loadTimelogTasksForDate(worktaskPageDayDate);
                         NotifyPropertyChanged("ForTimelog");
                     }
@@ -450,7 +454,7 @@ namespace TimecardApp.ViewModel
 
         private void loadTimelogTasksForDate(DateTime date)
         {
-            TimelogTaskCollection = App.AppViewModel.GetTimelogTasksForDate(thisWorkTask.DayDate);
+            TimelogTaskCollection = App.AppViewModel.GetTimelogTasksForDate(date);
         }
 
         public void DeleteThisWorktask()
