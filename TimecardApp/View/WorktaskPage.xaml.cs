@@ -137,7 +137,13 @@ namespace TimecardApp.View
 
         private void ResetForTimelogButton_Click(object sender, RoutedEventArgs e)
         {
-            workTaskViewModel.LastTimelogRegistration = "";
+            MessageBoxButton buttons = MessageBoxButton.OKCancel;
+            MessageBoxResult result = MessageBox.Show("Do you want to mark this worktask an additional upload into timelog angain?", "", buttons);
+
+            if (result == MessageBoxResult.OK)
+            {
+                workTaskViewModel.LastTimelogRegistration = "";
+            }
         }
     }
 }

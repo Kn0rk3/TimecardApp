@@ -57,15 +57,15 @@
                             <RowDefinition Height="Auto"/>
 
                         </Grid.RowDefinitions>
-                        <toolkit:TimePicker x:Name="startTimePicker"  Grid.Column="1" Grid.Row="0" Value="{Binding WorktaskPageStartTime,  Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}" />
+                        <toolkit:TimePicker ValueStringFormat="{}{0:HH:mm}" x:Name="startTimePicker"  Grid.Column="1" Grid.Row="0" Value="{Binding WorktaskPageStartTime,  Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}" />
                         <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="start" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0" FontSize="25" Height="33" Width="76"/>
-                        <toolkit:TimePicker x:Name="endTimePicker" Grid.Column="3" Grid.Row="0" Value="{Binding WorktaskPageEndTime,  Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}"/>
+                        <toolkit:TimePicker ValueStringFormat="{}{0:HH:mm}" x:Name="endTimePicker" Grid.Column="3" Grid.Row="0" Value="{Binding WorktaskPageEndTime,  Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}"/>
                         <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="end" VerticalAlignment="Center" Grid.Row="0" Grid.Column="2" FontSize="25" Height="33" Width="55"/>
-                        <toolkit:TimePicker x:Name="pauseTimePicker" Grid.Column="1" Grid.Row="1" Value="{Binding WorktaskPagePauseTime, Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}"/>
+                        <toolkit:TimePicker ValueStringFormat="{}{0:HH:mm}" x:Name="pauseTimePicker" Grid.Column="1" Grid.Row="1" Value="{Binding WorktaskPagePauseTime, Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}"/>
                         <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="break" VerticalAlignment="Center" Grid.Row="1" Grid.Column="0" FontSize="25" Height="33" Width="64"/>
                         <CheckBox x:Name="onsiteCheckBox" Grid.Column="3" Grid.Row="1" Margin="020,0,0,0" IsChecked="{Binding WorktaskPageIsOnsite, Mode=TwoWay}" IsEnabled="{Binding WorktaskPageEnabled}"/>
                         <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="onsite" VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" FontSize="25" Height="33" Width="75"/>
-                        <toolkit:TimePicker x:Name="workTimePicker" Grid.Column="3" Grid.Row="3" Value="{Binding WorktaskPageWorkTime}" IsEnabled="False" />
+                        <toolkit:TimePicker ValueStringFormat="{}{0:HH:mm}" x:Name="workTimePicker"  Grid.Column="3" Grid.Row="3" Value="{Binding WorktaskPageWorkTime}" IsEnabled="False" />
                         <TextBlock HorizontalAlignment="Left" Margin="23,18,0,21" Text="workingtime" VerticalAlignment="Center" Grid.Row="3" Grid.Column="0"  Grid.ColumnSpan="2" FontSize="25" Height="33" Width="154"/>
                         <TextBlock HorizontalAlignment="Left" Margin="23,0,0,2" Text="Project:" VerticalAlignment="Center" Grid.Row="4" Grid.Column="0" FontSize="25" Height="33" Width="90"/>
                         <toolkit:ListPicker x:Name="ProjectPicker" Margin="23,7,0,0" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding WorktaskPageProjectCollection}" IsEnabled="{Binding WorktaskPageEnabled}" SelectedItem="{Binding WorktaskPageProject, Mode=TwoWay}">
@@ -94,6 +94,7 @@
                         <ScrollViewer Grid.Column="0" HorizontalAlignment="Left"  Margin="0,5,-36,0" Grid.Row="7" VerticalAlignment="Top" Grid.ColumnSpan="4" Height="Auto" MaxHeight="100" >
                             <TextBox x:Name="workDescriptionTextBox" VerticalAlignment="Top" Text="{Binding WorktaskPageWorkDescription, Mode=TwoWay}" Width="456" TextWrapping="Wrap" GotFocus="workDescriptionTextBox_GotFocus" IsEnabled="{Binding WorktaskPageEnabled}"/>
                         </ScrollViewer>
+                        
                     </Grid>
                 </ScrollViewer>
             </phone:PivotItem>

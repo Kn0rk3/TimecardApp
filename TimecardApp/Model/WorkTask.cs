@@ -346,7 +346,7 @@ namespace TimecardApp.Model
                     NotifyPropertyChanging("WorkTimeTicks");
                     workTimeTicks = value;
                     DateTime workTimeTmp = new DateTime(workTimeTicks);
-                    totalWorkTimeString = workTimeTmp.ToShortTimeString();
+                    totalWorkTimeString = workTimeTmp.ToString("HH:mm");
                     NotifyPropertyChanged("WorkTimeTicks");
                 }
             }
