@@ -598,7 +598,7 @@ namespace TimecardApp.ViewModel
                 timelogViewModel = new TimelogViewModel(timelogSettingObj.Single(),  view);
             else
             {
-                TimelogSetting newTlSetting = new TimelogSetting() { TimelogSettingID = System.Guid.NewGuid().ToString() };
+                TimelogSetting newTlSetting = new TimelogSetting() { TimelogSettingID = System.Guid.NewGuid().ToString(), TimelogUrl = "https://"};
                 dellAppDB.TimelogSetting.InsertOnSubmit(newTlSetting);
                 dellAppDB.SubmitChanges();
                 timelogViewModel = new TimelogViewModel(newTlSetting, view);

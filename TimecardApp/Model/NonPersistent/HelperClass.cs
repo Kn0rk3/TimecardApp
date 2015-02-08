@@ -12,6 +12,15 @@ namespace TimecardApp.Model.NonPersistent
 {
     public static class HelperClass
     {
+        public static string ReturnManipulatedURLForTimelog(string inputURL)
+        {
+            if (inputURL.EndsWith("/") && inputURL.Count() > "https://".Count())
+                inputURL = inputURL.Remove(inputURL.Length - 1);
+            if (inputURL.StartsWith("http:"))
+                inputURL = inputURL.Replace("http:", "https:");
+            return inputURL;
+        }
+
         public static void FocusedTextBoxUpdateSource()
         {
             var focusedElement = FocusManager.GetFocusedElement();

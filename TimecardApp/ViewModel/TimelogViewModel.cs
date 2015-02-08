@@ -39,7 +39,7 @@ namespace TimecardApp.ViewModel
             }
             set
             {
-                url = value;
+                url = HelperClass.ReturnManipulatedURLForTimelog(value);
                 NotifyPropertyChanged("Url");
             }
         }
