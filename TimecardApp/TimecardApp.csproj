@@ -262,6 +262,9 @@
     <Content Include="Icons\feature.alarm.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\questionmark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Toolkit.Content\Microsoft.Phone.Controls.Toolkit.dll" />
     <Content Include="ServiceReferences.ClientConfig">
       <SubType>Designer</SubType>

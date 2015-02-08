@@ -16,11 +16,19 @@ namespace TimecardApp.View
 {
     public partial class TimelogPage : PhoneApplicationPage, ITimelogUsingView
     {
+        private string helperStringUpload = "-Help- Upload your work into Timelog: " +
+            "\n\nFirst things first: Login into Timelog and download your assinged tasks. " + 
+            "\n\nSecond: Edit the worktasks and assign them to the corresponding timelog task. Save them." + 
+            "\n\nThird: Upload all worktasks shown here in this list into timelog with one single click. That's all." + 
+            "\n\nImportant: You need to check and close the week in timelog manually via your usual website!" + 
+            "\n\nHint: In case you forgot something, you can reset a worktask for an additional upload.";
+        
         private TimelogViewModel timelogViewModel;
-        private ApplicationBarIconButton appBarHomeButton;
+        private ApplicationBarIconButton appBarHome;
         private ApplicationBarIconButton appBarSyncData;
         private ApplicationBarIconButton appBarEdit;
-        private ApplicationBarIconButton appBarUploadButton;
+        private ApplicationBarIconButton appBarUpload;
+        private ApplicationBarIconButton appBarHelperUpload;
 
         public TimelogPage()
         {
@@ -30,22 +38,25 @@ namespace TimecardApp.View
 
         private void BuildLocalizedApplicationBar()
         {
-            appBarHomeButton = new ApplicationBarIconButton(new Uri("Icons/map.neighborhood.png", UriKind.Relative));
-            appBarHomeButton.Text = "Home";
-            appBarHomeButton.Click += new System.EventHandler(this.homeButton_Click);
+            appBarHome = new ApplicationBarIconButton(new Uri("Icons/map.neighborhood.png", UriKind.Relative));
+            appBarHome.Text = "Home";
+            appBarHome.Click += new System.EventHandler(this.homeButton_Click);
 
-            appBarSyncData = new ApplicationBarIconButton(new Uri("Icons/refresh.png", UriKind.Relative));
+            appBarSyncData = new ApplicationBarIconButton(new Uri("Icons/download.png", UriKind.Relative));
             appBarSyncData.Text = "Load Tl tasks";
-            appBarSyncData.Click += new System.EventHandler(this.synchronisationData_Click);
+            appBarSyncData.Click += new System.EventHandler(this.downloadDataButton_Click);
 
             appBarEdit = new ApplicationBarIconButton(new Uri("Resources/edit.png", UriKind.Relative));
-            appBarEdit.Text = "Edit";
+            appBarEdit.Text = "Edit Login";
             appBarEdit.Click += new System.EventHandler(this.editTimelogSetting_Click);
 
-            appBarUploadButton = new ApplicationBarIconButton(new Uri("Icons/upload.png", UriKind.Relative));
-            appBarUploadButton.Text = "Upload";
-            appBarUploadButton.Click += new System.EventHandler(this.uploadWorkunitsButton_Click);
+            appBarUpload = new ApplicationBarIconButton(new Uri("Icons/upload.png", UriKind.Relative));
+            appBarUpload.Text = "Upload";
+            appBarUpload.Click += new System.EventHandler(this.uploadWorkunitsButton_Click);
 
+            appBarHelperUpload = new ApplicationBarIconButton(new Uri("Icons/questionmark.png", UriKind.Relative));
+            appBarHelperUpload.Text = "Help";
+            appBarHelperUpload.Click += new System.EventHandler(this.appBarHelperUpload_Click);
         }
 
         private void TimelogPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -54,19 +65,26 @@ namespace TimecardApp.View
             {
                 case 0:
                     ApplicationBar = new ApplicationBar();
-                    ApplicationBar.Buttons.Add(appBarHomeButton);
+                    ApplicationBar.Buttons.Add(appBarHome);
                     ApplicationBar.Buttons.Add(appBarEdit);
-                    ApplicationBar.Buttons.Add(appBarUploadButton);
+                    ApplicationBar.Buttons.Add(appBarUpload);
+                    ApplicationBar.Buttons.Add(appBarHelperUpload);
                     break;
                 case 1:
                     ApplicationBar = new ApplicationBar();
-                    ApplicationBar.Buttons.Add(appBarHomeButton);
+                    ApplicationBar.Buttons.Add(appBarHome);
                     ApplicationBar.Buttons.Add(appBarEdit);
                     ApplicationBar.Buttons.Add(appBarSyncData);
+                    ApplicationBar.Buttons.Add(appBarHelperUpload);
                     break;
             }
         }
 
+        private void appBarHelperUpload_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(helperStringUpload);
+        }
+        
         private void editTimelogSetting_Click(object sender, EventArgs e)
         {
             if (timelogViewModel.CurrentState != ETimelogState.Running)
@@ -95,7 +113,7 @@ namespace TimecardApp.View
             }
         }
 
-        private void synchronisationData_Click(object sender, EventArgs e)
+        private void downloadDataButton_Click(object sender, EventArgs e)
         {
             if (timelogViewModel.CurrentState != ETimelogState.Running)
             {

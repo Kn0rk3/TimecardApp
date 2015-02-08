@@ -18,10 +18,15 @@ namespace TimecardApp.View
 {
     public partial class WorktaskPage : PhoneApplicationPage
     {
+        private string helperStringLogin = "-Help- Assign a Timelog task to a worktask: " +
+            "\n\nYou can only assign a Timelog task for which the end and start date fits to the corresponding date of the worktask." +
+            "\n\nAn additional upload will overwrite the already logged time in Timelog. Better check the results afterwards.";
+
         private WorktaskViewModel workTaskViewModel;
         private ApplicationBarIconButton appBarDeleteButton;
         private ApplicationBarIconButton appBarSaveButton;
         private ApplicationBarIconButton appBarCancelButton;
+        private ApplicationBarIconButton appBarHelpButton;
 
         // every time the worktaskpage is created, create a new ViewModel for the Worktask 
         public WorktaskPage()
@@ -48,6 +53,17 @@ namespace TimecardApp.View
             appBarDeleteButton.Text = "Delete";
             appBarDeleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             ApplicationBar.Buttons.Add(appBarDeleteButton);
+
+            appBarHelpButton = new ApplicationBarIconButton(new Uri("Icons/questionmark.png", UriKind.Relative));
+            appBarHelpButton.Text = "Help";
+            appBarHelpButton.Click += new System.EventHandler(this.appBarHelperTimelog_Click);
+            ApplicationBar.Buttons.Add(appBarHelpButton);
+
+        }
+
+        private void appBarHelperTimelog_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(helperStringLogin);
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -89,7 +105,7 @@ namespace TimecardApp.View
 
         private void workDescriptionTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (String.Equals(workTaskViewModel.WorktaskPageWorkDescription, "task description"))
+            if (String.Equals(workTaskViewModel.WorktaskPageWorkDescription, AppResources.ExampleTaskDescription))
             {
                 // Clear the text box when it gets focus and only if there is still the standard text
                 workTaskViewModel.WorktaskPageWorkDescription = "";

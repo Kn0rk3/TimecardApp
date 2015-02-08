@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using TimecardApp.Model.NonPersistent;
-using TimecardApp.Model;
+using TimecardApp.Resources;
 
 namespace TimecardApp.ViewModel
 {
@@ -133,7 +133,10 @@ namespace TimecardApp.ViewModel
         private string worktaskPageWorkDescription;
         public string WorktaskPageWorkDescription
         {
-            get { return worktaskPageWorkDescription; }
+            get 
+            {            
+                    return worktaskPageWorkDescription; 
+            }
             set
             {
                 worktaskPageWorkDescription = value;

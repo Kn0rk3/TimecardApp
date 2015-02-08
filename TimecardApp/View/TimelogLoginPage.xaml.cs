@@ -15,9 +15,15 @@ namespace TimecardApp.View
 {
     public partial class TimelogLoginPage : PhoneApplicationPage, ITimelogUsingView 
     {
+        private string helperStringLogin = "-Help- Credentials for your Timelog access: " +
+            "\n\nFor a smoother experience with this Timelog interface it is recommended to save the credentials and activate the automatically login. " +
+            "The credentials will be saved encrypted into this local database and can only be decrypted with this device." +
+            "\n\nYou can always navigate to this page, in case you need to change data.";
+
         private TimelogViewModel timelogViewModel;
         private ApplicationBarIconButton appBarBackButton;
         private ApplicationBarIconButton appBarLoginButton;
+        private ApplicationBarIconButton appBarHelpButton;
 
         public TimelogLoginPage()
         {
@@ -36,8 +42,18 @@ namespace TimecardApp.View
             appBarLoginButton.Text = "Login";
             appBarLoginButton.Click += new System.EventHandler(this.loginButton_Click);
 
+            appBarHelpButton = new ApplicationBarIconButton(new Uri("Icons/questionmark.png", UriKind.Relative));
+            appBarHelpButton.Text = "Help";
+            appBarHelpButton.Click += new System.EventHandler(this.appBarHelperLogin_Click);
+
             ApplicationBar.Buttons.Add(appBarBackButton);
-            ApplicationBar.Buttons.Add(appBarLoginButton);      
+            ApplicationBar.Buttons.Add(appBarLoginButton);
+            ApplicationBar.Buttons.Add(appBarHelpButton);
+        }
+
+        private void appBarHelperLogin_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(helperStringLogin);
         }
 
         private void backButton_Click(object sender, EventArgs e)

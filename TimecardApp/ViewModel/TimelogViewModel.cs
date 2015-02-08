@@ -12,6 +12,7 @@ using System.Windows.Navigation;
 using TimecardApp.Model;
 using TimecardApp.Model.NonPersistent;
 using TimecardApp.Model.Timelog;
+using TimecardApp.Resources;
 using TimecardApp.TimelogProjectManagementService;
 using TimecardApp.View;
 
@@ -324,7 +325,8 @@ namespace TimecardApp.ViewModel
                                 _unit.TaskID = worktask.TimelogTask.TimelogTaskID;
                                 _unit.StartDateTime = worktask.DayDate;
                                 _unit.EmployeeInitials = username;
-                                _unit.Description = worktask.WorkDescription;
+                                if (!String.Equals(worktask.WorkDescription, AppResources.ExampleTaskDescription))
+                                    _unit.Description = worktask.WorkDescription;
                                 _unit.EndDateTime = worktask.DayDate.AddTicks(worktask.WorkTimeTicks);
                                 _unit.Duration = TimeSpan.FromTicks(worktask.WorkTimeTicks);
                                 if (String.IsNullOrEmpty(worktask.TimelogWorkunitGUID))

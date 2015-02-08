@@ -19,7 +19,6 @@ namespace TimecardApp.ViewModel
 {
     public class AppViewModel : INotifyPropertyChanged
     {
-
         #region Variablen
         // Data context for the local database
         private DBClass dellAppDB;
@@ -274,7 +273,25 @@ namespace TimecardApp.ViewModel
             {
                 // try to match the UID
                 if (!tlTaskCollection.Where(u => u.TimelogTaskUID  == oldTask.TimelogTaskUID).Any())
+                {
+                    //find all worktasks which are using this timelogtask
+                    var worktasksUsingOldTask = from WorkTask worktasks in dellAppDB.WorkTasks
+                                                where worktasks.TimelogTaskUID == oldTask.TimelogTaskUID
+                                                select worktasks;
+                    
+                    if (worktasksUsingOldTask.Count() > 0)
+                    {
+                        // set the timelogtask to null
+                        ObservableCollection<WorkTask> tlUsingWorktasks = new ObservableCollection<WorkTask>(worktasksUsingOldTask);
+                        foreach (WorkTask worktask in tlUsingWorktasks)
+                        {
+                            worktask.TimelogTask = null;
+                        }
+                    }
+                    dellAppDB.SubmitChanges();
                     dellAppDB.TimelogTasks.DeleteOnSubmit(oldTask);
+                }
+                   
             }
             dellAppDB.SubmitChanges();
 

@@ -5,7 +5,7 @@ using System.Data.Linq;
 using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using TimecardApp.Resources;
 
 namespace TimecardApp.Model
 {
@@ -260,8 +260,7 @@ namespace TimecardApp.Model
                         endTime = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0);
                         pauseTimeTicks = 0;
 
-                        workTimeTicks = 0;
-                        workDescription = "task description";      
+                        workTimeTicks = 0;    
                     }
                     NotifyPropertyChanging("DayDate");
                     dayDate = value;
@@ -358,7 +357,10 @@ namespace TimecardApp.Model
         {
             get
             {
-                return workDescription;
+                if (String.IsNullOrEmpty(workDescription))
+                    return AppResources.ExampleTaskDescription;
+                else    
+                    return workDescription;
             }
 
             set
