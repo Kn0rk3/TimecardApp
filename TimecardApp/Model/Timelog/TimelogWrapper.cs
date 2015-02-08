@@ -144,11 +144,17 @@ namespace TimecardApp.Model.Timelog
                     tlViewModel.ChangeState(ETimelogState.ExectionSuccessfull, ETimelogOperation.Login, String.Empty);
                 }
                 else
-                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.Login, String.Empty);
+                    if (e.Error != null)
+                        tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.Login, e.Error.Message);
+                    else
+                        tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.Login, String.Empty);                    
             }
             catch (Exception ex)
             {
-                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.Login, e.Error.Message);
+                if (e.Error != null)
+                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.Login, e.Error.Message); 
+                else
+                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.Login, ex.Message);                
             }
         }
 
@@ -164,12 +170,17 @@ namespace TimecardApp.Model.Timelog
                     tlViewModel.ChangeState(ETimelogState.ExectionSuccessfull, ETimelogOperation.GetTasks, String.Empty);
                 }
                 else
-                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.GetTasks, String.Empty);
-
+                    if (e.Error != null)
+                        tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.GetTasks, e.Error.Message);
+                    else
+                        tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.GetTasks, String.Empty);    
             }
             catch (Exception ex)
             {
-                tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.GetTasks, e.Error.Message);
+                if (e.Error != null)
+                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.GetTasks, e.Error.Message);
+                else
+                    tlViewModel.ChangeState(ETimelogState.UnexpectedError, ETimelogOperation.GetTasks, ex.Message);
             }
         }
     }
