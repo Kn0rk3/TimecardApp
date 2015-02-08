@@ -7,10 +7,12 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using TimecardApp.Model;
+using TimecardApp.Model.NonPersistent;
 using TimecardApp.ViewModel;
 using Microsoft.Phone.Data.Linq;
 using System.IO.IsolatedStorage;
 using TimecardApp.Resources;
+using System.Linq;
 
 namespace TimecardApp
 {
@@ -30,9 +32,9 @@ namespace TimecardApp
         }
 
         // The current version of the application.
-        public static int DB_VERSION = 1;
-
-
+        //version 2: New object TimelogTask, TimelogProject (from Timelog), marking projects and customers as Timelog objects and worktask now refers to phase from timelog
+        public static int DB_VERSION = 2;
+        
         /// <summary>
         /// Constructor for the Application object.
         /// </summary>
@@ -107,19 +109,24 @@ namespace TimecardApp
                     }
                 }
 
-                // Check whether a database update is needed.
-                DatabaseSchemaUpdater dbUpdater = db.CreateDatabaseSchemaUpdater();
-
-                if (dbUpdater.DatabaseSchemaVersion < DB_VERSION)
+                using (DBMigrator migrator = new DBMigrator(DBConnectionString , DB_VERSION ))
                 {
-                    //performn here the changes for database in higher versions
-
+                    try
+                    {
+                        if (migrator.hasToMigrate())
+                        {
+                            migrator.MigrateDatabase();
+                        }
+                    }
+                    catch
+                    {
+                        throw new Exception("Database error in Timecard App: Connectionstring doesn't point to a existing database. Migration failed.");
+                    }
                 }
             }
 
             // Create the ViewModel object.
             appViewModel = new AppViewModel(DBConnectionString);
-
         }
 
         private void fillDummyDataInDatabase(DBClass dellAppDB)
@@ -130,7 +137,7 @@ namespace TimecardApp
             Customer forthCustomer = new Customer() { CustomerID = System.Guid.NewGuid().ToString(), CustomerName = "Paul Hartmann", CustomerShort = "PH" };
             Customer fifthCustomer = new Customer() { CustomerID = System.Guid.NewGuid().ToString(), CustomerName = "Bell", CustomerShort = "BL" };
             Customer sixthCustomer = new Customer() { CustomerID = System.Guid.NewGuid().ToString(), CustomerName = "Wüstenrot", CustomerShort = "WW" };
-
+            
             dellAppDB.Customer.InsertOnSubmit(firstCustomer);
             dellAppDB.Customer.InsertOnSubmit(secondCustomer);
             dellAppDB.Customer.InsertOnSubmit(thirdCustomer);
@@ -157,8 +164,6 @@ namespace TimecardApp
             Timecard seventhTimecard = new Timecard() { TimecardID = System.Guid.NewGuid().ToString(), TimecardName = "KW 04", StartDate = new DateTime(2014, 3, 3).AddDays(-42) };
             Timecard eigthTimecard = new Timecard() { TimecardID = System.Guid.NewGuid().ToString(), TimecardName = "KW 03", StartDate = new DateTime(2014, 3, 3).AddDays(-49) };
             Timecard ningthTimecard = new Timecard() { TimecardID = System.Guid.NewGuid().ToString(), TimecardName = "KW 21", StartDate = new DateTime(2014, 5, 19) };
-
-
 
             dellAppDB.Projects.InsertOnSubmit(firstProject);
             dellAppDB.Projects.InsertOnSubmit(secondProject);
@@ -190,6 +195,64 @@ namespace TimecardApp
             DEBUG_NewTimecard(dellAppDB, seventhTimecard);
             DEBUG_NewTimecard(dellAppDB, eigthTimecard);
             DEBUG_NewTimecard(dellAppDB, ningthTimecard);
+
+            TimelogTask firstTask = new TimelogTask() { 
+                TimelogTaskUID = System.Guid.NewGuid().ToString(), 
+                TimelogProjectID = 15, 
+                TimelogProjectName = "Allianz", 
+                TimelogTaskName = "Implementerung Q4",
+                StartDate = new DateTime(2014,10,01), 
+                EndDate = new DateTime(2014,12,31)};
+            TimelogTask secondTask = new TimelogTask() { 
+                TimelogTaskUID = System.Guid.NewGuid().ToString(), 
+                TimelogProjectID = 15, 
+                TimelogProjectName = "Allianz", 
+                TimelogTaskName = "Implementerung Q3",
+                StartDate = new DateTime(2014,07,01), 
+                EndDate = new DateTime(2014,09,30)};
+            TimelogTask thirdTask = new TimelogTask() { 
+                TimelogTaskUID = System.Guid.NewGuid().ToString(), 
+                TimelogProjectID = 16, 
+                TimelogProjectName = "MunichRe",
+                TimelogTaskName = "Implementerung",
+                StartDate = new DateTime(2014, 01, 01),
+                EndDate = new DateTime(2014, 09, 30)};
+            TimelogTask forthTask = new TimelogTask()
+            {
+                TimelogTaskUID = System.Guid.NewGuid().ToString(),
+                TimelogProjectID = 15,
+                TimelogProjectName = "Allianz",
+                TimelogTaskName = "Implementerung Q4-1",
+                StartDate = new DateTime(2014, 10, 01),
+                EndDate = new DateTime(2014, 12, 31)
+            };
+            TimelogTask fifthTask = new TimelogTask()
+            {
+                TimelogTaskUID = System.Guid.NewGuid().ToString(),
+                TimelogProjectID = 15,
+                TimelogProjectName = "Allianz",
+                TimelogTaskName = "Implementerung Q4-2",
+                StartDate = new DateTime(2014, 10, 01),
+                EndDate = new DateTime(2014, 12, 31)
+            };
+            TimelogTask sixthTask = new TimelogTask()
+            {
+                TimelogTaskUID = System.Guid.NewGuid().ToString(),
+                TimelogProjectID = 15,
+                TimelogProjectName = "Allianz",
+                TimelogTaskName = "Implementerung Q4-3",
+                StartDate = new DateTime(2014, 10, 01),
+                EndDate = new DateTime(2014, 12, 31)
+            };
+
+            dellAppDB.TimelogTasks.InsertOnSubmit(firstTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(secondTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(thirdTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(forthTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(fifthTask);
+            dellAppDB.TimelogTasks.InsertOnSubmit(sixthTask);
+            dellAppDB.SubmitChanges();
+        
         }
 
         private void fillTutorialDataInDatabase(DBClass dellAppDB)

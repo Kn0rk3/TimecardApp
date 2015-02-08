@@ -105,24 +105,44 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="LocalizedStrings.cs" />
-    <Compile Include="Model\Backupfile.cs" />
+    <Compile Include="Model\NonPersistent\Backupfile.cs" />
     <Compile Include="Model\Customer.cs" />
     <Compile Include="Model\DBClass.cs" />
     <Compile Include="Model\Filter.cs" />
-    <Compile Include="Model\HelperClass.cs" />
+    <Compile Include="Model\NonPersistent\DBMigrator.cs" />
+    <Compile Include="Model\NonPersistent\HelperClass.cs" />
     <Compile Include="Model\IDBObjects.cs" />
-    <Compile Include="Model\PDFCreater.cs" />
+    <Compile Include="Model\TimelogSetting.cs" />
+    <Compile Include="Model\Timelog\ETimelogOperation.cs" />
+    <Compile Include="Model\Timelog\TimelogSession.cs" />
+    <Compile Include="Model\Timelog\ITimelogWrapper.cs" />
     <Compile Include="Model\Project.cs" />
     <Compile Include="Model\Setting.cs" />
     <Compile Include="Model\Timecard.cs" />
+    <Compile Include="Model\TimelogTask.cs" />
+    <Compile Include="Model\Timelog\ETimelogState.cs" />
+    <Compile Include="Model\Timelog\TimelogWrapper.cs" />
     <Compile Include="Model\WorkTask.cs" />
+    <Compile Include="Service References\TimelogProjectManagementService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\TimelogSecurityService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ViewModel\AppViewModel.cs" />
     <Compile Include="ViewModel\CustomerViewModel.cs" />
     <Compile Include="ViewModel\FilterViewModel.cs" />
+    <Compile Include="ViewModel\ITimelogViewModel.cs" />
+    <Compile Include="View\ITimelogUsingView.cs" />
     <Compile Include="ViewModel\ProjectViewModel.cs" />
     <Compile Include="ViewModel\BackupViewModel.cs" />
     <Compile Include="ViewModel\SettingViewModel.cs" />
     <Compile Include="ViewModel\TimecardViewModel.cs" />
+    <Compile Include="ViewModel\TimelogViewModel.cs" />
     <Compile Include="ViewModel\WorktaskViewModel.cs" />
     <Compile Include="View\BackupPage.xaml.cs">
       <DependentUpon>BackupPage.xaml</DependentUpon>
@@ -135,6 +155,12 @@
     </Compile>
     <Compile Include="View\FilterPage.xaml.cs">
       <DependentUpon>FilterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TimelogLoginPage.xaml.cs">
+      <DependentUpon>TimelogLoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TimelogPage.xaml.cs">
+      <DependentUpon>TimelogPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WorktaskPage.xaml.cs">
       <DependentUpon>WorktaskPage.xaml</DependentUpon>
@@ -179,6 +205,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\TimelogLoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\TimelogPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\WorktaskPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -209,6 +243,33 @@
     <None Include="Properties\WMAppManifest.xml">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\TimelogProjectManagementService\ProjectManagementServiceSecure.wsdl" />
+    <None Include="Service References\TimelogProjectManagementService\ProjectManagementServiceSecure1.wsdl" />
+    <None Include="Service References\TimelogSecurityService\SecurityServiceSecure.disco" />
+    <None Include="Service References\TimelogSecurityService\configuration91.svcinfo" />
+    <None Include="Service References\TimelogSecurityService\configuration.svcinfo" />
+    <None Include="Service References\TimelogSecurityService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\TimelogProjectManagementService\ProjectManagementServiceSecure.disco" />
+    <None Include="Service References\TimelogProjectManagementService\configuration91.svcinfo" />
+    <None Include="Service References\TimelogProjectManagementService\configuration.svcinfo" />
+    <None Include="Service References\TimelogProjectManagementService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <Content Include="Icons\feature.alarm.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\questionmark.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Toolkit.Content\Microsoft.Phone.Controls.Toolkit.dll" />
+    <Content Include="ServiceReferences.ClientConfig">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="Service References\TimelogSecurityService\SecurityServiceSecure.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\AlignmentGrid.png" />
@@ -253,14 +314,18 @@
     <Content Include="Icons\feature.settings.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\map.neighborhood.png" />
+    <Content Include="Icons\map.neighborhood.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\refresh.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\save.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\search.refine.png" />
+    <Content Include="Icons\search.refine.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\tabs.2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -294,14 +359,14 @@
   <ItemGroup>
     <Reference Include="Microsoft.Live, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Live.Controls, Version=5.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=8.0.1.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WPtoolkit.4.2013.08.16\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.Phone.Controls.Toolkit, Version=8.0.1.0, Culture=neutral, PublicKeyToken=b772ad94eb9ca604, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\TimelogProjectManagementService\" />
+    <WCFMetadataStorage Include="Service References\TimelogSecurityService\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

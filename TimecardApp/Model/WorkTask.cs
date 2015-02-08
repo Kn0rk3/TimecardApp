@@ -5,7 +5,7 @@ using System.Data.Linq;
 using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using TimecardApp.Resources;
 
 namespace TimecardApp.Model
 {
@@ -70,6 +70,97 @@ namespace TimecardApp.Model
                 if (value != null)
                     projectID  = value.ProjectID;
                 NotifyPropertyChanged("ProjectID");
+            }
+        }
+
+        //db version 2
+        private string timelogTaskUID;
+        [Column(CanBeNull = true)]
+        public string TimelogTaskUID;
+
+        private EntityRef<TimelogTask> _TimelogTask;
+        [Association(Storage = "_TimelogTask", ThisKey = "TimelogTaskUID", IsForeignKey = true)]
+        public TimelogTask TimelogTask
+        {
+            get { return this._TimelogTask.Entity; }
+            set
+            {
+                NotifyPropertyChanging("TimelogTaskUID");
+                this._TimelogTask.Entity = value;
+                if (value != null)
+                    timelogTaskUID = value.TimelogTaskUID;
+                NotifyPropertyChanged("TimelogTaskUID");
+            }
+        }
+
+        //db version 2
+        private string lastTimelogRegistration;
+        [Column(CanBeNull = true)]
+        public string LastTimelogRegistration
+        {
+            get
+            {
+                return lastTimelogRegistration;
+            }
+
+            set
+            {
+                if (lastTimelogRegistration != value)
+                {
+                    if (!String.IsNullOrEmpty(value))
+                        IsComplete = true;
+                    NotifyPropertyChanging("LastTimelogRegistration");
+                    lastTimelogRegistration = value;
+                    NotifyPropertyChanged("LastTimelogRegistration");
+                }
+            }
+        }
+
+        //db version 2
+        private string timelogWorkunitGUID;
+        [Column(CanBeNull = true)]
+        public string TimelogWorkunitGUID
+        {
+            get
+            {
+                return timelogWorkunitGUID;
+            }
+
+            set
+            {
+                if (timelogWorkunitGUID != value)
+                {
+                    NotifyPropertyChanging("TimelogWorkunitGUID");
+                    timelogWorkunitGUID = value;
+                    NotifyPropertyChanged("TimelogWorkunitGUID");
+                }
+            }
+        }
+
+        //db version 2
+        private bool isForTimelogRegistration;
+        [Column(CanBeNull = true)]
+        public bool? IsForTimelogRegistration
+        {
+            get
+            {
+                return isForTimelogRegistration;
+            }
+
+            set
+            {
+                if (value.HasValue)
+                {
+                    if (isForTimelogRegistration != value)
+                    {
+                        NotifyPropertyChanging("IsForTimelogRegistration");
+                        isForTimelogRegistration = value.Value;
+                        NotifyPropertyChanged("IsForTimelogRegistration");
+                    }
+                }
+                else
+                    isForTimelogRegistration = false;
+
             }
         }
 
@@ -169,8 +260,7 @@ namespace TimecardApp.Model
                         endTime = new DateTime(value.Year, value.Month, value.Day, 0, 0, 0);
                         pauseTimeTicks = 0;
 
-                        workTimeTicks = 0;
-                        workDescription = "task description";      
+                        workTimeTicks = 0;    
                     }
                     NotifyPropertyChanging("DayDate");
                     dayDate = value;
@@ -255,7 +345,7 @@ namespace TimecardApp.Model
                     NotifyPropertyChanging("WorkTimeTicks");
                     workTimeTicks = value;
                     DateTime workTimeTmp = new DateTime(workTimeTicks);
-                    totalWorkTimeString = workTimeTmp.ToShortTimeString();
+                    totalWorkTimeString = workTimeTmp.ToString("HH:mm");
                     NotifyPropertyChanged("WorkTimeTicks");
                 }
             }
@@ -267,7 +357,10 @@ namespace TimecardApp.Model
         {
             get
             {
-                return workDescription;
+                if (String.IsNullOrEmpty(workDescription))
+                    return AppResources.ExampleTaskDescription;
+                else    
+                    return workDescription;
             }
 
             set
@@ -281,10 +374,8 @@ namespace TimecardApp.Model
             }
         }
 
-
-
-        private String totalWorkTimeString;
-        public String TotalWorkTimeString
+        private string totalWorkTimeString;
+        public string TotalWorkTimeString
         {
             get
             {
@@ -299,6 +390,57 @@ namespace TimecardApp.Model
                     totalWorkTimeString = value;
                     NotifyPropertyChanged("TotalWorkTimeString");
                 }
+            }
+        }
+
+        private bool isExpanded;
+        public bool IsExpanded
+        {
+            get
+            {
+                return isExpanded;
+            }
+            set
+            {
+                if (isExpanded != value)
+                {
+                    NotifyPropertyChanging("IsExpanded");
+                    isExpanded = value;
+                    NotifyPropertyChanged("IsExpanded");
+                }
+            }
+        }
+
+
+        public string TimelogTaskIdent
+        {
+            get
+            {
+                if (TimelogTask != null)
+                    return TimelogTask.TimelogTaskName;
+                else
+                    return "";
+            }
+        }
+
+
+        public IList<string> ExpandItems
+        {
+            get
+            {
+                if (TimelogTask != null)
+                {
+                    IList<string> expandItems = new List<string>();
+                    expandItems.Add("Tl Project: " + TimelogTask.TimelogProjectName);
+                    expandItems.Add("Worktime: " + TotalWorkTimeString);
+                    if (String.IsNullOrEmpty(TimelogWorkunitGUID))
+                        expandItems.Add("Action: Insert in Timelog");
+                    else
+                        expandItems.Add("Action: Update in Timelog");
+                    return expandItems;
+                }
+                else
+                    return new List<string>();
             }
         }
 

@@ -12,23 +12,32 @@ using Microsoft.Phone.Tasks;
 using TimecardApp.Resources;
 using Microsoft.Phone.Data.Linq;
 using System.IO.IsolatedStorage;
-
+using TimecardApp.Model.NonPersistent;
+using TimecardApp.View;
 
 namespace TimecardApp.ViewModel
 {
     public class AppViewModel : INotifyPropertyChanged
     {
-
         #region Variablen
         // Data context for the local database
         private DBClass dellAppDB;
         private string connectionString;
+
         private WorktaskViewModel workTaskViewModel;
         private ProjectViewModel projectViewModel;
         private CustomerViewModel customerViewModel;
         private TimecardViewModel timecardViewModel;
         private SettingViewModel settingViewModel;
         private FilterViewModel filterViewModel;
+        private TimelogViewModel timelogViewModel;
+
+        private bool usingTimelogInterface;
+        public bool UsingTimelogInterface
+        {
+            get { return usingTimelogInterface; }
+            set { usingTimelogInterface = value; }
+        }
 
         // Die ObservableCollection ist im Endeffekt auch nur eine Liste, 
         // jedoch hat sie eine spezielle Eigenschaft, welche sie für unseren Einsatzzweck sehr wertvoll macht: 
@@ -205,6 +214,13 @@ namespace TimecardApp.ViewModel
                 dellAppDB.SubmitChanges();
             }
 
+            var settingObj = from Setting setting in dellAppDB.Setting select setting;
+            Setting tmpSetting = settingObj.Single();
+            if (tmpSetting.IsUsingTimelog.HasValue)
+                UsingTimelogInterface = tmpSetting.IsUsingTimelog.Value;
+            else
+                UsingTimelogInterface = false;
+
             LoadCollectionsFromDatabase();
         }
 
@@ -243,6 +259,58 @@ namespace TimecardApp.ViewModel
         // Write changes in the data context to the database.
         public void SaveChangesToDB()
         {
+            dellAppDB.SubmitChanges();
+        }
+
+        public void SaveNewTimelogTasks(ObservableCollection<TimelogTask> tlTaskCollection)
+        {
+            // delete the old ones
+            var oldTasks = from TimelogTask tasks in dellAppDB.TimelogTasks
+                                select tasks;
+
+            ObservableCollection<TimelogTask> oldTaskCollection = new ObservableCollection<TimelogTask>(oldTasks);
+            foreach (TimelogTask oldTask in oldTaskCollection)
+            {
+                // try to match the UID
+                if (!tlTaskCollection.Where(u => u.TimelogTaskUID  == oldTask.TimelogTaskUID).Any())
+                {
+                    //find all worktasks which are using this timelogtask
+                    var worktasksUsingOldTask = from WorkTask worktasks in dellAppDB.WorkTasks
+                                                where worktasks.TimelogTaskUID == oldTask.TimelogTaskUID
+                                                select worktasks;
+                    
+                    if (worktasksUsingOldTask.Count() > 0)
+                    {
+                        // set the timelogtask to null
+                        ObservableCollection<WorkTask> tlUsingWorktasks = new ObservableCollection<WorkTask>(worktasksUsingOldTask);
+                        foreach (WorkTask worktask in tlUsingWorktasks)
+                        {
+                            worktask.TimelogTask = null;
+                        }
+                    }
+                    dellAppDB.SubmitChanges();
+                    dellAppDB.TimelogTasks.DeleteOnSubmit(oldTask);
+                }
+                   
+            }
+            dellAppDB.SubmitChanges();
+
+            //insert new ones (or update)
+            foreach(TimelogTask newTask in tlTaskCollection )
+            {
+                if (!oldTaskCollection.Where(u => u.TimelogTaskUID == newTask.TimelogTaskUID).Any())
+                    //Insert
+                    dellAppDB.TimelogTasks.InsertOnSubmit(newTask);
+                else
+                {
+                    TimelogTask toUpdateTask = oldTaskCollection.Where(u => u.TimelogTaskUID == newTask.TimelogTaskUID).Single();
+                    toUpdateTask.TimelogTaskName = newTask.TimelogTaskName;
+                    toUpdateTask.TimelogProjectName = newTask.TimelogProjectName;
+                    toUpdateTask.TimelogProjectID = newTask.TimelogProjectID;
+                    toUpdateTask.StartDate = newTask.StartDate;
+                    toUpdateTask.EndDate = newTask.EndDate;
+                }
+            }
             dellAppDB.SubmitChanges();
         }
 
@@ -295,9 +363,10 @@ namespace TimecardApp.ViewModel
                         newWorktask.Ident_WorkTask = HelperClass.GetIdentForWorktask(newDate, singleWorktask.Project.Ident_Project);
                     else
                         newWorktask.Ident_WorkTask = HelperClass.GetIdentForWorktask(newDate, "");
+                    newWorktask.IsForTimelogRegistration = singleWorktask.IsForTimelogRegistration;
+                    newWorktask.TimelogTask = singleWorktask.TimelogTask;
                     WorktaskCopyCollection.Add(newWorktask);
                 }
-
             }
             else
             {
@@ -399,7 +468,6 @@ namespace TimecardApp.ViewModel
         {
             Customer newCustomer = (Customer)getDBObjectForID(DBObjects.Customer, customerID);
 
-            //prüfen ob es bereits diesen Worktask gibt oder ob er neu erstellt werden soll
             if (newCustomer != null)
             {
                 customerViewModel = new CustomerViewModel(newCustomer);
@@ -515,6 +583,30 @@ namespace TimecardApp.ViewModel
             return settingViewModel;
         }
 
+        public TimelogViewModel GetTimelogViewModel(ITimelogUsingView view)
+        {
+            if (timelogViewModel != null)
+            {
+                timelogViewModel.TimelogUsingView = view;
+                return timelogViewModel;
+            }
+              
+            var timelogSettingObj = from TimelogSetting tlSetting in dellAppDB.TimelogSetting
+                                    select tlSetting;
+
+            if (timelogSettingObj.Count() > 0)
+                timelogViewModel = new TimelogViewModel(timelogSettingObj.Single(),  view);
+            else
+            {
+                TimelogSetting newTlSetting = new TimelogSetting() { TimelogSettingID = System.Guid.NewGuid().ToString() };
+                dellAppDB.TimelogSetting.InsertOnSubmit(newTlSetting);
+                dellAppDB.SubmitChanges();
+                timelogViewModel = new TimelogViewModel(newTlSetting, view);
+            }
+
+            return timelogViewModel;
+        }
+
         public BackupViewModel GetBackupViewModel()
         {
             BackupViewModel newBackupViewModel = new BackupViewModel();
@@ -603,6 +695,26 @@ namespace TimecardApp.ViewModel
             }
 
             return quoteWorkTimeString;
+        }
+
+        public ObservableCollection<TimelogTask> GetTimelogTasksForDate(DateTime dateTime)
+        {
+            var timelogTasks = from TimelogTask task in dellAppDB.TimelogTasks 
+                                where (task.StartDate.Date <= dateTime.Date && task.EndDate.Date >= dateTime.Date) || (task.StartDate == null || task.EndDate == null)
+                                select task;
+
+            return new ObservableCollection<TimelogTask>(timelogTasks);
+        }
+
+        public ObservableCollection<WorkTask> GetAllWorktasksForTimelog()
+        {
+            var worktasks = from WorkTask worktask in dellAppDB.WorkTasks
+                            where worktask.IsForTimelogRegistration == true && 
+                                    (worktask.LastTimelogRegistration == String.Empty || worktask.LastTimelogRegistration == null) &&
+                                    worktask.TimelogTask != null 
+                            select worktask;
+
+            return new ObservableCollection<WorkTask>(worktasks);
         }
 
         public void LoadCollectionsFromDatabase()
@@ -728,6 +840,15 @@ namespace TimecardApp.ViewModel
             return new ObservableCollection<WorkTask>(worktasksForProjectsInDB);
         }
 
+
+        public ObservableCollection<TimelogTask> GetTimelogTasks()
+        {
+            var timelogTasksInDB = from TimelogTask task in dellAppDB.TimelogTasks 
+                                           select task;
+
+            return new ObservableCollection<TimelogTask>(timelogTasksInDB);
+        }
+
         public void LoadWorktasksForTimecard(string timecardID)
         {
             var worktasksOfThisTimecard = from WorkTask worktask in dellAppDB.WorkTasks
@@ -775,6 +896,11 @@ namespace TimecardApp.ViewModel
         public void DiscardSettingViewModel()
         {
             settingViewModel = null;
+        }
+
+        public void DiscardTlSettingViewModel()
+        {
+            timelogViewModel  = null;
         }
 
         #endregion
@@ -978,34 +1104,42 @@ namespace TimecardApp.ViewModel
 
         public void RestoreDatabase(string tmpPathDatabase)
         {
-                dellAppDB.Dispose();
-                //check downloaded database for version
+            dellAppDB.Dispose();
+            //check downloaded database for version
 
-                string tmpDBConnectionString = "Data Source=isostore:/" + tmpPathDatabase;
-                // Create the database if it does not exist.
-                using (DBClass tmpDB = new DBClass(tmpDBConnectionString))
+            string tmpDBConnectionString = "Data Source=isostore:/" + tmpPathDatabase;
+            // Create the database if it does not exist.
+            using (DBClass tmpDB = new DBClass(tmpDBConnectionString))
+            {
+                if (tmpDB.DatabaseExists() == true)
                 {
-                    if (tmpDB.DatabaseExists() == true)
+                    using (DBMigrator migrator = new DBMigrator(tmpDBConnectionString, App.DB_VERSION))
                     {
-                        DatabaseSchemaUpdater dbNewUpdater = tmpDB.CreateDatabaseSchemaUpdater();
-
-                        if (dbNewUpdater.DatabaseSchemaVersion < App.DB_VERSION)
+                        try
                         {
-
+                            if (migrator.hasToMigrate())
+                            {
+                                migrator.MigrateDatabase();
+                            }
                         }
-
-                        // version are equal -> replace database files 
-                        tmpDB.Dispose();
-                        IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
-                        iso.CopyFile(tmpPathDatabase, AppResources.DatabaseName + ".sdf", true);
-                        iso.DeleteFile(tmpPathDatabase);
-
+                        catch (Exception e)
+                        {
+                            throw new Exception("Error during migration. Migration failed.");
+                        }
                     }
-                    else
-                        MessageBox.Show("Restore failed because the downloaded file is no database for this app.");
-                }
 
-                this.ConnectDB();
+                    // version are equal or db was migrated -> replace database files 
+                    tmpDB.Dispose();
+                    IsolatedStorageFile iso = IsolatedStorageFile.GetUserStoreForApplication();
+                    iso.CopyFile(tmpPathDatabase, AppResources.DatabaseName + ".sdf", true);
+
+                    iso.Dispose();
+                }
+                else
+                    MessageBox.Show("Restore failed because the downloaded file is no database for this app.");
+            }
+
+            this.ConnectDB();
         }
 
         #endregion
@@ -1023,6 +1157,9 @@ namespace TimecardApp.ViewModel
             }
         }
         #endregion
+
+
+
 
 
     }

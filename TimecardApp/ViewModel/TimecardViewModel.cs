@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace TimecardApp.ViewModel
 {
-    public class TimecardViewModel : INotifyPropertyChanged
+    public class TimecardViewModel : INotifyPropertyChanged 
     {
         private string timecardID;
         public string TimecardID

@@ -9,6 +9,7 @@ using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using TimecardApp.Model;
 using System.ComponentModel;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {
@@ -66,7 +67,7 @@ namespace TimecardApp.View
             NavigationService.GoBack();
         }
 
-        void datePicker_ValueChanged(object sender, DateTimeValueChangedEventArgs e)
+        private void datePicker_ValueChanged(object sender, DateTimeValueChangedEventArgs e)
         {
             SelectDate = (DateTime)e.NewDateTime;
         }

@@ -146,4 +146,7 @@
   <data name="ClientID" xml:space="preserve">
     <value>000000004412064A</value>
   </data>
+  <data name="ExampleTaskDescription" xml:space="preserve">
+    <value>task description</value>
+  </data>
 </root>

@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace TimecardApp.Model
+namespace TimecardApp.Model.NonPersistent
 {
-    static class HelperClass
+    public static class HelperClass
     {
         public static void FocusedTextBoxUpdateSource()
         {
@@ -41,10 +42,38 @@ namespace TimecardApp.Model
             }
         }
 
+        public static string GetEncryptedPWString(string clearPW)
+        {
+            try
+            {
+                byte[] passwordInByte = UTF8Encoding.UTF8.GetBytes(clearPW);
+                byte[] protectedPasswordByte = ProtectedData.Protect(passwordInByte, null);
+                return Convert.ToBase64String(protectedPasswordByte, 0, protectedPasswordByte.Length);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error during password encryption. Error message:" + ex.Message + " \n InnerException: " + ex.InnerException);
+            }
+        }
+
+        public static string GetDecryptedPWString(string encrytpedPW)
+        {
+            try
+            {
+                byte[] encryptedBytes = Convert.FromBase64String(encrytpedPW);
+                byte[] passwordByte = ProtectedData.Unprotect(encryptedBytes, null);
+                return UTF8Encoding.UTF8.GetString(passwordByte, 0, passwordByte.Length);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error during password encryption. Error message:" + ex.Message + " \n InnerException: " + ex.InnerException);
+            }
+        }
+
         public static string GetShortDayName(DateTime date)
         {
             // hier darf immer nur ein Montag gespeichert werden
-            switch (date.DayOfWeek )
+            switch (date.DayOfWeek)
             {
                 case DayOfWeek.Monday:
                     return "Mo";
@@ -94,9 +123,14 @@ namespace TimecardApp.Model
             return GetShortDayName(date) + "-" + date.ToString("dd/MM/yyyy") + "-" + projecIdent;
         }
 
+        public static string GetIdentForTimelogTask(string taskName, string projectName, int projectID)
+        {
+            return taskName + " - " + projectName + " (ID:" +  projectID.ToString() + ")";
+        }
+
         public static int NumberOfWeek(DateTime date)
         {
-             int weekNumber;
+            int weekNumber;
             // Aktuelle Kultur ermitteln
             CultureInfo currentCulture = CultureInfo.CurrentCulture;
 
@@ -125,7 +159,7 @@ namespace TimecardApp.Model
                     calendarWeek = 1;
             }
             weekNumber = calendarWeek;
-            
+
             // Das Jahr der Kalenderwoche ermitteln
             int year = date.Year;
             if (calendarWeek == 1 && date.Month == 12)
@@ -134,7 +168,7 @@ namespace TimecardApp.Model
                 year--;
 
             return weekNumber;
-           
+
         }
     }
 }

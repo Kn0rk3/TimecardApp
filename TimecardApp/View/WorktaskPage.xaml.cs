@@ -12,14 +12,21 @@ using TimecardApp.Model;
 using TimecardApp.ViewModel;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.View
 {
     public partial class WorktaskPage : PhoneApplicationPage
     {
+        private string helperStringLogin = "-Help- Assign a Timelog task to a worktask: " +
+            "\n\nYou can only assign a Timelog task for which the end and start date fits to the corresponding date of the worktask." +
+            "\n\nAn additional upload will overwrite the already logged time in Timelog. Better check the results afterwards.";
+
         private WorktaskViewModel workTaskViewModel;
         private ApplicationBarIconButton appBarDeleteButton;
         private ApplicationBarIconButton appBarSaveButton;
+        private ApplicationBarIconButton appBarCancelButton;
+        private ApplicationBarIconButton appBarHelpButton;
 
         // every time the worktaskpage is created, create a new ViewModel for the Worktask 
         public WorktaskPage()
@@ -30,7 +37,6 @@ namespace TimecardApp.View
 
         private void BuildLocalizedApplicationBar()
         {
-            // ApplicationBar der Seite einer neuen Instanz von ApplicationBar zuweisen
             ApplicationBar = new ApplicationBar();
 
             appBarSaveButton = new ApplicationBarIconButton(new Uri("Icons/save.png", UriKind.Relative));
@@ -38,7 +44,7 @@ namespace TimecardApp.View
             appBarSaveButton.Click += new System.EventHandler(this.saveButton_Click);
             ApplicationBar.Buttons.Add(appBarSaveButton);
 
-            ApplicationBarIconButton appBarCancelButton = new ApplicationBarIconButton(new Uri("Toolkit.Content/ApplicationBar.Cancel.png", UriKind.Relative));
+            appBarCancelButton = new ApplicationBarIconButton(new Uri("Toolkit.Content/ApplicationBar.Cancel.png", UriKind.Relative));
             appBarCancelButton.Text = "Discard";
             appBarCancelButton.Click += new System.EventHandler(this.discardButton_Click);
             ApplicationBar.Buttons.Add(appBarCancelButton);
@@ -47,6 +53,17 @@ namespace TimecardApp.View
             appBarDeleteButton.Text = "Delete";
             appBarDeleteButton.Click += new System.EventHandler(this.deleteButton_Click);
             ApplicationBar.Buttons.Add(appBarDeleteButton);
+
+            appBarHelpButton = new ApplicationBarIconButton(new Uri("Icons/questionmark.png", UriKind.Relative));
+            appBarHelpButton.Text = "Help";
+            appBarHelpButton.Click += new System.EventHandler(this.appBarHelperTimelog_Click);
+            ApplicationBar.Buttons.Add(appBarHelpButton);
+
+        }
+
+        private void appBarHelperTimelog_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(helperStringLogin);
         }
 
         private void deleteButton_Click(object sender, EventArgs e)
@@ -88,7 +105,7 @@ namespace TimecardApp.View
 
         private void workDescriptionTextBox_GotFocus(object sender, RoutedEventArgs e)
         {
-            if (String.Equals(workTaskViewModel.WorktaskPageWorkDescription, "What have you done today?"))
+            if (String.Equals(workTaskViewModel.WorktaskPageWorkDescription, AppResources.ExampleTaskDescription))
             {
                 // Clear the text box when it gets focus and only if there is still the standard text
                 workTaskViewModel.WorktaskPageWorkDescription = "";
@@ -97,7 +114,8 @@ namespace TimecardApp.View
 
         private void saveButton_Click(object sender, EventArgs e)
         {
-            workTaskViewModel.WorktaskPageWorkDescription = workDescriptionTextBox.Text;
+            //workTaskViewModel.WorktaskPageWorkDescription = workDescriptionTextBox.Text;
+            HelperClass.FocusedTextBoxUpdateSource();
             workTaskViewModel.SaveThisWorkTask();
             NavigationService.Navigate(new Uri("/View/TimecardPage.xaml?timecardIDParam=" + workTaskViewModel.WorktaskPageTimecard.TimecardID, UriKind.Relative));
         }
@@ -133,5 +151,15 @@ namespace TimecardApp.View
             base.OnBackKeyPress(e);
         }
 
+        private void ResetForTimelogButton_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBoxButton buttons = MessageBoxButton.OKCancel;
+            MessageBoxResult result = MessageBox.Show("Do you want to mark this worktask an additional upload into timelog angain?", "", buttons);
+
+            if (result == MessageBoxResult.OK)
+            {
+                workTaskViewModel.LastTimelogRegistration = "";
+            }
+        }
     }
 }

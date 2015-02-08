@@ -1,0 +1,62 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="TimecardAppUnitTests.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- HINWEIS ZUR LOKALISIERUNG:
+            Um die angezeigten Zeichenfolgen zu lokalisieren, kopieren Sie die Werte in
+            die richtig benannten Schlüssel in der Datei der neutralen Ressourcensprache der App (AppResources.resx), und
+            ersetzen Sie den hartcodierten Textwert zwischen den Anführungszeichen des Attributs
+            mit der Bindungsklausel, deren Pfad auf diesen Zeichenfolgennamen verweist.
+
+            Zum Beispiel:
+
+                Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
+
+            Diese Bindung verweist auf die Zeichenfolgenressource der Vorlage mit der Bezeichnung "ApplicationTitle".
+
+            Werden auf der Registerkarte mit den Projekteigenschaften unterstützte Sprachen hinzugefügt, wird
+            pro Sprache eine neue resx-Datei erstellt. In dieser können die übersetzten Werte der
+            Zeichenfolgen der Benutzeroberfläche gespeichert werden. Die Bindung in diesen Beispielen führt dazu, dass der Wert der
+            Attribute aus der RESX-Datei entnommen wird, die
+            CurrentUICulture der App zur Laufzeit entspricht.
+         -->
+
+        <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
+        <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="TEST-APP" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
+            <TextBlock Text="Komponententest" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+		<TextBlock x:Name="label" Text="Ausgeführte Tests" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+
+        <!--Auskommentieren, um ein Ausrichtungsraster anzuzeigen und sicherzustellen, dass Ihre Steuerelemente
+            an den allgemeinen Grenzen ausgerichtet sind.  Das Bild hat oben einen Rand von -32 px wegen
+            der Taskleiste. Legen Sie dies auf 0 fest (oder entfernen Sie den Rand komplett),
+            wenn die Taskleiste ausgeblendet wird.
+
+            Entfernen Sie vor dem Versand dieses XAML und das Bild selbst.-->
+        <!--<Image Source="/Assets/AlignmentGrid.png" VerticalAlignment="Top" Height="800" Width="480" Margin="0,-32,0,0" Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False" />-->
+    </Grid>
+
+</phone:PhoneApplicationPage>

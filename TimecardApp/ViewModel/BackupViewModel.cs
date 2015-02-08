@@ -12,6 +12,7 @@ using System.IO.IsolatedStorage;
 using System.IO;
 using TimecardApp.Resources;
 using Microsoft.Phone.BackgroundTransfer;
+using TimecardApp.Model.NonPersistent;
 
 namespace TimecardApp.ViewModel
 {
@@ -271,7 +272,8 @@ namespace TimecardApp.ViewModel
 
                 App.AppViewModel.RestoreDatabase(tmpPathDatabase);
 
-                iso.DeleteFile(tmpPathDatabase);
+                if( iso.FileExists(tmpPathDatabase))
+                   iso.DeleteFile(tmpPathDatabase);
 
                 MessageBox.Show("Restore succesfull.");
                 RestoreLock = false;
