@@ -33,9 +33,10 @@ namespace TimecardApp.Model.Timelog
             {
                 if (projectManagementClient == null)
                 {
-                    var _binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport);
+                    var _binding = new BasicHttpBinding(BasicHttpSecurityMode.Transport) { MaxReceivedMessageSize = 1024000 };
                     var _endpoint = new EndpointAddress(SessionUrl + "/WebServices/ProjectManagement/V1_6/ProjectManagementServiceSecure.svc");
                     projectManagementClient = new ProjectManagementServiceClient(_binding, _endpoint);
+                    
                 }
 
                 return projectManagementClient;

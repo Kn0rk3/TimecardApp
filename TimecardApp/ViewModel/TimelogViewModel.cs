@@ -238,7 +238,7 @@ namespace TimecardApp.ViewModel
                     {
                         switch (newState)
                         {
-                            case ETimelogState.UnexpectedError:
+                            case ETimelogState.Error:
                                 {
                                     timelogUsingView.ShowErrorMessage(message);
                                     break;
@@ -250,7 +250,7 @@ namespace TimecardApp.ViewModel
                 case ETimelogOperation.UploadWorkunits:
                         switch (newState)
                         {
-                            case ETimelogState.UnexpectedError:
+                            case ETimelogState.Error:
                                 {
                                     timelogUsingView.ShowErrorMessage(message);
                                     break;
@@ -262,7 +262,7 @@ namespace TimecardApp.ViewModel
                     {
                         switch (newState)
                         {
-                            case ETimelogState.ExectionSuccessfull:
+                            case ETimelogState.Successfull:
                                 {
                                     if (currentOperation != operationRunning)
                                         ExecuteTlOperation(currentOperation);
@@ -274,7 +274,7 @@ namespace TimecardApp.ViewModel
                                     }
                                     break;
                                 }
-                            case ETimelogState.UnexpectedError:
+                            case ETimelogState.Error:
                                 {
                                     timelogUsingView.ShowErrorMessage(message);
                                     timelogUsingView.NavigateLogin();

@@ -11,8 +11,8 @@ namespace TimecardApp.Model.Timelog
         None,
         NoValidToken,
         ValidToken,
-        UnexpectedError,
-        ExectionSuccessfull,
+        Error,
+        Successfull,
         Running               
     }
 }

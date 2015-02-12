@@ -64,12 +64,8 @@
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock HorizontalAlignment="Left" Text="user:" Grid.Row="0" Grid.Column="0" FontSize="25" Height="33" />
-            <TextBlock HorizontalAlignment="Left" Text="{Binding Username}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" FontSize="25" Height="33" />
             <TextBlock HorizontalAlignment="Left" Text="state:"  Grid.Row="1" Grid.Column="0" FontSize="25" Height="33" />
             <TextBlock HorizontalAlignment="Left" Text="{Binding CurrentState}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1" FontSize="25" Height="33" />
-            <TextBlock HorizontalAlignment="Left" Text="operation:"  Grid.Row="2" Grid.Column="0" FontSize="25" Height="33" />
-            <TextBlock HorizontalAlignment="Left" Text="{Binding CurrentOperation}" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1" FontSize="25" Height="33" />
         </Grid>
     </Grid>
     
