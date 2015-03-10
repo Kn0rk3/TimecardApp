@@ -195,7 +195,15 @@ namespace TimecardApp.ViewModel
 #endif
             if (!String.IsNullOrEmpty(tlSetting.Password))
             {
-                password = HelperClass.GetDecryptedPWString(tlSetting.Password);
+                try
+                {
+                    password = HelperClass.GetDecryptedPWString(tlSetting.Password);
+                }
+                catch
+                {
+                    password = "";
+                    timelogUsingView.ShowErrorMessage("Please retype your login credentials. Password couldn't be restored because of different device.");
+                }
             }
             lastSynchronisationTimestamp = tlSetting.LastSynchronisationTimestamp;
             TlTaskCollection = App.AppViewModel.GetTimelogTasks();
@@ -211,9 +219,10 @@ namespace TimecardApp.ViewModel
                 timelogSetting.Username = Username;
 
                 if (!String.IsNullOrEmpty(password))
-                {
                     timelogSetting.Password = HelperClass.GetEncryptedPWString(password);
-                }
+                else
+                    timelogSetting.Password = String.Empty;
+
             }
             else
             {
