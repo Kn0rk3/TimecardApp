@@ -191,7 +191,7 @@ namespace TimecardApp.ViewModel
 
             url = tlSetting.TimelogUrl;
 #if DEBUG
-            url = "https://app1.timelog.com/Leuschel";
+            url = "";
 #endif
             if (!String.IsNullOrEmpty(tlSetting.Password))
             {
@@ -330,23 +330,26 @@ namespace TimecardApp.ViewModel
                             ObservableCollection<WorkUnit> updateUnits = new ObservableCollection<WorkUnit>();
                             foreach (WorkTask worktask in tlWorktaskCollection)
                             {
-                                WorkUnit _unit = new WorkUnit();
-                                _unit.TaskID = worktask.TimelogTask.TimelogTaskID;
-                                _unit.StartDateTime = worktask.DayDate;
-                                _unit.EmployeeInitials = username;
-                                if (!String.Equals(worktask.WorkDescription, AppResources.ExampleTaskDescription))
-                                    _unit.Description = worktask.WorkDescription;
-                                _unit.EndDateTime = worktask.DayDate.AddTicks(worktask.WorkTimeTicks);
-                                _unit.Duration = TimeSpan.FromTicks(worktask.WorkTimeTicks);
-                                if (String.IsNullOrEmpty(worktask.TimelogWorkunitGUID))
+                                if (worktask.ToRegister)
                                 {
-                                    _unit.GUID = System.Guid.NewGuid();
-                                    insertUnits.Add(_unit);
-                                }
-                                else
-                                {
-                                    _unit.GUID = System.Guid.Parse(worktask.TimelogWorkunitGUID);
-                                    updateUnits.Add(_unit);
+                                    WorkUnit _unit = new WorkUnit();
+                                    _unit.TaskID = worktask.TimelogTask.TimelogTaskID;
+                                    _unit.StartDateTime = worktask.DayDate;
+                                    _unit.EmployeeInitials = username;
+                                    if (!String.Equals(worktask.WorkDescription, AppResources.ExampleTaskDescription))
+                                        _unit.Description = worktask.WorkDescription;
+                                    _unit.EndDateTime = worktask.DayDate.AddTicks(worktask.WorkTimeTicks);
+                                    _unit.Duration = TimeSpan.FromTicks(worktask.WorkTimeTicks);
+                                    if (String.IsNullOrEmpty(worktask.TimelogWorkunitGUID))
+                                    {
+                                        _unit.GUID = System.Guid.NewGuid();
+                                        insertUnits.Add(_unit);
+                                    }
+                                    else
+                                    {
+                                        _unit.GUID = System.Guid.Parse(worktask.TimelogWorkunitGUID);
+                                        updateUnits.Add(_unit);
+                                    }
                                 }
                             }
 

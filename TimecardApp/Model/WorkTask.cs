@@ -241,6 +241,25 @@ namespace TimecardApp.Model
             }
         }
 
+        //for timelog registration
+        private bool toRegister;
+        public bool ToRegister
+        {
+            get
+            {
+                return toRegister;
+            }
+            set
+            {
+                if (toRegister != value)
+                {
+                    NotifyPropertyChanging("ToRegister");
+                    toRegister = value;
+                    NotifyPropertyChanged("ToRegister");
+                }
+            }
+        }
+
         private DateTime dayDate;
         [Column]
         public DateTime DayDate

@@ -714,6 +714,11 @@ namespace TimecardApp.ViewModel
                                     worktask.TimelogTask != null 
                             select worktask;
 
+            foreach (WorkTask wt in worktasks)
+            {
+                wt.ToRegister = true;
+            }
+
             return new ObservableCollection<WorkTask>(worktasks);
         }
 

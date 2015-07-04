@@ -93,15 +93,16 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="80" />
                                         <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="80" />
                                     </Grid.ColumnDefinitions>
-                                    <Button
+                                    <CheckBox
+                                        x:Name="IsToRegisterWorktask"
                                 Grid.Column="0"
-                                x:Name="editWorktask"
-                                BorderThickness="0"                                
-                                Margin="-10,0"
-                                Click="editWorktaskButton_Click">
-                                        <Image Source="/Resources/edit.png"/>
-                                    </Button>
+                                VerticalAlignment="Center" 
+                                FontFamily="Portable User Interface"
+                                   IsChecked="{Binding ToRegister, Mode=TwoWay}"     
+                                />
+                                    
                                     <toolkit:ExpanderView Grid.Column="1" Header="{Binding}" Expander="{Binding}"  
                                     ExpanderTemplate="{StaticResource WorktaskCustomExpanderTemplate}"
                                     IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
@@ -109,6 +110,14 @@
                                     ItemTemplate="{StaticResource WorktaskCustomItemTemplate}"
                                     ItemsSource="{Binding ExpandItems}"
                                     />
+                                    <Button
+                                Grid.Column="2"
+                                x:Name="editWorktask"
+                                BorderThickness="0"                                
+                                Margin="-10,0"
+                                Click="editWorktaskButton_Click">
+                                        <Image Source="/Resources/edit.png"/>
+                                    </Button>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
