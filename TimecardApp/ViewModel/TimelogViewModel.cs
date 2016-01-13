@@ -328,6 +328,7 @@ namespace TimecardApp.ViewModel
                         {
                             ObservableCollection<WorkUnit> insertUnits = new ObservableCollection<WorkUnit>();
                             ObservableCollection<WorkUnit> updateUnits = new ObservableCollection<WorkUnit>();
+                           
                             foreach (WorkTask worktask in tlWorktaskCollection)
                             {
                                 if (worktask.ToRegister)
@@ -392,23 +393,49 @@ namespace TimecardApp.ViewModel
             {
                 foreach (TimelogProjectManagementService.BatchContainerOfWorkUnit  workUnit in returnWorkunits)
                 {
-                    var worktaskForUnit = from WorkTask task in tlWorktaskCollection  
-                                where (task.DayDate  == workUnit.Item.StartDateTime.Date && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID )
-                                select task;
+                    WorkTask worktask = null;
+                    var worktasksForUnit = from WorkTask task in tlWorktaskCollection
+                                          where (task.TimelogWorkunitGUID == workUnit.Item.GUID.ToString())
+                                          select task;
+                    
+                    if (worktasksForUnit.Count() == 1)
+                        worktask = worktasksForUnit.Single();
+                    else
+                    {
+                        //nach Beschreibung suchen
+                        worktasksForUnit = from WorkTask task in tlWorktaskCollection
+                                          where (task.DayDate == workUnit.Item.StartDateTime.Date && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID && task.WorkDescription == workUnit.Item.Description)
+                                          select task;
+                        if (worktasksForUnit.Count() == 1)
+                            worktask = worktasksForUnit.Single();
+                        else if (worktasksForUnit.Count() > 1)
+                        {
+                            foreach (WorkTask tasks in worktasksForUnit)
+                            {
 
-                    if (worktaskForUnit.Count() == 1 && workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Success)
+                            }
+                        }
+                        else if (worktasksForUnit.Count() == 0)
+                        {
+
+
+                        }
+
+                        
+
+                    }
+
+                    if (workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Success)
                     {
                         //success --> set timestamp and GUID and remove from collection
-                        WorkTask worktask = worktaskForUnit.Single();
                         worktask.TimelogWorkunitGUID = workUnit.Item.GUID.ToString();
                         worktask.LastTimelogRegistration = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "\nTask-ID: " + workUnit.Item.TaskID + "\nTask: " 
                             + worktask.TimelogTask.TimelogTaskName + "\nWorktime: " + worktask.TotalWorkTimeString;
                         App.AppViewModel.SaveChangesToDB();
                     }
-                    else if (worktaskForUnit.Count() == 1 && workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Error)
+                    else if (workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Error)
                     {
                         // when error for update workunit check for error message
-                        WorkTask worktask = worktaskForUnit.Single();
                         if (String.IsNullOrEmpty(worktask.TimelogWorkunitGUID))
                         {
                             //error during inserting this workunit
@@ -425,11 +452,6 @@ namespace TimecardApp.ViewModel
                                 App.AppViewModel.SaveChangesToDB();
                             }
                         }
-                    }
-                    else if(worktaskForUnit.Count() > 1)
-                    {
-                        timelogUsingView.ShowErrorMessage("There are more than one worktask for date " + workUnit.Item.StartDateTime.Date.ToShortDateString() + 
-                            " and task ID " + workUnit.Item.TaskID + ". If so, move them into one worktask and try again!");
                     }
                 }
                 TlWorktaskCollection = App.AppViewModel.GetAllWorktasksForTimelog();
