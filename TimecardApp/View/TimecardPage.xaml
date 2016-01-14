@@ -13,9 +13,41 @@
     SupportedOrientations="Portrait" Orientation="Portrait"
     mc:Ignorable="d"
     shell:SystemTray.IsVisible="True">
+    <!-- Templates for Expanderview -->
+    <phone:PhoneApplicationPage.Resources>
+
+        <DataTemplate x:Key="WorktaskCustomExpanderTemplate">
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontSize="20" Margin="0,0,0,0">
+                    <TextBlock.Text>
+                        <Binding Path="TotalWorkTimeString" StringFormat="Worktime: {0}" />
+                    </TextBlock.Text>
+                </TextBlock>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="WorktaskCustomHeaderTemplate">
+            <TextBlock 
+                                        Grid.Column="0"
+                                        Text="{Binding Ident_WorkTask}"
+                                        FontSize="30"
+                                        Margin="0,0,0,0">
+            </TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="WorktaskCustomItemTemplate">
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock FontSize="20" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
+            </StackPanel>
+
+        </DataTemplate>
+
+    </phone:PhoneApplicationPage.Resources>
+
 
     <Grid x:Name="LayoutRoot" Background="Transparent">
-        <phone:Pivot x:Name="TimecardPagePivot" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - timecard" VerticalAlignment="Top" >
+        <phone:Pivot x:Name="TimecardPagePivot"  SelectionChanged="TimecardPagePivot_SelectionChanged" HorizontalAlignment="Left" Height="Auto" Title="TimecardApp - timecard" VerticalAlignment="Top" >
             <phone:PivotItem x:Name="mainTimecardItem" CacheMode="{x:Null}" Header="worktasks" Margin="12,28,-13,0">
                 <Grid x:Name="ContentPanel" Grid.Row="1" Margin="0,-30,12,0">
                     <Grid.RowDefinitions>
@@ -42,39 +74,301 @@
                         <ListBox x:Name="worktaskListBox" ItemsSource="{Binding WorktaskTimecardCollection}" Grid.Row="0" Margin="0, 0, 12, 0" Width="440">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid HorizontalAlignment="Stretch" Width="440">
+                                    <Grid HorizontalAlignment="Left" Width="440">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70" />
-                                            <ColumnDefinition Width="300" />
                                             <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="80" />
                                         </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="75"/>
-                                        </Grid.RowDefinitions>
                                         <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"                                              
                                             Grid.Column="0" Grid.Row="0"
                                             VerticalAlignment="Center"
                                             Margin="0,0,0,0"/>
+
+                                        <toolkit:ExpanderView Grid.Column="1" Header="{Binding}" Expander="{Binding}"  
+                                    ExpanderTemplate="{StaticResource WorktaskCustomExpanderTemplate}"
+                                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
+                                    HeaderTemplate="{StaticResource WorktaskCustomHeaderTemplate}" 
+                                    ItemTemplate="{StaticResource WorktaskCustomItemTemplate}"
+                                    ItemsSource="{Binding ExpandItems}"
+                                    />
                                         <Button
-                                            Grid.Column="1" Grid.Row="0"
-                                            Margin="-20,0,0,0"
-                                            BorderThickness="1"
-                                            Content="{Binding Ident_WorkTask}"
-                                            FontSize="20"
-                                            Width="300"
-                                            VerticalAlignment="Center" 
-                                            HorizontalAlignment="Left"
-                                            Click="editWorktaskButton_Click">
+                                Grid.Column="2"
+                                x:Name="editWorktask"
+                                BorderThickness="0"                                
+                                Margin="-10,0"
+                                Click="editWorktaskButton_Click">
+                                            <Image Source="/Resources/edit.png"/>
                                         </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem x:Name="mondayTimecardItem" CacheMode="{x:Null}" Header="mon" Margin="12,28,-13,0">
+                <Grid x:Name="mondayContentPanel" Grid.Row="1" Margin="0,-30,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="worktimeMondayGrid" Grid.Row="0" Margin="12,0,12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="150"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding TimecardPageWorkTimeCurrentDay}" FontSize="30" />
+                        <TextBlock HorizontalAlignment="Left" Text="workingtime" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" FontSize="30" />
+                    </Grid>
+                    <Grid x:Name="listboxMondayGrid" Grid.Row="1" Margin="0,0,12,0">
+                        <ListBox x:Name="worktasMondayListBox" ItemsSource="{Binding WorktaskCurrentDayTimecardCollection}" Grid.Row="0" Margin="0, 0, 12, 0" Width="440">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Left" Width="440">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="80" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"                                              
+                                            Grid.Column="0" Grid.Row="0"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,0,0"/>
+
+                                        <toolkit:ExpanderView Grid.Column="1" Header="{Binding}" Expander="{Binding}"  
+                                    ExpanderTemplate="{StaticResource WorktaskCustomExpanderTemplate}"
+                                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
+                                    HeaderTemplate="{StaticResource WorktaskCustomHeaderTemplate}" 
+                                    ItemTemplate="{StaticResource WorktaskCustomItemTemplate}"
+                                    ItemsSource="{Binding ExpandItems}"
+                                    />
                                         <Button
-                                            Grid.Column="2" Grid.Row="0"
-                                            Margin="-30,0,0,0"
-                                            BorderThickness="0"
-                                            Content="{Binding TotalWorkTimeString}"
-                                            FontSize="20"
-                                            VerticalAlignment="Center" 
-                                            HorizontalAlignment="Left"
-                                            Click="editWorktaskButton_Click">
+                                Grid.Column="2"
+                                x:Name="editWorktask"
+                                BorderThickness="0"                                
+                                Margin="-10,0"
+                                Click="editWorktaskButton_Click">
+                                            <Image Source="/Resources/edit.png"/>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem x:Name="tuesdayTimecardItem" CacheMode="{x:Null}" Header="tue" Margin="12,28,-13,0">
+                <Grid x:Name="tuesdayContentPanel" Grid.Row="1" Margin="0,-30,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="worktimeTuesdayGrid" Grid.Row="0" Margin="12,0,12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="150"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding TimecardPageWorkTimeCurrentDay}" FontSize="30" />
+                        <TextBlock HorizontalAlignment="Left" Text="workingtime" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" FontSize="30" />
+                    </Grid>
+                    <Grid x:Name="listboxTuesdayGrid" Grid.Row="1" Margin="0,0,12,0">
+                        <ListBox x:Name="worktasTuesdayListBox" ItemsSource="{Binding WorktaskCurrentDayTimecardCollection}" Grid.Row="0" Margin="0, 0, 12, 0" Width="440">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Left" Width="440">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="80" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"                                              
+                                            Grid.Column="0" Grid.Row="0"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,0,0"/>
+
+                                        <toolkit:ExpanderView Grid.Column="1" Header="{Binding}" Expander="{Binding}"  
+                                    ExpanderTemplate="{StaticResource WorktaskCustomExpanderTemplate}"
+                                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
+                                    HeaderTemplate="{StaticResource WorktaskCustomHeaderTemplate}" 
+                                    ItemTemplate="{StaticResource WorktaskCustomItemTemplate}"
+                                    ItemsSource="{Binding ExpandItems}"
+                                    />
+                                        <Button
+                                Grid.Column="2"
+                                x:Name="editWorktask"
+                                BorderThickness="0"                                
+                                Margin="-10,0"
+                                Click="editWorktaskButton_Click">
+                                            <Image Source="/Resources/edit.png"/>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem x:Name="wednesdayTimecardItem" CacheMode="{x:Null}" Header="wed" Margin="12,28,-13,0">
+                <Grid x:Name="wednesdayContentPanel" Grid.Row="1" Margin="0,-30,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="worktimeWednesdayGrid" Grid.Row="0" Margin="12,0,12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="150"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding TimecardPageWorkTimeCurrentDay}" FontSize="30" />
+                        <TextBlock HorizontalAlignment="Left" Text="workingtime" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" FontSize="30" />
+                    </Grid>
+                    <Grid x:Name="listboxWednesdayGrid" Grid.Row="1" Margin="0,0,12,0">
+                        <ListBox x:Name="worktasWednesdayListBox" ItemsSource="{Binding WorktaskCurrentDayTimecardCollection}" Grid.Row="0" Margin="0, 0, 12, 0" Width="440">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Left" Width="440">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="80" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"                                              
+                                            Grid.Column="0" Grid.Row="0"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,0,0"/>
+
+                                        <toolkit:ExpanderView Grid.Column="1" Header="{Binding}" Expander="{Binding}"  
+                                    ExpanderTemplate="{StaticResource WorktaskCustomExpanderTemplate}"
+                                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
+                                    HeaderTemplate="{StaticResource WorktaskCustomHeaderTemplate}" 
+                                    ItemTemplate="{StaticResource WorktaskCustomItemTemplate}"
+                                    ItemsSource="{Binding ExpandItems}"
+                                    />
+                                        <Button
+                                Grid.Column="2"
+                                x:Name="editWorktask"
+                                BorderThickness="0"                                
+                                Margin="-10,0"
+                                Click="editWorktaskButton_Click">
+                                            <Image Source="/Resources/edit.png"/>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem x:Name="thursdayTimecardItem" CacheMode="{x:Null}" Header="thur" Margin="12,28,-13,0">
+                <Grid x:Name="thursdayContentPanel" Grid.Row="1" Margin="0,-30,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="worktimeThursdayGrid" Grid.Row="0" Margin="12,0,12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="150"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding TimecardPageWorkTimeCurrentDay}" FontSize="30" />
+                        <TextBlock HorizontalAlignment="Left" Text="workingtime" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" FontSize="30" />
+                    </Grid>
+                    <Grid x:Name="listboxThursdayGrid" Grid.Row="1" Margin="0,0,12,0">
+                        <ListBox x:Name="worktasThursdayListBox" ItemsSource="{Binding WorktaskCurrentDayTimecardCollection}" Grid.Row="0" Margin="0, 0, 12, 0" Width="440">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Left" Width="440">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="80" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"                                              
+                                            Grid.Column="0" Grid.Row="0"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,0,0"/>
+
+                                        <toolkit:ExpanderView Grid.Column="1" Header="{Binding}" Expander="{Binding}"  
+                                    ExpanderTemplate="{StaticResource WorktaskCustomExpanderTemplate}"
+                                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
+                                    HeaderTemplate="{StaticResource WorktaskCustomHeaderTemplate}" 
+                                    ItemTemplate="{StaticResource WorktaskCustomItemTemplate}"
+                                    ItemsSource="{Binding ExpandItems}"
+                                    />
+                                        <Button
+                                Grid.Column="2"
+                                x:Name="editWorktask"
+                                BorderThickness="0"                                
+                                Margin="-10,0"
+                                Click="editWorktaskButton_Click">
+                                            <Image Source="/Resources/edit.png"/>
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </Grid>
+            </phone:PivotItem>
+            <phone:PivotItem x:Name="fridayTimecardItem" CacheMode="{x:Null}" Header="fri" Margin="12,28,-13,0">
+                <Grid x:Name="fridayContentPanel" Grid.Row="1" Margin="0,-30,12,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid x:Name="worktimeFridayGrid" Grid.Row="0" Margin="12,0,12,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" MinWidth="150"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding TimecardPageWorkTimeCurrentDay}" FontSize="30" />
+                        <TextBlock HorizontalAlignment="Left" Text="workingtime" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"  Grid.ColumnSpan="2" FontSize="30" />
+                    </Grid>
+                    <Grid x:Name="listboxFridayGrid" Grid.Row="1" Margin="0,0,12,0">
+                        <ListBox x:Name="worktasFridayListBox" ItemsSource="{Binding WorktaskCurrentDayTimecardCollection}" Grid.Row="0" Margin="0, 0, 12, 0" Width="440">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid HorizontalAlignment="Left" Width="440">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70" />
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="80" />
+                                        </Grid.ColumnDefinitions>
+                                        <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay}"                                              
+                                            Grid.Column="0" Grid.Row="0"
+                                            VerticalAlignment="Center"
+                                            Margin="0,0,0,0"/>
+
+                                        <toolkit:ExpanderView Grid.Column="1" Header="{Binding}" Expander="{Binding}"  
+                                    ExpanderTemplate="{StaticResource WorktaskCustomExpanderTemplate}"
+                                    IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
+                                    HeaderTemplate="{StaticResource WorktaskCustomHeaderTemplate}" 
+                                    ItemTemplate="{StaticResource WorktaskCustomItemTemplate}"
+                                    ItemsSource="{Binding ExpandItems}"
+                                    />
+                                        <Button
+                                Grid.Column="2"
+                                x:Name="editWorktask"
+                                BorderThickness="0"                                
+                                Margin="-10,0"
+                                Click="editWorktaskButton_Click">
+                                            <Image Source="/Resources/edit.png"/>
                                         </Button>
                                     </Grid>
                                 </DataTemplate>

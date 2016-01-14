@@ -404,8 +404,11 @@ namespace TimecardApp.ViewModel
                     {
                         //nach Beschreibung suchen und nur die Insert Tasks, da diese eine leere TimelogGuid haben
                         worktasksForUnit = from WorkTask task in tlWorktaskCollection
-                                           where (task.DayDate == workUnit.Item.StartDateTime.Date && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID && task.WorkDescription == workUnit.Item.Description
-                                           && task.TimelogTaskUID == String.Empty)
+                                           where (task.DayDate.Date == workUnit.Item.StartDateTime.Date 
+                                          && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID 
+                                          && task.WorkDescription == workUnit.Item.Description
+                                          && String.IsNullOrEmpty(task.TimelogWorkunitGUID)
+                                           )
                                            select task;
                         if (worktasksForUnit.Count() == 1)
                             worktask = worktasksForUnit.Single();
@@ -418,7 +421,9 @@ namespace TimecardApp.ViewModel
                         {
                             //es kann keiner gefunden werden, der der Beschreibung entspricht - suche nur nach dem Minimum
                             worktasksForUnit = from WorkTask task in tlWorktaskCollection
-                                               where (task.DayDate == workUnit.Item.StartDateTime.Date && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID && task.TimelogTaskUID == String.Empty)
+                                               where (task.DayDate.Date == workUnit.Item.StartDateTime.Date 
+                                               && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID
+                                               && String.IsNullOrEmpty(task.TimelogWorkunitGUID))
                                                select task;
                             if (worktasksForUnit.Count() == 1)
                                 worktask = worktasksForUnit.Single();

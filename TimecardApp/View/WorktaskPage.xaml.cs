@@ -86,12 +86,17 @@ namespace TimecardApp.View
             if (NavigationContext.QueryString.TryGetValue("worktaskIDParam", out worktaskIDParam))
             {
                 String projectID = "";
+                String dayDate = "";
                 String timecardID = "";
                 bool result;
                 result = NavigationContext.QueryString.TryGetValue("projectID", out projectID);
                 result = NavigationContext.QueryString.TryGetValue("timecardID", out timecardID);
+                result = NavigationContext.QueryString.TryGetValue("dayDate", out dayDate);
+                
+                DateTime dayDateTime;
+                bool dateConvertResult = DateTime.TryParse(dayDate, out dayDateTime);
 
-                workTaskViewModel = App.AppViewModel.GetWorkTaskViewModel(worktaskIDParam, projectID, timecardID);
+                workTaskViewModel = App.AppViewModel.GetWorkTaskViewModel(worktaskIDParam, projectID, timecardID, dayDateTime);
                 appBarDeleteButton.IsEnabled = workTaskViewModel.WorktaskPageEnabled;
                 appBarSaveButton.IsEnabled = workTaskViewModel.WorktaskPageEnabled;
             }

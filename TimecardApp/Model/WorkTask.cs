@@ -442,8 +442,19 @@ namespace TimecardApp.Model
             }
         }
 
-
         public IList<string> ExpandItems
+        {
+            get
+            {
+                IList<string> expandItems = new List<string>();
+                expandItems.Add("Des: " + WorkDescription);
+                if (TimelogTask != null)
+                    expandItems.Add("Tl Task: " + TimelogTask.TimelogTaskIdent);
+                return expandItems;
+            }
+        }
+
+        public IList<string> ExpandItemsTl
         {
             get
             {

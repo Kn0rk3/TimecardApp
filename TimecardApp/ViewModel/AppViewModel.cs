@@ -481,7 +481,7 @@ namespace TimecardApp.ViewModel
             return customerViewModel;
         }
 
-        public WorktaskViewModel GetWorkTaskViewModel(String worktaskID, String projectID, String timecardID)
+        public WorktaskViewModel GetWorkTaskViewModel(String worktaskID, String projectID, String timecardID, DateTime dayDate)
         {
             if (!String.IsNullOrEmpty(worktaskID))
             {
@@ -494,8 +494,12 @@ namespace TimecardApp.ViewModel
 
                 if (newWorkTask == null)
                 {
+                    if (dayDate == null)
+                        dayDate = timecardViewModel.TimecardStartDate;
+
                     if (timecardViewModel != null)
-                        newWorkTask = new WorkTask() { WorkTaskID = worktaskID, DayDate = timecardViewModel.TimecardStartDate, Ident_WorkTask = HelperClass.GetIdentForWorktask(timecardViewModel.TimecardStartDate, ""), TimecardID = timecardViewModel.TimecardID, Timecard = (Timecard)getDBObjectForID(DBObjects.Timecard, timecardViewModel.TimecardID) };
+                        newWorkTask = new WorkTask() { WorkTaskID = worktaskID, DayDate = dayDate, Ident_WorkTask = HelperClass.GetIdentForWorktask(timecardViewModel.TimecardStartDate, ""), TimecardID = timecardViewModel.TimecardID, Timecard = (Timecard)getDBObjectForID(DBObjects.Timecard, timecardViewModel.TimecardID) };
+                    
                     else
                     {
                         Timecard tmpTimecard = getTimecardForDate(DateTime.Now);

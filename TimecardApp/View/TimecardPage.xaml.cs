@@ -20,7 +20,7 @@ namespace TimecardApp.View
     public partial class TimecardPage : PhoneApplicationPage, INotifyPropertyChanged
     {
         private TimecardViewModel timecardViewModel;
-
+        
         public TimecardPage()
         {
             InitializeComponent();
@@ -74,7 +74,7 @@ namespace TimecardApp.View
 
         private void newWorkTaskButton_Click(object sender, EventArgs e)
         {
-            NavigationService.Navigate(new Uri("/View/WorktaskPage.xaml?worktaskIDParam=" + System.Guid.NewGuid().ToString() + "&timecardID=" + timecardViewModel.TimecardID , UriKind.Relative));
+            NavigationService.Navigate(new Uri("/View/WorktaskPage.xaml?worktaskIDParam=" + System.Guid.NewGuid().ToString() + "&timecardID=" + timecardViewModel.TimecardID + "&dayDate=" + timecardViewModel.CurrentShownDate, UriKind.Relative));
         }
 
         private void homeButton_Click(object sender, EventArgs e)
@@ -117,6 +117,42 @@ namespace TimecardApp.View
         private void timelogButton_Click(object sender, EventArgs e)
         {
             NavigationService.Navigate(new Uri("/View/TimelogPage.xaml", UriKind.Relative));
+        }
+
+        private void TimecardPagePivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch ((sender as Pivot).SelectedIndex)
+            {
+                case 0:
+                    timecardViewModel.CurrentShownDate = timecardViewModel.TimecardStartDate.Date;
+                    break;
+
+                case 1:
+                    //Monday
+                    timecardViewModel.CurrentShownDate = timecardViewModel.TimecardStartDate.Date;
+                    break;
+
+                case 2:
+                    //Tuesday
+                    timecardViewModel.CurrentShownDate = timecardViewModel.TimecardStartDate.AddDays(1).Date;
+                    break;
+
+                case 3:
+                    //Wednesday
+                    timecardViewModel.CurrentShownDate = timecardViewModel.TimecardStartDate.AddDays(2).Date;
+                    break;
+
+                case 4:
+                    //Wednesday
+                    timecardViewModel.CurrentShownDate = timecardViewModel.TimecardStartDate.AddDays(3).Date;
+                    break;
+
+                case 5:
+                    //Wednesday
+                    timecardViewModel.CurrentShownDate = timecardViewModel.TimecardStartDate.AddDays(4).Date;
+                    break;
+
+            }
         }
 
         protected override void OnNavigatedFrom(System.Windows.Navigation.NavigationEventArgs e)

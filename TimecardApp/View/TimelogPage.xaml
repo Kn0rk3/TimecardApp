@@ -108,7 +108,7 @@
                                     IsExpanded="{Binding IsExpanded, Mode=TwoWay}" 
                                     HeaderTemplate="{StaticResource WorktaskCustomHeaderTemplate}" 
                                     ItemTemplate="{StaticResource WorktaskCustomItemTemplate}"
-                                    ItemsSource="{Binding ExpandItems}"
+                                    ItemsSource="{Binding ExpandItemsTl}"
                                     />
                                     <Button
                                 Grid.Column="2"
