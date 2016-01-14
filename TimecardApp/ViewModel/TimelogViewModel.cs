@@ -157,7 +157,7 @@ namespace TimecardApp.ViewModel
                     NotifyPropertyChanged("TlTaskCollection");
                 }
             }
-            
+
         }
 
         private ObservableCollection<WorkTask> tlWorktaskCollection;
@@ -257,15 +257,15 @@ namespace TimecardApp.ViewModel
                     }
 
                 case ETimelogOperation.UploadWorkunits:
-                        switch (newState)
-                        {
-                            case ETimelogState.Error:
-                                {
-                                    timelogUsingView.ShowErrorMessage(message);
-                                    break;
-                                }
-                        }
-                        break;
+                    switch (newState)
+                    {
+                        case ETimelogState.Error:
+                            {
+                                timelogUsingView.ShowErrorMessage(message);
+                                break;
+                            }
+                    }
+                    break;
 
                 case ETimelogOperation.Login:
                     {
@@ -328,7 +328,7 @@ namespace TimecardApp.ViewModel
                         {
                             ObservableCollection<WorkUnit> insertUnits = new ObservableCollection<WorkUnit>();
                             ObservableCollection<WorkUnit> updateUnits = new ObservableCollection<WorkUnit>();
-                           
+
                             foreach (WorkTask worktask in tlWorktaskCollection)
                             {
                                 if (worktask.ToRegister)
@@ -354,9 +354,9 @@ namespace TimecardApp.ViewModel
                                 }
                             }
 
-                            if (insertUnits.Count > 0 || updateUnits.Count >0)
+                            if (insertUnits.Count > 0 || updateUnits.Count > 0)
                                 wrapper.UploadWorkunits(insertUnits, updateUnits);
-                            
+
                         }
                         else
                         {
@@ -391,55 +391,59 @@ namespace TimecardApp.ViewModel
         {
             if (returnWorkunits != null)
             {
-                foreach (TimelogProjectManagementService.BatchContainerOfWorkUnit  workUnit in returnWorkunits)
+                foreach (TimelogProjectManagementService.BatchContainerOfWorkUnit workUnit in returnWorkunits)
                 {
                     WorkTask worktask = null;
                     var worktasksForUnit = from WorkTask task in tlWorktaskCollection
-                                          where (task.TimelogWorkunitGUID == workUnit.Item.GUID.ToString())
-                                          select task;
-                    
+                                           where (task.TimelogWorkunitGUID == workUnit.Item.GUID.ToString())
+                                           select task;
+
                     if (worktasksForUnit.Count() == 1)
                         worktask = worktasksForUnit.Single();
                     else
                     {
-                        //nach Beschreibung suchen
+                        //nach Beschreibung suchen und nur die Insert Tasks, da diese eine leere TimelogGuid haben
                         worktasksForUnit = from WorkTask task in tlWorktaskCollection
-                                          where (task.DayDate == workUnit.Item.StartDateTime.Date && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID && task.WorkDescription == workUnit.Item.Description)
-                                          select task;
+                                           where (task.DayDate == workUnit.Item.StartDateTime.Date && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID && task.WorkDescription == workUnit.Item.Description
+                                           && task.TimelogTaskUID == String.Empty)
+                                           select task;
                         if (worktasksForUnit.Count() == 1)
                             worktask = worktasksForUnit.Single();
                         else if (worktasksForUnit.Count() > 1)
                         {
-                            foreach (WorkTask tasks in worktasksForUnit)
-                            {
-
-                            }
+                            //hier kann nun beliebig der erste Task gewählt werden
+                            worktask = worktasksForUnit.First();
                         }
                         else if (worktasksForUnit.Count() == 0)
                         {
-
-
+                            //es kann keiner gefunden werden, der der Beschreibung entspricht - suche nur nach dem Minimum
+                            worktasksForUnit = from WorkTask task in tlWorktaskCollection
+                                               where (task.DayDate == workUnit.Item.StartDateTime.Date && task.TimelogTask.TimelogTaskID == workUnit.Item.TaskID && task.TimelogTaskUID == String.Empty)
+                                               select task;
+                            if (worktasksForUnit.Count() == 1)
+                                worktask = worktasksForUnit.Single();
+                            else if (worktasksForUnit.Count() > 1)
+                            {
+                                //hier kann nun beliebig der erste Task gewählt werden
+                                worktask = worktasksForUnit.First();
+                            }
                         }
-
-                        
-
                     }
 
-                    if (workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Success)
+                    if (worktask != null && workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Success)
                     {
                         //success --> set timestamp and GUID and remove from collection
                         worktask.TimelogWorkunitGUID = workUnit.Item.GUID.ToString();
-                        worktask.LastTimelogRegistration = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "\nTask-ID: " + workUnit.Item.TaskID + "\nTask: " 
+                        worktask.LastTimelogRegistration = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss") + "\nTask-ID: " + workUnit.Item.TaskID + "\nTask: "
                             + worktask.TimelogTask.TimelogTaskName + "\nWorktime: " + worktask.TotalWorkTimeString;
                         App.AppViewModel.SaveChangesToDB();
                     }
-                    else if (workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Error)
+                    else if (worktask != null && workUnit.Status == TimelogProjectManagementService.ExecutionStatus.Error)
                     {
-                        // when error for update workunit check for error message
                         if (String.IsNullOrEmpty(worktask.TimelogWorkunitGUID))
                         {
                             //error during inserting this workunit
-                            
+                            timelogUsingView.ShowErrorMessage("Error on inserting workunit in timelog with following Error Message:" + workUnit.Message);
                         }
                         else
                         {
@@ -460,23 +464,41 @@ namespace TimecardApp.ViewModel
 
         public void SetTimelogTasks(ObservableCollection<TimelogProjectManagementService.Task> tasks)
         {
-            LastSynchronisationTimestamp = "Last synchronisation: " +  DateTime.Now.ToString("yy-MM-dd hh:mm:ss");
+            LastSynchronisationTimestamp = "Last synchronisation: " + DateTime.Now.ToString("yy-MM-dd hh:mm:ss");
             if (tasks != null)
             {
                 ObservableCollection<TimelogTask> tlTasks = new ObservableCollection<TimelogTask>();
                 foreach (TimelogProjectManagementService.Task task in tasks)
                 {
-                    TimelogTask newTask = new TimelogTask()
+                    //Wenn ParentTask vorhanden ist, dann diese nicht anlegen, weil darauf nicht gebucht werden soll
+                    if (String.IsNullOrEmpty(task.Details.ParentTaskID.ToString()) && ! task.Details.IsParent)
                     {
-                        TimelogTaskUID = task.ID.ToString(),
-                        TimelogProjectID = task.Details.ProjectHeader.ID,
-                        TimelogProjectName = task.Details.ProjectHeader.Name,
-                        TimelogTaskName = task.Name,
-                        EndDate = task.EndDate,
-                        StartDate = task.StartDate,
-                        TimelogTaskID = task.TaskID
-                    };
-                    tlTasks.Add(newTask);
+                        TimelogTask newTask = new TimelogTask()
+                        {
+                            TimelogTaskUID = task.ID.ToString(),
+                            TimelogProjectID = task.Details.ProjectHeader.ID,
+                            TimelogProjectName = task.Details.ProjectHeader.Name,
+                            TimelogTaskName = task.Name,
+                            EndDate = task.EndDate,
+                            StartDate = task.StartDate,
+                            TimelogTaskID = task.TaskID
+                        };
+                        tlTasks.Add(newTask);
+                    }
+                    else if (! String.IsNullOrEmpty(task.Details.ParentTaskID.ToString()) && !task.Details.IsParent)
+                    {
+                        TimelogTask newTask = new TimelogTask()
+                        {
+                            TimelogTaskUID = task.ID.ToString(),
+                            TimelogProjectID = task.Details.ProjectHeader.ID,
+                            TimelogProjectName = task.Details.ProjectHeader.Name,
+                            TimelogTaskName = task.FullName,
+                            EndDate = task.EndDate,
+                            StartDate = task.StartDate,
+                            TimelogTaskID = task.TaskID
+                        };
+                        tlTasks.Add(newTask);
+                    }
                 }
                 TlTaskCollection = tlTasks;
             }
