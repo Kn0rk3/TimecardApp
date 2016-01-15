@@ -4,7 +4,7 @@
   <Languages xmlns="">
     <Language code="en" />
   </Languages>
-  <App xmlns="" ProductID="{36daef2f-313a-4a83-8682-89a3943ff01e}" Title="TimecardApp" RuntimeType="Silverlight" Version="3.1.0.0" Genre="apps.normal" Author="Kn0rk3" Description="Track your working time, assign them to projects and customers. " Publisher="Kn0rk3" PublisherID="{0cc62370-ff7d-4b0a-8188-a5ee7851ea6a}" BackUpOptOut="false" SDOptOut="false">
+  <App xmlns="" ProductID="{36daef2f-313a-4a83-8682-89a3943ff01e}" Title="TimecardApp" RuntimeType="Silverlight" Version="3.2.0.0" Genre="apps.normal" Author="Kn0rk3" Description="Track your working time, assign them to projects and customers. " Publisher="Kn0rk3" PublisherID="{0cc62370-ff7d-4b0a-8188-a5ee7851ea6a}" BackUpOptOut="false" SDOptOut="false">
     <IconPath IsRelative="true" IsResource="false">free-zone-starts-md.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_NETWORKING" />

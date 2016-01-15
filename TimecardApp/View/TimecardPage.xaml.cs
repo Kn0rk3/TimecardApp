@@ -143,12 +143,12 @@ namespace TimecardApp.View
                     break;
 
                 case 4:
-                    //Wednesday
+                    //Thursday
                     timecardViewModel.CurrentShownDate = timecardViewModel.TimecardStartDate.AddDays(3).Date;
                     break;
 
                 case 5:
-                    //Wednesday
+                    //Friday
                     timecardViewModel.CurrentShownDate = timecardViewModel.TimecardStartDate.AddDays(4).Date;
                     break;
 
