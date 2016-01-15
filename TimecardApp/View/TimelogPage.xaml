@@ -19,7 +19,7 @@
         
         <DataTemplate x:Key="TlTaskCustomExpanderTemplate">
             <StackPanel Orientation="Vertical">
-                <TextBlock FontSize="20" Margin="0,0,0,0">
+                <TextBlock FontSize="16" Margin="0,0,0,0">
                     <TextBlock.Text>
                         <Binding Path="TimelogProjectName" StringFormat="Project: {0}" />
                     </TextBlock.Text>  
@@ -31,20 +31,20 @@
             <TextBlock 
                                         Grid.Column="0"
                                         Text="{Binding TimelogTaskName}"
-                                        FontSize="30"
+                                        FontSize="20"
                                         Margin="0,0,0,0">
             </TextBlock>
         </DataTemplate>
 
         <DataTemplate x:Key="TlTaskCustomItemTemplate">
             <StackPanel Orientation="Vertical">
-                <TextBlock FontSize="20" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
+                <TextBlock FontSize="16" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="WorktaskCustomExpanderTemplate">
             <StackPanel Orientation="Vertical">
-                <TextBlock FontSize="20" Margin="0,0,0,0">
+                <TextBlock FontSize="16" Margin="0,0,0,0">
                     <TextBlock.Text>
                         <Binding Path="TimelogTaskIdent" StringFormat="Tl task: {0}" />
                     </TextBlock.Text>
@@ -56,7 +56,7 @@
             <TextBlock 
                                         Grid.Column="0"
                                         Text="{Binding Ident_WorkTask}"
-                                        FontSize="30"
+                                        FontSize="20"
                                         Margin="0,0,0,0">
             </TextBlock>
         </DataTemplate>
@@ -64,7 +64,7 @@
         <DataTemplate x:Key="WorktaskCustomItemTemplate">
             
                 <StackPanel Orientation="Vertical">
-                    <TextBlock FontSize="20" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
+                    <TextBlock FontSize="16" VerticalAlignment="Center" Text="{Binding}"></TextBlock>
                 </StackPanel>
             
         </DataTemplate>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="17648Kn0rk3.TimecardApp" Publisher="CN=E2D87DBF-21EB-4EEC-BA6A-B7EF0C4FAD5C" Version="3.2.0.0" />
+  <Identity Name="17648Kn0rk3.TimecardApp" Publisher="CN=E2D87DBF-21EB-4EEC-BA6A-B7EF0C4FAD5C" Version="3.2.1.0" />
   <mp:PhoneIdentity PhoneProductId="36daef2f-313a-4a83-8682-89a3943ff01e" PhonePublisherId="0cc62370-ff7d-4b0a-8188-a5ee7851ea6a" />
   <Properties>
     <DisplayName>TimecardApp</DisplayName>
